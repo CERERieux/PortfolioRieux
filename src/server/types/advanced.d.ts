@@ -82,15 +82,8 @@ export interface ReqBodyIssue {
   _id?: string;
 }
 
-export interface UpdateIssue {
+export interface UpdateIssue extends ReqBodyIssue {
   project_name: string;
-  issue_title?: string;
-  issue_text?: string;
-  created_by?: string;
-  assigned_to?: string;
-  status_text?: string;
-  open?: boolean;
-  _id: string;
 }
 
 /** ------------------------------------------------------------------------ */

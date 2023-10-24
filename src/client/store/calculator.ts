@@ -117,6 +117,21 @@ export const useCalculatorStore = create<State>((set, get) => ({
       } else {
         container.push(parseInt(auxStr)); // Else it's an int, call parseInt
       }
+    } else {
+      // If it's empty, then end the function since user made a bad operation ([num][operator]=)
+      // If we want to get a log of operations we can do the next
+      const logs = log.slice(); // Get the log from calculator
+      logs.push(display + "= Error"); // Put the new operation in the log
+      // Then put the result in the state value and indicate we did an operation
+
+      // console.log("display ", container[0]);
+      set({
+        display: "" + container[0], // Show result
+        operation: true, // Indicate that we made an operation
+        dot: false, // Reset the rule of the dot
+        log: logs, // Assing new log to the state
+      });
+      return null;
     }
 
     /* Then we start to do the operations

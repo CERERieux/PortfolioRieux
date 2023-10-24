@@ -10,7 +10,6 @@ import type {
   LogOptions,
   IExTracker,
   DeleteResult,
-  Error,
 } from "../types/basic";
 
 const dnsPromises = dns.promises;
@@ -177,18 +176,13 @@ export async function canRedirectURL(shortUrl: string) {
 export async function getAllUsers() {
   // Get all users from User table
   const query = await User.find({})
+    .select("username _id")
     .exec()
     .then(data => {
       // If there is any data(users)
       if (data.length > 0) {
-        // We only need to show the username and ID from each one
-        const infoToDisplay = data.map(user => {
-          return {
-            username: user.username,
-            _id: user._id,
-          };
-        });
-        return infoToDisplay; // Return the info filtered
+        // Return the users from the query
+        return data;
       } else {
         return { error: ERROR_USER.EMPTY_RESULT };
       }
@@ -215,7 +209,7 @@ export async function createNewUser({ username }: { username: string }) {
   return newUser;
 }
 
-export async function deleteUser(_id: string): Promise<DeleteResult | Error> {
+export async function deleteUser(_id: string) {
   // If id isn't valid or user isn't found, return an error
   if (_id.length !== 24) {
     return { error: ERROR_USER.ID_FORMAT };
@@ -256,12 +250,13 @@ export async function deleteUser(_id: string): Promise<DeleteResult | Error> {
     return { error: ERROR_USER.PROBLEM_DELETE };
   }
   // Return an object with the user deleted and the number of activities they had
-  return {
+  const result: DeleteResult = {
     delete: {
       user: _id,
       no_exercise: deletedExercises,
     },
   };
+  return result;
 }
 
 export async function createNewExercise({
@@ -374,9 +369,11 @@ export async function deleteExercise(_id: string) {
     console.error(err);
     return { error: ERROR_USER.PROBLEM_DELETE };
   });
-
+  const resultAction = {
+    action: `The exercise ${_id} was sucessfully deleted.`,
+  };
   // Return an object with the confirmation that exercise was deleted
-  return { action: `The exercise ${_id} was sucessfully deleted.` };
+  return resultAction;
 }
 
 export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
@@ -388,7 +385,7 @@ export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
   }
   // Find user by it's ID and populate the user's log, if doesn't exist, send an error
   const user = await User.findById({ _id })
-    .populate("log", "description duration date")
+    .populate({ path: "log", select: "description duration date" })
     .exec()
     .catch(err => {
       console.error(err);

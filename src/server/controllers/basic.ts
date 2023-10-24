@@ -23,9 +23,11 @@ export function timestamp(req: Request, res: Response) {
   }
   // If we can't get the time, it's an invalid date
   if (!isNaN(date.getTime())) {
-    res.json({ unix: date.getTime(), utc: date.toUTCString() });
+    return res
+      .status(200)
+      .json({ unix: date.getTime(), utc: date.toUTCString() });
   } else {
-    res.json({ error: date.toUTCString() });
+    return res.status(400).json({ error: date.toUTCString() });
   }
 }
 
@@ -38,7 +40,7 @@ export function headParser(req: Request, res: Response) {
     language: req.acceptsLanguages(), // The prefered language they use
     software: req.headers["user-agent"], // And the specs of the user
   };
-  res.json(headResponse);
+  return res.status(200).json(headResponse);
 }
 
 /** --------------------------------------------------------------- */
@@ -47,9 +49,11 @@ export async function shortenerURL(req: Request, res: Response) {
   const shortURL = await BasicModel.createShortURL(req.body); // Create a short URL with the user data
   // If the short URL is bigger then 8 characters, then it's an error
   if (shortURL.length > 8) {
-    res.json({ error: shortURL });
+    return res.status(400).json({ error: shortURL });
   } else {
-    res.json({ original_url: req.body.url, short_url: shortURL });
+    return res
+      .status(200)
+      .json({ original_url: req.body.url, short_url: shortURL });
   }
 }
 
@@ -57,7 +61,7 @@ export async function visitShortURL(req: Request, res: Response) {
   // We check if user sent a short url that exist
   const userURL = req.params.user_url;
   if (userURL.length !== 8) {
-    res.json({ error: "Please introduce a valid shortURL" });
+    return res.status(400).json({ error: "Please introduce a valid shortURL" });
   }
   const isValidReq: ValidUrlReq = await BasicModel.canRedirectURL(userURL);
   // If it exist/it's valid, we redirect the user to its original url
@@ -65,7 +69,7 @@ export async function visitShortURL(req: Request, res: Response) {
     res.redirect(301, isValidReq.original_url);
   } else {
     // If it don't exist, we indicate an error
-    res.json(isValidReq.original_url);
+    return res.status(400).json(isValidReq.original_url);
   }
 }
 
@@ -73,22 +77,25 @@ export async function visitShortURL(req: Request, res: Response) {
 
 export async function getAllUsers(req: Request, res: Response) {
   const users = await BasicModel.getAllUsers();
-  res.json(users);
+  if ("error" in users) return res.status(500).json(users);
+  return res.status(200).json(users);
 }
 
 export async function createUser(req: Request, res: Response) {
   const newUser = await BasicModel.createNewUser(req.body);
   if (typeof newUser === "string") {
-    res.json({ error: newUser });
+    return res.status(500).json({ error: newUser });
   } else {
-    res.json({ username: newUser.username, _id: newUser._id });
+    return res
+      .status(200)
+      .json({ username: newUser.username, _id: newUser._id });
   }
 }
 
 export async function deleteUser(req: Request, res: Response) {
-  // TODO
   const result = await BasicModel.deleteUser(req.params._id);
-  res.json(result);
+  if ("error" in result) return res.status(500).json(result);
+  return res.status(200).json(result);
 }
 
 export async function createNewExercise(req: Request, res: Response) {
@@ -106,12 +113,14 @@ export async function createNewExercise(req: Request, res: Response) {
     date: exerciseDate,
   };
   const resultExercise = await BasicModel.createNewExercise(exerciseData);
-  res.json(resultExercise);
+  if ("error" in resultExercise) return res.status(500).json(resultExercise);
+  return res.status(200).json(resultExercise);
 }
 
 export async function deleteExercise(req: Request, res: Response) {
   const result = await BasicModel.deleteExercise(req.params._id);
-  res.json(result);
+  if ("error" in result) return res.status(500).json(result);
+  return res.status(200).json(result);
 }
 
 export async function displayUserLog(
@@ -127,8 +136,9 @@ export async function displayUserLog(
     limit,
     _id: req.params._id,
   };
-  const Logs = await BasicModel.displayUserLog(options);
-  res.json(Logs);
+  const logs = await BasicModel.displayUserLog(options);
+  if ("error" in logs) return res.status(500).json(logs);
+  return res.status(200).json(logs);
 }
 
 /** --------------------------------------------------------------- */

@@ -23,7 +23,7 @@ export async function consultStock(
 ) {
   const { stock, like, _id } = req.query;
   if (_id.length !== 24) {
-    res.json("Invalid ID format, please introduce a valid ID");
+    return res.status(400).json({ error: INVALID_FORMAT });
   }
 
   const resultStock = await AdvancedMiscModel.consultStock({
@@ -31,15 +31,23 @@ export async function consultStock(
     like,
     _id,
   });
-  res.json(resultStock);
+  if ("error" in resultStock) return res.status(500).json(resultStock);
+  return res.status(200).json(resultStock);
 }
 
 /** ------------------------------------------------------------------------ */
 
+export async function getAllBoards(req: Request, res: Response) {
+  const resultQuery = await AdvancedMiscModel.getAllBoards();
+  if ("error" in resultQuery) return res.status(500).json(resultQuery);
+  return res.status(200).json(resultQuery);
+}
+
 export async function getTopThreads(req: Request, res: Response) {
   const _id = req.params.board.toLowerCase();
   const resultThreads = await AdvancedMiscModel.getTopThreads(_id);
-  res.json(resultThreads);
+  if ("error" in resultThreads) return res.status(500).json(resultThreads);
+  return res.status(200).json(resultThreads);
 }
 
 export async function createNewThread(
@@ -50,14 +58,15 @@ export async function createNewThread(
   const text = req.body.text;
   const deletePassword = req.body.delete_password;
   if (text == null || deletePassword == null)
-    res.json({ error: MISSING_ELEMENT });
+    return res.status(400).json({ error: MISSING_ELEMENT });
   else {
     const resultCreate = await AdvancedMiscModel.createNewThread({
       _id: _id.toLowerCase(),
       text,
       deletePassword,
     });
-    res.json(resultCreate);
+    if ("error" in resultCreate) return res.status(500).json(resultCreate);
+    return res.status(200).json(resultCreate);
   }
 }
 
@@ -66,11 +75,13 @@ export async function reportThread(
   res: Response,
 ) {
   const _id = req.body.thread_id;
-  if (_id == null) res.json({ error: MISSING_ELEMENT });
-  else if (_id.length !== 24) res.json({ error: INVALID_FORMAT });
+  if (_id == null) return res.status(400).json({ error: MISSING_ELEMENT });
+  else if (_id.length !== 24)
+    return res.status(400).json({ error: INVALID_FORMAT });
   else {
     const resultReport = await AdvancedMiscModel.reportThread(_id);
-    res.json(resultReport);
+    if ("error" in resultReport) return res.status(500).json(resultReport);
+    return res.status(200).json(resultReport);
   }
 }
 
@@ -81,14 +92,16 @@ export async function deleteThread(
   const deletePassword = req.query.password;
   const _id = req.query.thread_id;
   if (_id == null || deletePassword == null)
-    res.json({ error: MISSING_ELEMENT });
-  else if (_id.length !== 24) res.json({ error: INVALID_FORMAT });
+    return res.status(400).json({ error: MISSING_ELEMENT });
+  else if (_id.length !== 24)
+    return res.status(400).json({ error: INVALID_FORMAT });
   else {
     const resultDelete = await AdvancedMiscModel.deleteThread({
       _id,
       password: deletePassword,
     });
-    res.json(resultDelete);
+    if ("error" in resultDelete) return res.status(500).json(resultDelete);
+    return res.status(200).json(resultDelete);
   }
 }
 
@@ -98,14 +111,17 @@ export async function getAllReplies(
 ) {
   const _idBoard = req.params.board;
   const _idThread = req.query.thread_id;
-  if (_idThread == null) res.json({ error: MISSING_ELEMENT });
-  else if (_idThread.length !== 24) res.json({ error: INVALID_FORMAT });
+  if (_idThread == null)
+    return res.status(400).json({ error: MISSING_ELEMENT });
+  else if (_idThread.length !== 24)
+    return res.status(400).json({ error: INVALID_FORMAT });
   else {
     const resultQuery = await AdvancedMiscModel.getAllReplies({
       _idBoard,
       _idThread,
     });
-    res.json(resultQuery);
+    if ("error" in resultQuery) return res.status(500).json(resultQuery);
+    return res.status(200).json(resultQuery);
   }
 }
 
@@ -117,15 +133,17 @@ export async function createNewReply(
   const text = req.body.text;
   const deletePassword = req.body.delete_password;
   if (_id == null || text == null || deletePassword == null)
-    res.json({ error: MISSING_ELEMENT });
-  else if (_id.length !== 24) res.json({ error: INVALID_FORMAT });
+    return res.status(400).json({ error: MISSING_ELEMENT });
+  else if (_id.length !== 24)
+    return res.status(40).json({ error: INVALID_FORMAT });
   else {
     const resultCreate = await AdvancedMiscModel.createNewReply({
       _id,
       text,
       deletePassword,
     });
-    res.json(resultCreate);
+    if ("error" in resultCreate) return res.status(500).json(resultCreate);
+    return res.status(200).json(resultCreate);
   }
 }
 
@@ -134,11 +152,13 @@ export async function reportReply(
   res: Response,
 ) {
   const _id = req.body.reply_id;
-  if (_id == null) res.json({ error: MISSING_ELEMENT });
-  else if (_id.length !== 24) res.json({ error: INVALID_FORMAT });
+  if (_id == null) return res.status(400).json({ error: MISSING_ELEMENT });
+  else if (_id.length !== 24)
+    return res.status(400).json({ error: INVALID_FORMAT });
   else {
     const resultReport = await AdvancedMiscModel.reportReply(_id);
-    res.json(resultReport);
+    if ("error" in resultReport) return res.status(500).json(resultReport);
+    return res.status(200).json(resultReport);
   }
 }
 
@@ -149,13 +169,15 @@ export async function deleteReply(
   const deletePassword = req.query.password;
   const _id = req.query.reply_id;
   if (_id == null || deletePassword == null)
-    res.json({ error: MISSING_ELEMENT });
-  else if (_id.length !== 24) res.json({ error: INVALID_FORMAT });
+    return res.status(400).json({ error: MISSING_ELEMENT });
+  else if (_id.length !== 24)
+    return res.status(400).json({ error: INVALID_FORMAT });
   else {
     const resultDelete = await AdvancedMiscModel.deleteReply({
       _id,
       password: deletePassword,
     });
-    res.json(resultDelete);
+    if ("error" in resultDelete) return res.status(500).json(resultDelete);
+    return res.status(200).json(resultDelete);
   }
 }

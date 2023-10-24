@@ -8,7 +8,6 @@ import type {
   SingleConsultStock,
   IStocksData,
   IThreadFiltered,
-  IReplyFiltered,
   CreateThread,
   UserDataCreate,
   GetReplies,
@@ -80,8 +79,10 @@ export async function consultStock({ stock, like, _id }: StockQuery) {
   } else {
     /** If there are 2 stocks, we call the operationStocks function for
      * each stock and then wait for both to finish */
-    const stock1 = await operationStocks({ currentClient, stock: stock[0] });
-    const stock2 = await operationStocks({ currentClient, stock: stock[1] });
+    const [stock1, stock2] = await Promise.all([
+      operationStocks({ currentClient, stock: stock[0] }),
+      operationStocks({ currentClient, stock: stock[1] }),
+    ]);
     if ("error" in stock1) return stock1;
     if ("error" in stock2) return stock2;
     /** Once we finished all the stock and client operations, then we work to
@@ -89,8 +90,10 @@ export async function consultStock({ stock, like, _id }: StockQuery) {
      * relative likes of the stock
      * Since we have 2 stocks, we repeat the process of get first all the
      * info and then use both results */
-    const infoStock1 = await fetchInfo(stock1);
-    const infoStock2 = await fetchInfo(stock2);
+    const [infoStock1, infoStock2] = await Promise.all([
+      fetchInfo(stock1),
+      fetchInfo(stock2),
+    ]);
     if ("error" in infoStock1) return infoStock1;
     if ("error" in infoStock2) return infoStock2;
     /** Call to fetchInfo function to get all the info needed to show final
@@ -243,6 +246,8 @@ async function fetchInfo(resultStock: StockDocument) {
 /** ------------------------------------------------------------------------ */
 
 const ERROR_BOARD = {
+  COULD_NOT_GET_ALL_BOARDS:
+    "We couldn't recover the boards from our database, please try again later",
   COULD_NOT_FIND_BOARD:
     "We couldn't find the board you needed to make the operation, please try again later",
   COULD_NOT_SAVE_BOARD:
@@ -269,6 +274,8 @@ const ERROR_BOARD = {
     "Couldn't update the thread information with your data, please try again later",
   EMPTY_BOARD:
     "There is not a board with the name you introduce, please post in a existent board or create a new one posting a thread on it",
+  EMPTY_ALL_BOARDS:
+    "Right now we have 0 boards created, please start a new one creating a thread about the topic you want to talk about",
   INCORRECT_PASSWORD:
     "The password you introduce to delete is incorrect, please revise if your password is the correct one",
 };
@@ -279,14 +286,37 @@ const REPORT_REPLY_SUCCESS =
   "Your reply report was sucessfully sent to our servers";
 const DELETE_REPLY_SUCCESS = "Your reply was sucessfully deleted";
 
+export async function getAllBoards() {
+  const allBoards = await Board.find({})
+    .sort("_id")
+    .exec()
+    .catch(err => {
+      console.error(err);
+      return { error: ERROR_BOARD.COULD_NOT_GET_ALL_BOARDS };
+    });
+  if ("error" in allBoards) return allBoards;
+  if (allBoards.length === 0) return { error: ERROR_BOARD.EMPTY_ALL_BOARDS };
+  const resultQuery = allBoards.map(board => ({
+    id: board._id,
+    thread_count: board.threads.length,
+  }));
+  return resultQuery;
+}
+
 /** Function that gets the top 10 most recent threads and their 3 most
  * recent replies, if nothing is found, return an empty array */
 export async function getTopThreads(_id: string) {
-  // First we find the board that user want to see
+  // First we find the board that user want to see with all the info filtered
   const userBoard = await Board.findById({ _id })
     .populate({
       path: "threads",
-      populate: { path: "replies" },
+      options: { sort: "-bumped_on", limit: 10 },
+      select: "_id text created_on bumped_on replies",
+      populate: {
+        path: "replies",
+        options: { sort: "-created_on" },
+        select: "_id created_on text",
+      },
     })
     .exec()
     .catch(err => {
@@ -297,21 +327,10 @@ export async function getTopThreads(_id: string) {
   if (userBoard === null) return { error: ERROR_BOARD.EMPTY_BOARD };
   if ("error" in userBoard) return userBoard;
   else {
-    // If we got a board, we need to order the threads by bumped_on time
-    let orderThread = userBoard.threads.slice();
-    if (orderThread.length > 1) {
-      orderThread.sort((a, b) => {
-        // Get 2 threads and start to order in Descendent
-        if (a.bumped_on > b.bumped_on) return -1;
-        if (a.bumped_on < b.bumped_on) return 1;
-        return 0;
-      });
-      // If board has more than 10 threads, only get the first 10
-      if (orderThread.length > 10) orderThread = orderThread.slice(0, 10);
-    }
+    // If we got a board, we need to put the number of replies of each thread
+    const orderThread = userBoard.threads.slice();
 
-    /** Then we filter the keys we want to send to user and will order
-     * the most 3 recent reply if thread has those, so for each thread */
+    // We get all the threads, then we put the reply counter
     const displayInfo = orderThread.map(thread => {
       // Start an auxiliar with only the info needed
       const infoFiltered: IThreadFiltered = {
@@ -322,25 +341,13 @@ export async function getTopThreads(_id: string) {
         replies: [],
         replycount: thread.replies.length,
       };
-      let replySort = thread.replies.slice(); // Get replies and sort
-      if (replySort.length > 1) {
-        replySort.sort((a, b) => {
-          // Get 2 replies and start to order in Descendent
-          if (a.created_on > b.created_on) return -1;
-          if (a.created_on < b.created_on) return 1;
-          return 0;
-        });
-        // Only get the most 3 recent replies if there are more
-        if (replySort.length > 3) replySort = replySort.slice(0, 3);
+      // If we have more than 3 replies in the thread, only get the top 3 recent ones
+      if (thread.replies.length > 3) {
+        infoFiltered.replies = thread.replies.slice(0, 3);
+      } else {
+        infoFiltered.replies = thread.replies;
       }
-      // Filter the info of each reply
-      const replyInfo: IReplyFiltered[] = replySort.map(reply => ({
-        _id: reply._id,
-        created_on: reply.created_on,
-        text: reply.text,
-      }));
-      // Assign the replies filtered to the thread and return the clean info
-      infoFiltered.replies = replyInfo;
+      // Return the info needed
       return infoFiltered;
     });
     return displayInfo;
@@ -404,7 +411,8 @@ export async function reportThread(_id: string) {
     return { error: ERROR_BOARD.COULD_NOT_UPDATE_THREAD };
   });
   if ("error" in resultUpdate) return resultUpdate;
-  return { action: REPORT_THREAD_SUCCESS };
+  const resultAction = { action: REPORT_THREAD_SUCCESS };
+  return resultAction;
 }
 
 export async function deleteThread({ _id, password }: DeleteElementBoard) {
@@ -436,7 +444,8 @@ export async function deleteThread({ _id, password }: DeleteElementBoard) {
     // If there was an error in deleting the thread, send it
     if ("error" in deleteResult) return deleteResult;
     // If it was successful, return the action
-    return { action: DELETE_THREAD_SUCCESS };
+    const resultAction = { action: DELETE_THREAD_SUCCESS };
+    return resultAction;
   } else {
     // If password is incorrect, return an error
     return { error: ERROR_BOARD.INCORRECT_PASSWORD };
@@ -447,21 +456,12 @@ export async function getAllReplies({ _idBoard, _idThread }: GetReplies) {
   // First, we find the board by its name
   const userBoard = await Board.findById({ _id: _idBoard })
     .populate({
-      path: "threads", // Populate its thread
-      select: {
-        _id: 1, // Filtered
-        text: 1,
-        created_on: 1,
-        bumped_on: 1,
-        replies: 1,
-      },
+      path: "threads",
+      select: "_id text created_on bumped_on replies",
       populate: {
-        path: "replies", // And populate the replies of the thread
-        select: {
-          _id: 1, // Filered
-          text: 1,
-          created_on: 1,
-        },
+        path: "replies",
+        options: { sort: "-created_on" },
+        select: "_id created_on text",
       },
     })
     .exec()
@@ -480,15 +480,7 @@ export async function getAllReplies({ _idBoard, _idThread }: GetReplies) {
   if (userThread.length === 0)
     return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD };
   const currentThread = userThread[0]; // Get user thread
-  // We need to sort its replies if it has at least 2
-  if (currentThread.replies.length > 1) {
-    currentThread.replies.sort((a, b) => {
-      // Get 2 replies and start to order in Descendent
-      if (a.created_on > b.created_on) return -1;
-      if (a.created_on < b.created_on) return 1;
-      return 0;
-    });
-  }
+
   return currentThread;
 }
 
@@ -552,7 +544,8 @@ export async function reportReply(_id: string) {
   });
   // If there was an error while updating, return the error
   if ("error" in updateResult) return updateResult;
-  return { action: REPORT_REPLY_SUCCESS }; // Return the success message
+  const resultAction = { action: REPORT_REPLY_SUCCESS };
+  return resultAction; // Return the success message
 }
 
 export async function deleteReply({ _id, password }: DeleteElementBoard) {
@@ -574,7 +567,8 @@ export async function deleteReply({ _id, password }: DeleteElementBoard) {
     });
     // If there was an error while deleting, return the error
     if ("error" in deleteResult) return deleteResult;
-    return { action: DELETE_REPLY_SUCCESS }; // Return the success message
+    const resultAction = { action: DELETE_REPLY_SUCCESS };
+    return resultAction; // Return the success message
   } else {
     // If password is wrong, then return an error
     return { error: ERROR_BOARD.INCORRECT_PASSWORD };

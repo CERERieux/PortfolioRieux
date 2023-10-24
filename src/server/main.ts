@@ -1,6 +1,7 @@
 import "dotenv/config";
 import "./database/mongoose";
 import express from "express";
+// import helmet from "helmet";
 import ViteExpress from "vite-express";
 import { basicRouter } from "./routes/basic";
 import { homeRouter } from "./routes/home";
@@ -13,6 +14,7 @@ const PORT = process.env.PORT ?? "3000";
 app.disable("x-powered-by");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// app.use(helmet())
 
 app.use("/", homeRouter);
 app.use("/basic", basicRouter);

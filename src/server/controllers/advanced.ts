@@ -68,13 +68,13 @@ export function convertHandler(
   const canConvert = AdvancedModel.canBeConverted(input);
   const initialUnit = AdvancedModel.getUnit(input);
   if (!canConvert && initialUnit === "") {
-    res.json({ error: ERROR_CONVERTER.INVALID_INPUT });
+    return res.status(400).json({ error: ERROR_CONVERTER.INVALID_INPUT });
   }
   if (!canConvert) {
-    res.json({ error: ERROR_CONVERTER.INVALID_NUMBER });
+    return res.status(400).json({ error: ERROR_CONVERTER.INVALID_NUMBER });
   }
   if (initialUnit === "") {
-    res.json({ error: ERROR_CONVERTER.INVALID_UNIT });
+    return res.status(400).json({ error: ERROR_CONVERTER.INVALID_UNIT });
   }
   const initialNumber = AdvancedModel.getNumber(input);
   const resultNumber = AdvancedModel.convert({ initialNumber, initialUnit });
@@ -94,7 +94,7 @@ export function convertHandler(
     returnUnit: resultUnit,
     string: resultString,
   };
-  res.json(response);
+  return res.status(200).json(response);
 }
 
 /** ------------------------------------------------------------------------ */
@@ -108,7 +108,7 @@ export function checkSudoku(
   const value = req.body.value;
   // If request is missing 1 field to check user's value in the puzzle, we return an error
   if (puzzle == null || coord == null || value == null) {
-    res.json({ error: ERROR_SUDOKU.MISSING_FIELDS });
+    return res.status(400).json({ error: ERROR_SUDOKU.MISSING_FIELDS });
   }
   // We check if the puzzle is valid to check user's input
   const validationResult = AdvancedModel.sudokuValidate(puzzle);
@@ -117,7 +117,7 @@ export function checkSudoku(
     validationResult === ERROR_SUDOKU.INVALID_FORMAT ||
     validationResult === ERROR_SUDOKU.UNSOLVABLE
   ) {
-    res.json({ error: validationResult });
+    return res.status(400).json({ error: validationResult });
   }
   /* If the puzzle is valid, then we check the coordinate and value given by user, if any of 
     those is invalid, we show an error */
@@ -157,12 +157,12 @@ export function checkSudoku(
   }
   // If there was conflict while validating user input, we display it
   if (validateInput.conflicts.length > 0) {
-    res.json({
+    return res.status(200).json({
       valid: validateInput.validPlace,
       conflict: validateInput.conflicts,
     });
   } else {
-    res.json({ valid: validateInput.validPlace });
+    return res.status(200).json({ valid: validateInput.validPlace });
   }
 }
 
@@ -173,7 +173,7 @@ export function solveSudoku(
   // If request is missing the puzzle, we return an error
   const puzzle = req.body.puzzle;
   if (puzzle == null) {
-    res.json({ error: ERROR_SUDOKU.MISSING_FIELDS });
+    return res.status(400).json({ error: ERROR_SUDOKU.MISSING_FIELDS });
   } else {
     // We check if the puzzle is valid
     const validationResult = AdvancedModel.sudokuValidate(puzzle);
@@ -182,11 +182,11 @@ export function solveSudoku(
       validationResult === ERROR_SUDOKU.INVALID_FORMAT ||
       validationResult === ERROR_SUDOKU.UNSOLVABLE
     ) {
-      res.json({ error: validationResult });
+      return res.status(400).json({ error: validationResult });
     }
     // If valid, resolve sudoku with recursivity
     const result = AdvancedModel.solveSudoku(puzzle);
-    res.json({
+    return res.status(200).json({
       solution: result,
     });
   }
@@ -201,23 +201,23 @@ export function translatorAmericanBritish(
   // Obtain the data from user, if there is an error with the data, send an error
   const { text, locale } = req.body;
   if (text == null || locale == null) {
-    res.json({ error: ERROR_TRANSLATOR.MISSING_FIELDS });
+    return res.status(400).json({ error: ERROR_TRANSLATOR.MISSING_FIELDS });
   }
   if (text === "") {
-    res.json({ error: ERROR_TRANSLATOR.EMPTY_TEXT });
+    return res.status(400).json({ error: ERROR_TRANSLATOR.EMPTY_TEXT });
   }
   if (locale !== AME_TO_BRIT && locale !== BRIT_TO_AME) {
-    res.json({ error: ERROR_TRANSLATOR.INVALID_LOCALE });
+    return res.status(400).json({ error: ERROR_TRANSLATOR.INVALID_LOCALE });
   }
   // If data is valid, then we check what locale user wants the translation
   if (locale === AME_TO_BRIT) {
     translator.setInput(text);
     const translationToBritish = translator.translateAmerican(text);
-    res.json({ text, translation: translationToBritish });
+    return res.status(200).json({ text, translation: translationToBritish });
   } else {
     translator.setInput(text);
     const translationToAmerican = translator.translateBritish(text);
-    res.json({ text, translation: translationToAmerican });
+    return res.status(200).json({ text, translation: translationToAmerican });
   }
 }
 
@@ -238,7 +238,7 @@ export async function getAllIssues(
   const updatedOn = req.query.updated_on;
   const _id = req.query._id;
   if (_id?.length !== 24) {
-    res.json({ error: ERROR_ISSUES.INVALID_FORMAT });
+    return res.status(400).json({ error: ERROR_ISSUES.INVALID_FORMAT });
   }
   const searchParams: IssueSearchParams = {
     project_name: project,
@@ -253,7 +253,8 @@ export async function getAllIssues(
     _id,
   };
   const resultQuery = await AdvancedModel.getAllIssues(searchParams);
-  res.json(resultQuery);
+  if ("error" in resultQuery) return res.status(500).json(resultQuery);
+  return res.status(200).json(resultQuery);
 }
 
 export async function createNewIssue(
@@ -265,7 +266,7 @@ export async function createNewIssue(
   const createdBy = req.body.created_by;
 
   if (issueTitle == null || issueText == null || createdBy == null) {
-    res.json({ error: ERROR_ISSUES.MISSING_FIELDS });
+    return res.status(400).json({ error: ERROR_ISSUES.MISSING_FIELDS });
   } else {
     const project = req.params.project;
     const assignedTo = req.body.assigned_to ?? "";
@@ -284,7 +285,8 @@ export async function createNewIssue(
       updated_on: updatedOn,
     };
     const resultCreated = await AdvancedModel.createNewIssue(issue);
-    res.json(resultCreated);
+    if ("error" in resultCreated) return res.status(500).json(resultCreated);
+    return res.status(200).json(resultCreated);
   }
 }
 
@@ -300,9 +302,9 @@ export async function updateIssue(
   const open = req.body.open;
   const _id = req.body._id;
   if (_id == null) {
-    res.json({ error: ERROR_ISSUES.MISSING_ID });
+    return res.status(400).json({ error: ERROR_ISSUES.MISSING_ID });
   } else if (_id.length !== 24) {
-    res.json({ error: ERROR_ISSUES.INVALID_FORMAT });
+    return res.status(400).json({ error: ERROR_ISSUES.INVALID_FORMAT });
   } else if (
     issueTitle == null &&
     issueText == null &&
@@ -311,7 +313,7 @@ export async function updateIssue(
     statusText == null &&
     open == null
   ) {
-    res.json({
+    return res.status(400).json({
       error: ERROR_ISSUES.MISSING_UPDATE_DATA,
       _id,
     });
@@ -330,12 +332,12 @@ export async function updateIssue(
     const resultUpdate = await AdvancedModel.updateIssue(issue);
     // If there was an error at updating, display it
     if ("error" in resultUpdate) {
-      res.json({
+      return res.status(500).json({
         error: resultUpdate.error,
         _id,
       });
     } else {
-      res.json({
+      return res.status(200).json({
         result: UPDATE_SUCCESS,
         _id,
       });
@@ -349,19 +351,19 @@ export async function deleteIssue(
 ) {
   const _id = req.params._id;
   if (_id == null) {
-    res.json({ error: ERROR_ISSUES.MISSING_ID });
+    return res.status(400).json({ error: ERROR_ISSUES.MISSING_ID });
   } else if (_id.length !== 24) {
-    res.json({ error: ERROR_ISSUES.INVALID_FORMAT });
+    return res.status(400).json({ error: ERROR_ISSUES.INVALID_FORMAT });
   } else {
     const wasDeleted = await AdvancedModel.deleteIssue(_id);
     // If an issue was deleted, it was a success, if not then it's an error
     if (wasDeleted) {
-      res.json({
+      return res.status(200).json({
         result: DELETE_SUCCESS,
         _id,
       });
     } else {
-      res.json({
+      return res.status(500).json({
         error: ERROR_ISSUES.ERROR_DELETE,
         _id,
       });
@@ -377,9 +379,9 @@ export async function getAllBooks(req: Request, res: Response) {
   const firstBook = resultQuery[0];
   // If the 1st book has the error property, then the result was an error
   if ("error" in firstBook) {
-    res.json(firstBook);
+    return res.status(500).json(firstBook);
   } else {
-    res.json(resultQuery); // Else, send all the book
+    return res.status(200).json(resultQuery); // Else, send all the book
   }
 }
 
@@ -390,28 +392,31 @@ export async function createNewBook(
   // Get the title from user, if don't exist, send an error
   const title = req.body.title;
   if (title == null) {
-    res.json({ error: ERROR_BOOKS.MISSING_TITLE });
+    return res.status(400).json({ error: ERROR_BOOKS.MISSING_TITLE });
   }
   // Create a new book based on the title and show it
   const newBook = await AdvancedModel.createNewBook(title);
-  res.json(newBook);
+  if ("error" in newBook) return res.status(500).json(newBook);
+  return res.status(200).json(newBook);
 }
 
 export async function deleteAllBooks(req: Request, res: Response) {
   // Delete all the books and show the result of the operation
   const deletedBooks = await AdvancedModel.deleteAllBooks();
-  res.json(deletedBooks);
+  if ("error" in deletedBooks) return res.status(500).json(deletedBooks);
+  return res.status(200).json(deletedBooks);
 }
 
 export async function getSingleBook(req: Request, res: Response) {
   // Get the id sent by user, if it's invalid, send an error
   const _id = req.params.id;
   if (_id.length !== 24) {
-    res.json({ error: ERROR_BOOKS.INVALID_ID });
+    return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
   }
   // Find the book and show the result of the operation
   const book = await AdvancedModel.getSingleBook(_id);
-  res.json(book);
+  if ("error" in book) return res.status(500).json(book);
+  return res.status(200).json(book);
 }
 
 export async function createBookComment(
@@ -421,27 +426,29 @@ export async function createBookComment(
   // Get data sent from user, if there is an error with both data, send an error
   const _id = req.params.id;
   if (_id.length !== 24) {
-    res.json({ error: ERROR_BOOKS.INVALID_ID });
+    return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
   }
   const comment = req.body.comment;
   if (comment == null) {
-    res.json({ error: ERROR_BOOKS.MISSING_COMMENT });
+    return res.status(400).json({ error: ERROR_BOOKS.MISSING_COMMENT });
   }
   // If those are valid, create the comment and show the result of the operation
   const bookWithComment = await AdvancedModel.createBookComment(comment, _id);
-  res.json(bookWithComment);
+  if ("error" in bookWithComment) return res.status(500).json(bookWithComment);
+  return res.status(200).json(bookWithComment);
 }
 
 export async function deleteSingleBook(req: Request, res: Response) {
   // Get the ID of the book to delete, if there is an error with the ID, send an error
   const _id = req.params.id;
   if (_id == null) {
-    res.json({ error: ERROR_BOOKS.MISSING_ID });
+    return res.status(400).json({ error: ERROR_BOOKS.MISSING_ID });
   }
   if (_id.length !== 24) {
-    res.json({ error: ERROR_BOOKS.INVALID_ID });
+    return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
   }
   // If valid, delete the book and show the result of the operation
   const resultDelete = await AdvancedModel.deleteSingleBook(_id);
-  res.json(resultDelete);
+  if ("error" in resultDelete) return res.status(500).json(resultDelete);
+  return res.status(200).json(resultDelete);
 }

@@ -7,6 +7,8 @@ advancedMiscRouter
   .route("/stock-prices")
   .get(AdvancedMiscController.consultStock);
 
+advancedMiscRouter.get("/boards", AdvancedMiscController.getAllBoards);
+
 advancedMiscRouter
   .route("/threads/:board")
   .get(AdvancedMiscController.getTopThreads)

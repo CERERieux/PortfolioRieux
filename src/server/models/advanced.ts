@@ -969,7 +969,7 @@ export async function getAllBooks() {
   if (books.length === 0) {
     return [{ error: ERROR_BOOKS.EMPTY_LIBRARY }];
   }
-  // If we have books in database, order the data and exclude their ID
+  // If we have books in database, order the data
   const displayBooks = books.map(book => ({
     title: book.title,
     _id: book._id,

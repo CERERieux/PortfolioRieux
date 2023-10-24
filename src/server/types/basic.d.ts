@@ -34,13 +34,6 @@ export interface ExerciseElements {
   date: string;
 }
 
-export interface LogOptions {
-  from?: string;
-  to?: string;
-  limit?: string;
-  _id: string;
-}
-
 export interface ReqParamsLog {
   _id: string;
 }
@@ -51,8 +44,8 @@ export interface ReqQueryLog {
   limit?: string;
 }
 
-export interface Error {
-  error: string;
+export interface LogOptions extends ReqQueryLog {
+  _id: string;
 }
 
 export interface DeleteResult {
