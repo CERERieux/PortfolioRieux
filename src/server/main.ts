@@ -11,7 +11,7 @@ import { advancedMiscRouter } from "./routes/advancedMisc";
 const app = express();
 const PORT = process.env.PORT ?? "3000";
 const directives = {
-  scriptSrc: ["'self'", process.env.SHA_CODE as string],
+  scriptSrc: ["'self'", process.env.SHA_CODE ?? ""],
   connectSrc: ["'self'", "ws:", "https:"],
   imgSrc: ["'self'", "data:", "https:"],
 };
