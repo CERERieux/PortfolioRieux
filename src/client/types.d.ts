@@ -21,3 +21,8 @@ export interface TimeStampData {
   unix: number;
   utc: string;
 }
+
+export interface ShortUrlResult {
+  original_url: string;
+  short_url: string;
+}
