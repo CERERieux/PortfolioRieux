@@ -6,6 +6,7 @@ import { DrumMachine } from "./components/DM/DrumMachine";
 import { PomodoroClock } from "./components/Pomodoro/PomodoroClock";
 import { Markdown } from "./components/Mark_down/Markdown";
 import NotFound from "./components/NotFound/NotFound";
+import DataRequest from "./components/DataRequest/DataRequest";
 
 export default function App() {
 
@@ -17,6 +18,7 @@ export default function App() {
       <Route path="/front-end/markdown" element={<Markdown />}></Route>
       <Route path="/front-end/drum-machine" element={<DrumMachine />}></Route>
       <Route path="/front-end/pomodoro" element={<PomodoroClock />}></Route>
+      <Route path="/front-end/request-information" element={<DataRequest />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
