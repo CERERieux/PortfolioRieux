@@ -9,6 +9,7 @@ import NotFound from "./components/NotFound/NotFound";
 import DataRequest from "./components/DataRequest/DataRequest";
 import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
 import ConverterUnit from "./components/ConverterUnit/ConverterUnit";
+import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
 
 export default function App() {
 
@@ -23,6 +24,7 @@ export default function App() {
       <Route path="/front-end/request-information" element={<DataRequest />}></Route>
       <Route path="/front-end/shortener-url" element={<ShortenerUrl />}></Route>
       <Route path="/front-end/converter" element={<ConverterUnit />}></Route>
+      <Route path="/front-end/translate-eng" element={<TranslatorEng />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
