@@ -8,6 +8,7 @@ import { Markdown } from "./components/Mark_down/Markdown";
 import NotFound from "./components/NotFound/NotFound";
 import DataRequest from "./components/DataRequest/DataRequest";
 import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
+import ConverterUnit from "./components/ConverterUnit/ConverterUnit";
 
 export default function App() {
 
@@ -21,6 +22,7 @@ export default function App() {
       <Route path="/front-end/pomodoro" element={<PomodoroClock />}></Route>
       <Route path="/front-end/request-information" element={<DataRequest />}></Route>
       <Route path="/front-end/shortener-url" element={<ShortenerUrl />}></Route>
+      <Route path="/front-end/converter" element={<ConverterUnit />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );

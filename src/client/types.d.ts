@@ -26,3 +26,11 @@ export interface ShortUrlResult {
   original_url: string;
   short_url: string;
 }
+
+export interface ConversionResult {
+  initNum: number;
+  initUnit: string;
+  returnNum: number;
+  returnUnit: string;
+  string: string;
+}
