@@ -7,6 +7,7 @@ import { PomodoroClock } from "./components/Pomodoro/PomodoroClock";
 import { Markdown } from "./components/Mark_down/Markdown";
 import NotFound from "./components/NotFound/NotFound";
 import DataRequest from "./components/DataRequest/DataRequest";
+import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
 
 export default function App() {
 
@@ -19,6 +20,7 @@ export default function App() {
       <Route path="/front-end/drum-machine" element={<DrumMachine />}></Route>
       <Route path="/front-end/pomodoro" element={<PomodoroClock />}></Route>
       <Route path="/front-end/request-information" element={<DataRequest />}></Route>
+      <Route path="/front-end/shortener-url" element={<ShortenerUrl />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
