@@ -34,3 +34,8 @@ export interface ConversionResult {
   returnUnit: string;
   string: string;
 }
+
+export interface TranslateResult {
+  text: string;
+  translation: string;
+}
