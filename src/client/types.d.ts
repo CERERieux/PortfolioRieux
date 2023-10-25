@@ -10,3 +10,14 @@ export interface Quote {
   quote: string;
   author: string;
 }
+
+export interface ReqData {
+  ipaddress: string;
+  language: string[];
+  software: string;
+}
+
+export interface TimeStampData {
+  unix: number;
+  utc: string;
+}
