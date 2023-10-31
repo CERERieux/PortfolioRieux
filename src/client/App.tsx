@@ -10,6 +10,8 @@ import DataRequest from "./components/DataRequest/DataRequest";
 import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
 import ConverterUnit from "./components/ConverterUnit/ConverterUnit";
 import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
+import AnonBoard from "./components/AnonBoard/AnonBoard";
+import AnonThread from "./components/AnonBoard/AnonThread";
 
 export default function App() {
 
@@ -25,6 +27,8 @@ export default function App() {
       <Route path="/front-end/shortener-url" element={<ShortenerUrl />}></Route>
       <Route path="/front-end/converter" element={<ConverterUnit />}></Route>
       <Route path="/front-end/translate-eng" element={<TranslatorEng />}></Route>
+      <Route path="/front-end/anon-board" element={<AnonBoard />}></Route>
+      <Route path="/front-end/anon-board/thread/:board" element={<AnonThread />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
