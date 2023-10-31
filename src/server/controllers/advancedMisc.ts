@@ -46,7 +46,7 @@ export async function getAllBoards(req: Request, res: Response) {
 export async function getTopThreads(req: Request, res: Response) {
   const _id = req.params.board.toLowerCase();
   const resultThreads = await AdvancedMiscModel.getTopThreads(_id);
-  if ("error" in resultThreads) return res.status(500).json(resultThreads);
+  if ("error" in resultThreads) return res.status(200).json(resultThreads);
   return res.status(200).json(resultThreads);
 }
 
