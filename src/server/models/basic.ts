@@ -1,16 +1,16 @@
-import "mongoose"; // Import mongoose to be able to use the models and manage our database
+import mongoose from "mongoose"; // Import mongoose to be able to use the models and manage our database
 import dns from "node:dns"; // We need "dns" to verify if user hostname exist
 import { nanoid } from "nanoid"; // NanoID to make the short URL in an easier way
-import { Url, User, ExTracker } from "../schemas/basic";
+import { Url, ExTracker } from "../schemas/basic";
 import type {
-  ValidUrlReq,
   IShortenerUrl,
+  ValidUrlReq,
   ValidExtension,
+  IExTracker,
   ExerciseElements,
   LogOptions,
-  IExTracker,
-  DeleteResult,
 } from "../types/basic";
+import { GUser, ERROR_GUSER } from "../schemas/global";
 
 const dnsPromises = dns.promises;
 const ERROR_URL = {
@@ -23,27 +23,18 @@ const ERROR_URL = {
     "Error at trying to verify if URL is a valid hostname, verify if the URL is correct or try again later",
   URL_NOT_EXIST: "Error: This short URL doesn't exist, please put a valid URL",
 };
-const ERROR_USER = {
-  COULD_NOT_FIND: "Could not find the user you needed, please try again later",
+const ERROR_EXERCISE = {
   COULD_NOT_FIND_EX:
     "Could not find the exercise you needed, please try again later",
-  COULD_NOT_DELETE:
-    "Could not delete the user you needed, please try again later",
   EXERCISE_NOT_FOUND:
     "The exercise doesn't exist in database, check if the exerciseID you entered is correct",
-  EMPTY_RESULT: "Couldn't find any result that match your search",
   ID_FORMAT:
     "The ID you entered doesn't match the required format, please put a valid ID format",
-  PROBLEM_GET:
-    "Error at trying to get the information you asked for, please try again",
-  PROBLEM_POST: "Error at trying to create a new user, please try again",
-  PROBLEM_POST_EX: "Error at trying to create a new exercise, please try again",
+  PROBLEM_POST: "Error at trying to create a new exercise, please try again",
   PROBLEM_UPDATE_USER:
     "Error at trying to update user's new exercise, please try again",
   PROBLEM_DELETE:
-    "Error at trying to delete what you asked us to delete, please try again",
-  USER_NOT_FOUND:
-    "The user doesn't exist in database, check if the userID you entered is correct",
+    "Error at trying to delete the exercise you asked us to delete, please try again",
 };
 
 export async function createShortURL({ url }: { url: string }) {
@@ -173,112 +164,20 @@ export async function canRedirectURL(shortUrl: string) {
 
 /** ---------------------------------------------------------------- */
 
-export async function getAllUsers() {
-  // Get all users from User table
-  const query = await User.find({})
-    .select("username _id")
-    .exec()
-    .then(data => {
-      // If there is any data(users)
-      if (data.length > 0) {
-        // Return the users from the query
-        return data;
-      } else {
-        return { error: ERROR_USER.EMPTY_RESULT };
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      return { error: ERROR_USER.COULD_NOT_FIND };
-    });
-
-  return query;
-}
-
-export async function createNewUser({ username }: { username: string }) {
-  const newUser = new User({
-    username,
-  });
-  const isError = await newUser.save().catch(err => {
-    console.error(err);
-    return true;
-  });
-  if (isError === true) {
-    return ERROR_USER.PROBLEM_POST;
-  }
-  return newUser;
-}
-
-export async function deleteUser(_id: string) {
-  // If id isn't valid or user isn't found, return an error
-  if (_id.length !== 24) {
-    return { error: ERROR_USER.ID_FORMAT };
-  }
-
-  const user = await User.findById({ _id }).catch(err => {
-    console.error(err);
-    return { error: ERROR_USER.COULD_NOT_DELETE };
-  });
-  if (user == null) {
-    return { error: ERROR_USER.USER_NOT_FOUND };
-  }
-  if ("error" in user) {
-    return user;
-  }
-  // If user exist, then delete they activities
-  const deletedExercises = await ExTracker.deleteMany({ username: _id })
-    .then(deleted => {
-      return deleted.deletedCount;
-    })
-    .catch(err => {
-      console.error(err);
-      return -1;
-    });
-  if (deletedExercises === -1) {
-    return { error: ERROR_USER.PROBLEM_DELETE };
-  }
-  // Once we deleted their activities, delete the user
-  const userDeleted = await User.deleteOne({ _id })
-    .then(deleted => {
-      return deleted.deletedCount;
-    })
-    .catch(err => {
-      console.error(err);
-      return -1;
-    });
-  if (userDeleted === -1) {
-    return { error: ERROR_USER.PROBLEM_DELETE };
-  }
-  // Return an object with the user deleted and the number of activities they had
-  const result: DeleteResult = {
-    delete: {
-      user: _id,
-      no_exercise: deletedExercises,
-    },
-  };
-  return result;
-}
-
 export async function createNewExercise({
   _id,
   description,
   duration,
   date,
 }: ExerciseElements) {
-  // In case the Id we recieve isn't correct, we send an error
-  if (_id.length !== 24) {
-    return {
-      error: ERROR_USER.ID_FORMAT,
-    };
-  }
   // Find user by Id, if not found, we send an error
-  const user = await User.findById({ _id }).catch(err => {
+  const user = await GUser.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_USER.COULD_NOT_FIND };
+    return { error: ERROR_GUSER.COULD_NOT_FIND };
   });
   if (user == null) {
     return {
-      error: ERROR_USER.USER_NOT_FOUND,
+      error: ERROR_GUSER.USER_NOT_FOUND,
     };
   }
   if ("error" in user) {
@@ -286,6 +185,7 @@ export async function createNewExercise({
   }
   // If we found the user, create a new exercise with the elements needed
   const newExercise = new ExTracker({
+    _id: new mongoose.Types.ObjectId(),
     username: user._id,
     description,
     duration,
@@ -294,57 +194,120 @@ export async function createNewExercise({
 
   const resultSave = await newExercise.save().catch(err => {
     console.error(err);
-    return { error: ERROR_USER.PROBLEM_POST_EX };
+    return { error: ERROR_EXERCISE.PROBLEM_POST };
   }); // Save it
   if ("error" in resultSave) {
     return resultSave;
   }
-  user.log.push(newExercise); // Push it to the user's log
-  user.count = user.count + 1; // Update the count of user's activities
+  user.exercises.push(newExercise); // Push it to the user's log
   // Save the modifications, then we return an object that display the new info
   const result = await user
     .save()
     .then(u => {
       return {
-        username: u.username,
+        username: u._id,
         description: newExercise.description,
         duration: newExercise.duration,
         date: newExercise.date,
-        _id: u._id,
+        _id: newExercise._id,
       };
     })
     .catch(err => {
       console.error(err);
-      return { error: ERROR_USER.PROBLEM_UPDATE_USER };
+      return { error: ERROR_EXERCISE.PROBLEM_UPDATE_USER };
     });
 
   return result;
 }
 
+export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
+  // Find user by it's ID and populate the user's log, if doesn't exist, send an error
+  const user = await GUser.findById(_id)
+    .populate({ path: "exercises", select: "description duration date _id" })
+    .exec()
+    .catch(err => {
+      console.error(err);
+      return { error: ERROR_GUSER.COULD_NOT_FIND };
+    });
+  if (user == null) {
+    return {
+      error: ERROR_GUSER.USER_NOT_FOUND,
+    };
+  }
+  if ("error" in user) {
+    return user;
+  }
+  // If we found the user, we filter the info from the logs, we only filter the ID of each activity
+  let orderLog: Array<Partial<IExTracker>> = user.exercises.map(exercise => {
+    return {
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date,
+      _id: exercise._id,
+    };
+  });
+  // Once we get our logs clean, we filter in case user sent queries in the request
+  // Do the next 2 filters if there is at least 1 exercise
+  if (orderLog.length > 0) {
+    // Filter after a specific date
+    if (from !== undefined) {
+      orderLog = orderLog.filter(log => {
+        const date = new Date(log.date as string).getTime();
+        const filter = new Date(from).getTime();
+        if (date > filter) return true;
+        return false;
+      });
+    }
+    // Filter before a specific date
+    if (to !== undefined) {
+      orderLog = orderLog.filter(log => {
+        const date = new Date(log.date as string).getTime();
+        const filter = new Date(to).getTime();
+        if (date < filter) return true;
+        return false;
+      });
+    }
+  }
+
+  // Filter the number of activities in log
+  if (limit !== undefined) {
+    const limitNum = parseInt(limit);
+    orderLog = orderLog.slice(0, limitNum);
+  }
+
+  // Create the result in order
+  const orderResult = {
+    username: user._id,
+    count: user.exercises.length,
+    log: orderLog,
+  };
+  return orderResult;
+}
+
 export async function deleteExercise(_id: string) {
   // If id isn't valid or exercise isn't found, return an error
   if (_id.length !== 24) {
-    return { error: ERROR_USER.ID_FORMAT };
+    return { error: ERROR_EXERCISE.ID_FORMAT };
   }
 
-  const exercise = await ExTracker.findById({ _id }).catch(err => {
+  const exercise = await ExTracker.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_USER.COULD_NOT_FIND_EX };
+    return { error: ERROR_EXERCISE.COULD_NOT_FIND_EX };
   });
   if (exercise == null) {
-    return { error: ERROR_USER.EXERCISE_NOT_FOUND };
+    return { error: ERROR_EXERCISE.EXERCISE_NOT_FOUND };
   }
   if ("error" in exercise) {
     return exercise;
   }
 
   // Get the user because later we need to decrement the count of their exercises
-  const user = await User.findById({ _id: exercise.username }).catch(err => {
+  const user = await GUser.findById(exercise.username).catch(err => {
     console.error(err);
-    return { error: ERROR_USER.COULD_NOT_FIND };
+    return { error: ERROR_GUSER.COULD_NOT_FIND };
   });
   if (user == null) {
-    return { error: ERROR_USER.USER_NOT_FOUND };
+    return { error: ERROR_GUSER.USER_NOT_FOUND };
   }
   if ("error" in user) {
     return user;
@@ -360,84 +323,18 @@ export async function deleteExercise(_id: string) {
       return -1;
     });
   if (deletedExercises === -1) {
-    return { error: ERROR_USER.PROBLEM_DELETE };
+    return { error: ERROR_EXERCISE.PROBLEM_DELETE };
   }
 
-  // Decrement count in user
-  user.count = user.count - 1;
+  // Remove the exercise from the user
+  user.exercises = user.exercises.filter(ex => ex._id.toString() !== _id);
   user.save().catch(err => {
     console.error(err);
-    return { error: ERROR_USER.PROBLEM_DELETE };
+    return { error: ERROR_EXERCISE.PROBLEM_DELETE };
   });
   const resultAction = {
     action: `The exercise ${_id} was sucessfully deleted.`,
   };
   // Return an object with the confirmation that exercise was deleted
   return resultAction;
-}
-
-export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
-  // If ID doesn't match the required format, send an error
-  if (_id.length !== 24) {
-    return {
-      error: ERROR_USER.ID_FORMAT,
-    };
-  }
-  // Find user by it's ID and populate the user's log, if doesn't exist, send an error
-  const user = await User.findById({ _id })
-    .populate({ path: "log", select: "description duration date" })
-    .exec()
-    .catch(err => {
-      console.error(err);
-      return { error: ERROR_USER.COULD_NOT_FIND };
-    });
-  if (user == null) {
-    return {
-      error: ERROR_USER.USER_NOT_FOUND,
-    };
-  }
-  if ("error" in user) {
-    return user;
-  }
-  // If we found the user, we filter the info from the logs, we only filter the ID of each activity
-  let orderLog: Array<Partial<IExTracker>> = user.log.map(exercise => {
-    return {
-      description: exercise.description,
-      duration: exercise.duration,
-      date: exercise.date,
-    };
-  });
-  // Once we get our logs clean, we filter in case user sent queries in the request
-  // Filter after a specific date
-  if (from !== undefined) {
-    orderLog = orderLog.filter(log => {
-      const date = new Date(log.date as string).getTime();
-      const filter = new Date(from).getTime();
-      if (date > filter) return true;
-      return false;
-    });
-  }
-  // Filter before a specific date
-  if (to !== undefined) {
-    orderLog = orderLog.filter(log => {
-      const date = new Date(log.date as string).getTime();
-      const filter = new Date(to).getTime();
-      if (date < filter) return true;
-      return false;
-    });
-  }
-  // Filter the number of activities in log
-  if (limit !== undefined) {
-    const limitNum = parseInt(limit);
-    orderLog = orderLog.filter((log, i) => i < limitNum);
-  }
-
-  // Create the result in order
-  const orderResult = {
-    username: user.username,
-    count: user.count,
-    _id: user._id,
-    log: orderLog,
-  };
-  return orderResult;
 }

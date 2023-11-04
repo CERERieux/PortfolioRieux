@@ -3,7 +3,6 @@ import type { Request, Response } from "express";
 import type {
   ExerciseElements,
   LogOptions,
-  ReqParamsLog,
   ReqQueryLog,
   ValidUrlReq,
 } from "../types/basic";
@@ -75,29 +74,6 @@ export async function visitShortURL(req: Request, res: Response) {
 
 /** --------------------------------------------------------------- */
 
-export async function getAllUsers(req: Request, res: Response) {
-  const users = await BasicModel.getAllUsers();
-  if ("error" in users) return res.status(500).json(users);
-  return res.status(200).json(users);
-}
-
-export async function createUser(req: Request, res: Response) {
-  const newUser = await BasicModel.createNewUser(req.body);
-  if (typeof newUser === "string") {
-    return res.status(500).json({ error: newUser });
-  } else {
-    return res
-      .status(200)
-      .json({ username: newUser.username, _id: newUser._id });
-  }
-}
-
-export async function deleteUser(req: Request, res: Response) {
-  const result = await BasicModel.deleteUser(req.params._id);
-  if ("error" in result) return res.status(500).json(result);
-  return res.status(200).json(result);
-}
-
 export async function createNewExercise(req: Request, res: Response) {
   // We create a date with the actual time
   let exerciseDate = new Date(Date.now()).toDateString();
@@ -107,7 +83,7 @@ export async function createNewExercise(req: Request, res: Response) {
   }
   // Create an object with all the elements we need to create a new exercise
   const exerciseData: ExerciseElements = {
-    _id: req.params._id,
+    _id: req._id,
     description: req.body.description,
     duration: req.body.duration,
     date: exerciseDate,
@@ -117,14 +93,8 @@ export async function createNewExercise(req: Request, res: Response) {
   return res.status(200).json(resultExercise);
 }
 
-export async function deleteExercise(req: Request, res: Response) {
-  const result = await BasicModel.deleteExercise(req.params._id);
-  if ("error" in result) return res.status(500).json(result);
-  return res.status(200).json(result);
-}
-
 export async function displayUserLog(
-  req: Request<ReqParamsLog, {}, {}, ReqQueryLog>,
+  req: Request<{}, {}, {}, ReqQueryLog>,
   res: Response,
 ) {
   // We get all the queries we want from user even if those are undefined
@@ -134,11 +104,17 @@ export async function displayUserLog(
     from,
     to,
     limit,
-    _id: req.params._id,
+    _id: req._id,
   };
   const logs = await BasicModel.displayUserLog(options);
   if ("error" in logs) return res.status(500).json(logs);
   return res.status(200).json(logs);
+}
+
+export async function deleteExercise(req: Request, res: Response) {
+  const result = await BasicModel.deleteExercise(req.params._id);
+  if ("error" in result) return res.status(500).json(result);
+  return res.status(200).json(result);
 }
 
 /** --------------------------------------------------------------- */
