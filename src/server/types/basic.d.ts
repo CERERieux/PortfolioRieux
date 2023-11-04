@@ -1,3 +1,5 @@
+import type { Types } from "mongoose";
+
 export interface IShortenerUrl {
   originalUrl: string;
   shortUrl: string;
@@ -14,14 +16,9 @@ export interface ValidExtension {
   newExtension: string;
 }
 
-export interface IUser {
-  username: string;
-  count: number;
-  log: ExTracker[];
-}
-
 export interface IExTracker {
-  username: User;
+  _id: Types.ObjectId;
+  username: string;
   description: string;
   duration: number;
   date: string;
@@ -34,10 +31,6 @@ export interface ExerciseElements {
   date: string;
 }
 
-export interface ReqParamsLog {
-  _id: string;
-}
-
 export interface ReqQueryLog {
   from?: string;
   to?: string;
@@ -46,11 +39,4 @@ export interface ReqQueryLog {
 
 export interface LogOptions extends ReqQueryLog {
   _id: string;
-}
-
-export interface DeleteResult {
-  delete: {
-    user: string;
-    no_exercise: number;
-  };
 }
