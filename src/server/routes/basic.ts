@@ -11,7 +11,6 @@ basicRouter.route("/whoami").get(BasicController.headParser);
 basicRouter
   .route("/shorturl")
   .post(partialExtratorUser, BasicController.shortenerURL);
-basicRouter.route("/shorturl/:user_url").get(BasicController.visitShortURL);
 
 basicRouter
   .route("/users/exercises")
