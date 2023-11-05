@@ -1,7 +1,7 @@
 import mongoose from "mongoose"; // Import mongoose to be able to use the models and manage our database
 import dns from "node:dns"; // We need "dns" to verify if user hostname exist
 import { nanoid } from "nanoid"; // NanoID to make the short URL in an easier way
-import { Url, ExTracker } from "../schemas/basic";
+import { Url, ExTracker, ERROR_EXERCISE, ERROR_URL } from "../schemas/basic";
 import type {
   IShortenerUrl,
   ValidUrlReq,
@@ -9,35 +9,14 @@ import type {
   IExTracker,
   ExerciseElements,
   LogOptions,
+  UrlMaterial,
+  CreateUrlMaterial,
 } from "../types/basic";
 import { GUser, ERROR_GUSER } from "../schemas/global";
 
 const dnsPromises = dns.promises;
-const ERROR_URL = {
-  COULD_NOT_FIND: "Couldn't find your shortURL, please try again later",
-  COULD_NOT_SAVE: "Couldn't save your new shortURL, please try again later",
-  EMPTY_URL: "Please put an URL in the form",
-  INVALID_FORMAT:
-    "Invalid format, please put an URL with the format http(s)://hostname.com",
-  LOOKUP:
-    "Error at trying to verify if URL is a valid hostname, verify if the URL is correct or try again later",
-  URL_NOT_EXIST: "Error: This short URL doesn't exist, please put a valid URL",
-};
-const ERROR_EXERCISE = {
-  COULD_NOT_FIND_EX:
-    "Could not find the exercise you needed, please try again later",
-  EXERCISE_NOT_FOUND:
-    "The exercise doesn't exist in database, check if the exerciseID you entered is correct",
-  ID_FORMAT:
-    "The ID you entered doesn't match the required format, please put a valid ID format",
-  PROBLEM_POST: "Error at trying to create a new exercise, please try again",
-  PROBLEM_UPDATE_USER:
-    "Error at trying to update user's new exercise, please try again",
-  PROBLEM_DELETE:
-    "Error at trying to delete the exercise you asked us to delete, please try again",
-};
 
-export async function createShortURL({ url }: { url: string }) {
+export async function createShortURL({ url, username }: UrlMaterial) {
   // If user didn't sent an URL in the form, we end the function
   if (url === "") {
     return ERROR_URL.EMPTY_URL;
@@ -62,7 +41,11 @@ export async function createShortURL({ url }: { url: string }) {
       // We will create a new extension until is a valid one
       let newExtension = nanoid(8);
       do {
-        const validExtension = await createUrlDB(newExtension, url); // Save result in DB
+        const validExtension = await createUrlDB({
+          newExtension,
+          url,
+          username,
+        }); // Save result in DB
         // If there was an error in the process, display it
         if ("error" in validExtension) {
           return validExtension.error;
@@ -87,14 +70,12 @@ export async function createShortURL({ url }: { url: string }) {
   return newURL;
 }
 
-async function createUrlDB(newExtension: string, url: string) {
+async function createUrlDB({ newExtension, url, username }: CreateUrlMaterial) {
   // First we check if the new extension already is used
   const query = await Url.find({ shortUrl: newExtension })
     .exec()
     .then(data => {
-      if (data.length === 0) {
-        return true;
-      }
+      if (data.length === 0) return true;
       return false;
     })
     .catch(err => {
@@ -112,6 +93,7 @@ async function createUrlDB(newExtension: string, url: string) {
       newExtension,
     };
     const newUserUrl = new Url({
+      username,
       shortUrl: newExtension,
       originalUrl: url,
     });
@@ -122,6 +104,30 @@ async function createUrlDB(newExtension: string, url: string) {
     });
     if ("error" in resultSave) {
       return resultSave;
+    }
+
+    // Then we add the new url to the user if they exist
+    if (username !== (process.env.DUMP_USER as string)) {
+      // Return an error if user was not found or there was an error in the search
+      const user = await GUser.findById(username).catch(err => {
+        console.error(err);
+        return { error: ERROR_GUSER.COULD_NOT_FIND };
+      });
+      if (user == null) {
+        return {
+          error: ERROR_GUSER.USER_NOT_FOUND,
+        };
+      }
+      if ("error" in user) {
+        return user;
+      }
+      user.shortUrl.push(newUserUrl); // Push new url to user and save user
+      const userSave = await user.save().catch(err => {
+        console.error(err);
+        return { error: ERROR_GUSER.COULD_NOT_SAVE };
+      });
+      // If there was an error while saving, send it
+      if ("error" in userSave) return userSave;
     }
     return newValidExtension; // Return the new extension and if it was valid
   } else {

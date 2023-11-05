@@ -45,7 +45,10 @@ export function headParser(req: Request, res: Response) {
 /** --------------------------------------------------------------- */
 
 export async function shortenerURL(req: Request, res: Response) {
-  const shortURL = await BasicModel.createShortURL(req.body); // Create a short URL with the user data
+  // Get the username and url from user
+  const { url } = req.body;
+  const username = req._id;
+  const shortURL = await BasicModel.createShortURL({ url, username }); // Create a short URL with the user data
   // If the short URL is bigger then 8 characters, then it's an error
   if (shortURL.length > 8) {
     return res.status(400).json({ error: shortURL });
