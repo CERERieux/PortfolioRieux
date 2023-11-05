@@ -1,5 +1,6 @@
 import { Router } from "express";
 import extratorUser from "../middlewares/extractorUser";
+import partialExtratorUser from "../middlewares/partialExtractorUser";
 import * as BasicController from "../controllers/basic";
 
 export const basicRouter = Router();
@@ -7,7 +8,9 @@ export const basicRouter = Router();
 basicRouter.route("/timestamp/:date?").get(BasicController.timestamp);
 basicRouter.route("/whoami").get(BasicController.headParser);
 
-basicRouter.route("/shorturl").post(BasicController.shortenerURL);
+basicRouter
+  .route("/shorturl")
+  .post(partialExtratorUser, BasicController.shortenerURL);
 basicRouter.route("/shorturl/:user_url").get(BasicController.visitShortURL);
 
 basicRouter
