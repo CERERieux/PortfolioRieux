@@ -1,14 +1,26 @@
 import type { Types } from "mongoose";
 
 export interface IShortenerUrl {
+  _id: Types.ObjectId;
+  username: string;
   originalUrl: string;
   shortUrl: string;
 }
-// user?: `${string}-${string}-${string}-${string}-${string}`;
+
+export interface UrlMaterial {
+  url: string;
+  username: string;
+}
 
 export interface ValidUrlReq {
   isValid: boolean;
   original_url: string;
+}
+
+export interface CreateUrlMaterial {
+  newExtension: string;
+  url: string;
+  username: string;
 }
 
 export interface ValidExtension {
