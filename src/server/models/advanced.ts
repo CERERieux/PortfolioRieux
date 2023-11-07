@@ -1,5 +1,5 @@
 import "mongoose"; // Import mongoose to be able to use the models and manage our database
-import { IssueTracker, Book } from "../schemas/advanced";
+import { IssueTracker, ERROR_ISSUES, Book } from "../schemas/advanced";
 import {
   AMERICAN_ONLY,
   AMER_TO_BRIT_SPELLING,
@@ -11,10 +11,11 @@ import type {
   ConvertStringProps,
   ConvertProps,
   SudokuPlacement,
-  IssueSearchParams,
-  IIssueTracker,
   UpdateIssue,
+  ReqQueryIssue,
+  CreateIssue,
 } from "../types/advanced";
+import { ERROR_GUSER, GUser } from "../schemas/global";
 
 const METRIC_UNIT = {
   L: "l",
@@ -52,15 +53,6 @@ const REGIONS = {
   REGION_7: "g1g2g3h1h2h3i1i2i3",
   REGION_8: "g4g5g6h4h5h6i4i5i6",
   REGION_9: "g7g8g9h7h8h9i7i8i9",
-};
-
-const ERROR_ISSUES = {
-  FAIL_CREATE: "Couldn't create your new issue, please try again later.",
-  FAIL_FIND: "Error at trying to get all the issues, please try again later",
-  FAIL_FIND_ID: "Error at trying to find your issue, please try again later",
-  FAIL_UPDATE: "Error at trying to update your issue, please try again later",
-  NOT_FOUND: "Issue not found, revise if the ID you put is correct.",
-  NOT_PROJECT_FOUND: "Couldn't find any issues related to the project: ",
 };
 
 const ERROR_BOOKS = {
@@ -782,11 +774,9 @@ export class Translator {
  * search parameters, we filter those issues to only show the ones user wants
  * Any parameter can be filtered, it return an error if project isn't found
  */
-export async function getAllIssues(searchParams: IssueSearchParams) {
-  // Find project by name
-  const projectIssues = await IssueTracker.find({
-    project_name: searchParams.project_name,
-  }).catch(err => {
+export async function getAllIssues(searchParams: ReqQueryIssue) {
+  // Find all issues
+  const projectIssues = await IssueTracker.find({}).catch(err => {
     console.error(err);
     return { error: ERROR_ISSUES.FAIL_FIND };
   });
@@ -796,7 +786,7 @@ export async function getAllIssues(searchParams: IssueSearchParams) {
   // If we didn't find any project with that name, return an error
   if (projectIssues.length === 0) {
     return {
-      error: ERROR_ISSUES.NOT_PROJECT_FOUND + searchParams.project_name,
+      error: ERROR_ISSUES.NOT_ISSUES_FIND,
     };
   }
   // If we have issues, we need to filter those if user needs it
@@ -804,29 +794,29 @@ export async function getAllIssues(searchParams: IssueSearchParams) {
   /** TODO: Maybe make this smaller like in update where you put a for in and based
    * what parameter is, treat it differently
    */
-  if (searchParams.issue_title !== undefined) {
+  if (searchParams.project !== undefined) {
     filteredIssues = filteredIssues.filter(
-      issue => issue.issue_title === searchParams.issue_title,
+      issue => issue.project.toLowerCase() === searchParams.project,
     );
   }
-  if (searchParams.issue_text !== undefined) {
+  if (searchParams.title !== undefined) {
     filteredIssues = filteredIssues.filter(
-      issue => issue.issue_text === searchParams.issue_text,
+      issue => issue.title.toLowerCase() === searchParams.title,
+    );
+  }
+  if (searchParams.text !== undefined) {
+    filteredIssues = filteredIssues.filter(
+      issue => issue.text.toLowerCase() === searchParams.text,
     );
   }
   if (searchParams.created_by !== undefined) {
     filteredIssues = filteredIssues.filter(
-      issue => issue.created_by === searchParams.created_by,
+      issue => issue.created_by.toLowerCase() === searchParams.created_by,
     );
   }
-  if (searchParams.assigned_to !== undefined) {
+  if (searchParams.status !== undefined) {
     filteredIssues = filteredIssues.filter(
-      issue => issue.assigned_to === searchParams.assigned_to,
-    );
-  }
-  if (searchParams.status_text !== undefined) {
-    filteredIssues = filteredIssues.filter(
-      issue => issue.status_text === searchParams.status_text,
+      issue => issue.status.toLowerCase() === searchParams.status,
     );
   }
   if (searchParams.open !== undefined) {
@@ -835,15 +825,19 @@ export async function getAllIssues(searchParams: IssueSearchParams) {
   }
   if (searchParams.created_on !== undefined) {
     filteredIssues = filteredIssues.filter(issue => {
-      const dateUser = new Date(searchParams.created_on as string);
-      const dateIssue = new Date(issue.created_on.slice(0, 9));
+      const dateUser = new Date(searchParams.created_on as string).toJSON();
+      const dateIssue = new Date(
+        issue.created_on.toJSON().slice(0, 10),
+      ).toJSON();
       return dateUser === dateIssue;
     });
   }
   if (searchParams.updated_on !== undefined) {
     filteredIssues = filteredIssues.filter(issue => {
-      const dateUser = new Date(searchParams.updated_on as string);
-      const dateIssue = new Date(issue.updated_on.slice(0, 9));
+      const dateUser = new Date(searchParams.updated_on as string).toJSON();
+      const dateIssue = new Date(
+        issue.updated_on.toJSON().slice(0, 10),
+      ).toJSON();
       return dateUser === dateIssue;
     });
   }
@@ -854,15 +848,15 @@ export async function getAllIssues(searchParams: IssueSearchParams) {
   }
   // At the end, format each issue to display it to the user
   const displayIssue = filteredIssues.map(issue => ({
-    issue_title: issue.issue_title,
-    issue_text: issue.issue_text,
+    _id: issue._id,
+    project: issue.project,
+    title: issue.title,
+    text: issue.text,
     created_by: issue.created_by,
-    assigned_to: issue.assigned_to,
-    status_text: issue.status_text,
+    status: issue.status,
     open: issue.open,
     created_on: issue.created_on,
     updated_on: issue.updated_on,
-    _id: issue._id,
   }));
   return displayIssue;
 }
@@ -870,7 +864,7 @@ export async function getAllIssues(searchParams: IssueSearchParams) {
 /** Function that creates a new Issue in the database, it receive the
  * Issue to create and return the new Issue created and formatted
  */
-export async function createNewIssue(issue: IIssueTracker) {
+export async function createNewIssue(issue: CreateIssue) {
   // Create a new Issue and save it
   const newIssue = new IssueTracker(issue);
   const resultSave = await newIssue.save().catch(err => {
@@ -881,17 +875,42 @@ export async function createNewIssue(issue: IIssueTracker) {
   if ("error" in resultSave) {
     return resultSave;
   }
-  // If not, send the new issue to display it
+  // If user isn't anonymous, add it to their issues
+  if (issue.created_by !== "Anonymous") {
+    // Find user by Id, if not found, we send an error
+    const user = await GUser.findById(resultSave.created_by).catch(err => {
+      console.error(err);
+      return { error: ERROR_GUSER.COULD_NOT_FIND };
+    });
+    if (user == null) {
+      return {
+        error: ERROR_GUSER.USER_NOT_FOUND,
+      };
+    }
+    if ("error" in user) {
+      return user;
+    }
+    // Put the new issue into user and save it
+    user.issues.push(resultSave);
+    const updatedUser = await user.save().catch(err => {
+      console.error(err);
+      return { error: ERROR_ISSUES.FAIL_CREATE };
+    });
+    if ("error" in updatedUser) {
+      return updatedUser;
+    }
+  }
+  // At the end send the new issue to display it
   return {
     _id: resultSave._id,
-    issue_title: resultSave.issue_title,
-    issue_text: resultSave.issue_text,
+    project: resultSave.project,
+    title: resultSave.title,
+    text: resultSave.text,
+    created_by: resultSave.created_by,
+    status: resultSave.status,
+    open: resultSave.open,
     created_on: resultSave.created_on,
     updated_on: resultSave.updated_on,
-    created_by: resultSave.created_by,
-    assigned_to: resultSave.assigned_to,
-    open: resultSave.open,
-    status_text: resultSave.status_text,
   };
 }
 
@@ -900,12 +919,10 @@ export async function createNewIssue(issue: IIssueTracker) {
  */
 export async function updateIssue(issue: UpdateIssue) {
   // Find the issue by ID, if not found return error
-  const issueToUpdate = await IssueTracker.findById({ _id: issue._id }).catch(
-    err => {
-      console.error(err);
-      return { error: ERROR_ISSUES.FAIL_FIND_ID };
-    },
-  );
+  const issueToUpdate = await IssueTracker.findById(issue._id).catch(err => {
+    console.error(err);
+    return { error: ERROR_ISSUES.FAIL_FIND_ID };
+  });
   if (issueToUpdate == null) {
     return { error: ERROR_ISSUES.NOT_FOUND };
   }
@@ -916,20 +933,16 @@ export async function updateIssue(issue: UpdateIssue) {
   let param: keyof UpdateIssue;
   for (param in issue) {
     // As long it has a value and isn't the _id or the project name, we can change it
-    if (
-      issue[param] !== undefined &&
-      param !== "_id" &&
-      param !== "project_name"
-    ) {
+    if (issue[param] !== undefined && param !== "_id") {
       if (param !== "open") {
-        issueToUpdate[param] = issue[param] as string;
+        if (issue[param] !== "") issueToUpdate[param] = issue[param] as string;
       } else {
         issueToUpdate[param] = issue[param] as boolean;
       }
     }
   }
   // At the end we change the "update on" property to the actual date
-  issueToUpdate.updated_on = new Date(Date.now()).toISOString();
+  issueToUpdate.updated_on = new Date(Date.now());
   const issueUpdated = await issueToUpdate.save().catch(err => {
     console.error(err);
     return { error: ERROR_ISSUES.FAIL_UPDATE };

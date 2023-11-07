@@ -2,19 +2,18 @@ import * as AdvancedModel from "../models/advanced";
 import type { Request, Response } from "express";
 import type {
   ConverterQuery,
-  IIssueTracker,
-  IssueSearchParams,
+  CreateIssue,
   ReqBodyCommentBook,
   ReqBodyCreateBook,
   ReqBodyIssue,
   ReqParamDelete,
   ReqParamsCommentBook,
-  ReqParamsIssue,
   ReqQueryIssue,
   SudokuBody,
   TranslatorBody,
   UpdateIssue,
 } from "../types/advanced";
+import { ERROR_ISSUES } from "../schemas/advanced";
 
 const ERROR_CONVERTER = {
   INVALID_NUMBER: "Invalid number",
@@ -31,15 +30,7 @@ const ERROR_SUDOKU = {
   INVALID_VALUE: "Invalid value",
 };
 
-const ERROR_ISSUES = {
-  MISSING_FIELDS: "Required field(s) missing",
-  MISSING_ID: "Missing _id",
-  MISSING_UPDATE_DATA: "No update field(s) sent",
-  INVALID_FORMAT: "Please introduce a valid ID format",
-  ERROR_UPDATE: "Could not update",
-  ERROR_DELETE: "Could not delete",
-};
-const UPDATE_SUCCESS = "Successfully updated";
+const UPDATE_SUCCESS = (id: string) => `Successfully updated issue ${id}`;
 const DELETE_SUCCESS = "Successfully deleted";
 
 const ERROR_BOOKS = {
@@ -224,29 +215,22 @@ export function translatorAmericanBritish(
 /** ------------------------------------------------------------------------ */
 
 export async function getAllIssues(
-  req: Request<ReqParamsIssue, {}, {}, ReqQueryIssue>,
+  req: Request<{}, {}, {}, ReqQueryIssue>,
   res: Response,
 ) {
-  const project = req.params.project;
-  const issueTitle = req.query.issue_title;
-  const issueText = req.query.issue_text;
+  const { project, title, text, status, open, _id } = req.query;
   const createdBy = req.query.created_by;
-  const assignedTo = req.query.assigned_to;
-  const statusText = req.query.status_text;
-  const open = req.query.open;
   const createdOn = req.query.created_on;
   const updatedOn = req.query.updated_on;
-  const _id = req.query._id;
-  if (_id?.length !== 24) {
+  if (_id !== undefined && _id.length !== 24) {
     return res.status(400).json({ error: ERROR_ISSUES.INVALID_FORMAT });
   }
-  const searchParams: IssueSearchParams = {
-    project_name: project,
-    issue_title: issueTitle,
-    issue_text: issueText,
+  const searchParams: ReqQueryIssue = {
+    project,
+    title,
+    text,
     created_by: createdBy,
-    assigned_to: assignedTo,
-    status_text: statusText,
+    status,
     open,
     created_on: createdOn,
     updated_on: updatedOn,
@@ -258,31 +242,23 @@ export async function getAllIssues(
 }
 
 export async function createNewIssue(
-  req: Request<ReqParamsIssue, {}, ReqBodyIssue, {}>,
+  req: Request<{}, {}, ReqBodyIssue, {}>,
   res: Response,
 ) {
-  const issueTitle = req.body.issue_title;
-  const issueText = req.body.issue_text;
-  const createdBy = req.body.created_by;
+  const { project, title, text } = req.body;
+  const createdBy = req._id === process.env.DUMP_USER ? "Anonymous" : req._id;
 
-  if (issueTitle == null || issueText == null || createdBy == null) {
+  if (project == null || title == null || text == null) {
     return res.status(400).json({ error: ERROR_ISSUES.MISSING_FIELDS });
   } else {
-    const project = req.params.project;
-    const assignedTo = req.body.assigned_to ?? "";
-    const statusText = req.body.status_text ?? "";
-    const createdOn = new Date(Date.now()).toISOString();
-    const updatedOn = new Date(Date.now()).toISOString();
-    const issue: IIssueTracker = {
-      project_name: project,
-      issue_title: issueTitle,
-      issue_text: issueText,
+    const createdOn = new Date(Date.now());
+    const issue: CreateIssue = {
+      project,
+      title,
+      text,
       created_by: createdBy,
-      assigned_to: assignedTo,
-      status_text: statusText,
-      open: true,
       created_on: createdOn,
-      updated_on: updatedOn,
+      updated_on: createdOn,
     };
     const resultCreated = await AdvancedModel.createNewIssue(issue);
     if ("error" in resultCreated) return res.status(500).json(resultCreated);
@@ -291,64 +267,45 @@ export async function createNewIssue(
 }
 
 export async function updateIssue(
-  req: Request<ReqParamsIssue, {}, ReqBodyIssue, {}>,
+  req: Request<{}, {}, ReqBodyIssue, {}>,
   res: Response,
 ) {
-  const issueTitle = req.body.issue_title;
-  const issueText = req.body.issue_text;
-  const createdBy = req.body.created_by;
-  const assignedTo = req.body.assigned_to;
-  const statusText = req.body.status_text;
-  const open = req.body.open;
-  const _id = req.body._id;
-  if (_id == null) {
+  const { title, text, status, open, _id } = req.body;
+  if (_id == null)
     return res.status(400).json({ error: ERROR_ISSUES.MISSING_ID });
-  } else if (_id.length !== 24) {
+
+  if (_id.length !== 24)
     return res.status(400).json({ error: ERROR_ISSUES.INVALID_FORMAT });
-  } else if (
-    issueTitle == null &&
-    issueText == null &&
-    createdBy == null &&
-    assignedTo == null &&
-    statusText == null &&
-    open == null
-  ) {
+
+  if (title == null && text == null && status == null && open == null) {
     return res.status(400).json({
       error: ERROR_ISSUES.MISSING_UPDATE_DATA,
       _id,
     });
-  } else {
-    const project = req.params.project;
-    const issue: UpdateIssue = {
-      project_name: project,
-      issue_title: issueTitle,
-      issue_text: issueText,
-      created_by: createdBy,
-      assigned_to: assignedTo,
-      status_text: statusText,
-      open,
-      _id,
-    };
-    const resultUpdate = await AdvancedModel.updateIssue(issue);
-    // If there was an error at updating, display it
-    if ("error" in resultUpdate) {
-      return res.status(500).json({
-        error: resultUpdate.error,
-        _id,
-      });
-    } else {
-      return res.status(200).json({
-        result: UPDATE_SUCCESS,
-        _id,
-      });
-    }
   }
+
+  const issue: UpdateIssue = {
+    title,
+    text,
+    status,
+    open,
+    _id,
+  };
+  const resultUpdate = await AdvancedModel.updateIssue(issue);
+  // If there was an error at updating, display it
+  if ("error" in resultUpdate) return res.status(500).json(resultUpdate);
+  return res.status(200).json(UPDATE_SUCCESS(_id));
 }
 
 export async function deleteIssue(
   req: Request<ReqParamDelete, {}, {}, {}>,
   res: Response,
 ) {
+  // If user isn't admin, send an error
+  if (req._id !== process.env.ADMIN)
+    return res.status(401).json({
+      error: ERROR_ISSUES.FORBIDDEN_ACCESS,
+    });
   const _id = req.params._id;
   if (_id == null) {
     return res.status(400).json({ error: ERROR_ISSUES.MISSING_ID });
@@ -364,7 +321,7 @@ export async function deleteIssue(
       });
     } else {
       return res.status(500).json({
-        error: ERROR_ISSUES.ERROR_DELETE,
+        error: ERROR_ISSUES.ERROR_DELETE(_id),
         _id,
       });
     }
