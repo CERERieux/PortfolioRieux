@@ -1,3 +1,5 @@
+import type { Types } from "mongoose";
+
 export interface ConverterQuery {
   input: string;
 }
@@ -39,51 +41,57 @@ export interface TranslatorBody {
 /** ------------------------------------------------------------------------ */
 
 export interface IIssueTracker {
-  project_name: string;
-  issue_title: string;
-  issue_text: string;
-  created_by: string;
-  assigned_to?: string;
-  status_text?: string;
-  open: boolean;
-  created_on: string;
-  updated_on: string;
-}
-
-export interface ReqParamsIssue {
+  _id: Types.ObjectId;
   project: string;
-}
-export interface ReqParamDelete {
-  _id: string;
+  title: string;
+  text: string;
+  created_by: string;
+  status: string;
+  open: boolean;
+  created_on: Date;
+  updated_on: Date;
 }
 
 export interface ReqQueryIssue {
-  issue_title?: string;
-  issue_text?: string;
+  _id?: string;
+  project?: string;
+  title?: string;
+  text?: string;
   created_by?: string;
-  assigned_to?: string;
-  status_text?: string;
+  status?: string;
   open?: string;
   created_on?: string;
   updated_on?: string;
-  _id?: string;
-}
-export interface IssueSearchParams extends ReqQueryIssue {
-  project_name: string;
 }
 
 export interface ReqBodyIssue {
-  issue_title?: string;
-  issue_text?: string;
-  created_by?: string;
-  assigned_to?: string;
-  status_text?: string;
-  open?: boolean;
   _id?: string;
+  project?: string;
+  title?: string;
+  text?: string;
+  status?: string;
+  open?: boolean;
 }
 
-export interface UpdateIssue extends ReqBodyIssue {
-  project_name: string;
+export interface CreateIssue {
+  project: string;
+  title: string;
+  text: string;
+  created_by: string;
+  created_on: Date;
+  updated_on: Date;
+}
+
+export interface UpdateIssue {
+  title?: string;
+  text?: string;
+  status?: string;
+  open?: boolean;
+  _id: string;
+}
+
+export interface ReqParamDelete {
+  _id: string;
 }
 
 /** ------------------------------------------------------------------------ */
