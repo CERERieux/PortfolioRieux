@@ -1,5 +1,7 @@
 import { Router } from "express";
 import * as AdvancedController from "../controllers/advanced";
+import extratorUser from "../middlewares/extractorUser";
+import partialExtratorUser from "../middlewares/partialExtractorUser";
 
 export const advancedRouter = Router();
 
@@ -13,13 +15,13 @@ advancedRouter
   .post(AdvancedController.translatorAmericanBritish);
 
 advancedRouter
-  .route("/issue-tracker/:project")
-  .get(AdvancedController.getAllIssues)
-  .post(AdvancedController.createNewIssue)
-  .put(AdvancedController.updateIssue);
+  .route("/issue-tracker/")
+  .get(partialExtratorUser, AdvancedController.getAllIssues)
+  .post(partialExtratorUser, AdvancedController.createNewIssue)
+  .put(extratorUser, AdvancedController.updateIssue);
 advancedRouter
   .route("/issue-tracker/:_id")
-  .delete(AdvancedController.deleteIssue);
+  .delete(extratorUser, AdvancedController.deleteIssue);
 
 advancedRouter
   .route("/books")
