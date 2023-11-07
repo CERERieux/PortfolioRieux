@@ -55,18 +55,6 @@ const REGIONS = {
   REGION_9: "g7g8g9h7h8h9i7i8i9",
 };
 
-const ERROR_BOOKS = {
-  COULD_NOT_DELETE: "Error at deleting a book, please try again.",
-  COULD_NOT_FIND: "Error at finding a book, please try again.",
-  COULD_NOT_SAVE: "Error at saving the new book, please try again.",
-  DELETE_EMPTY_LIBRARY: "Library was empty, you can't delete more books.",
-  DELETE_EMPTY_BOOK: "No book exists",
-  EMPTY_LIBRARY: "Can't find any book, library is empty, please add new books.",
-  NOT_FOUND:
-    "Couldn't found a book matching the given ID, please try with another ID",
-};
-const SUCCESS_DELETE_BOOK = "Delete successful";
-
 const SAME_INPUT = "Everything looks good to me!";
 
 /** ------------------------------------------------------------------------ */
@@ -783,7 +771,7 @@ export async function getAllIssues(searchParams: ReqQueryIssue) {
   if ("error" in projectIssues) {
     return projectIssues;
   }
-  // If we didn't find any project with that name, return an error
+  // If we didn't find any issue, return an error
   if (projectIssues.length === 0) {
     return {
       error: ERROR_ISSUES.NOT_ISSUES_FIND,
@@ -791,61 +779,45 @@ export async function getAllIssues(searchParams: ReqQueryIssue) {
   }
   // If we have issues, we need to filter those if user needs it
   let filteredIssues = projectIssues.slice();
-  /** TODO: Maybe make this smaller like in update where you put a for in and based
-   * what parameter is, treat it differently
-   */
-  if (searchParams.project !== undefined) {
-    filteredIssues = filteredIssues.filter(
-      issue => issue.project.toLowerCase() === searchParams.project,
-    );
+
+  // Filter the issues based on their type
+  let param: keyof ReqQueryIssue;
+  // For each property in the search, if it isn't empty
+  for (param in searchParams) {
+    if (searchParams[param] !== undefined) {
+      // For those properties that are a string just search by it
+      if (
+        param !== "_id" &&
+        param !== "created_on" &&
+        param !== "updated_on" &&
+        param !== "open"
+      ) {
+        filteredIssues = filteredIssues.filter(
+          issue =>
+            (issue[param] as string).toLowerCase() === searchParams[param],
+        );
+      } else if (param !== "_id" && param !== "open") {
+        // If the parameter is a date, ensure we get it as string and compare it
+        filteredIssues = filteredIssues.filter(issue => {
+          const dateUser = new Date(searchParams[param] as string).toJSON();
+          const dateIssue = new Date(
+            (issue[param] as Date).toJSON().slice(0, 10),
+          ).toJSON();
+          return dateUser === dateIssue;
+        });
+      } else if (param === "_id") {
+        // If it's the id of the issue, get the string from the id
+        filteredIssues = filteredIssues.filter(
+          issue => issue._id.toString() === searchParams._id,
+        );
+      } else {
+        // If the search parameter is a boolean, get the value and compare it
+        const bool = searchParams.open === "true";
+        filteredIssues = filteredIssues.filter(issue => issue.open === bool);
+      }
+    }
   }
-  if (searchParams.title !== undefined) {
-    filteredIssues = filteredIssues.filter(
-      issue => issue.title.toLowerCase() === searchParams.title,
-    );
-  }
-  if (searchParams.text !== undefined) {
-    filteredIssues = filteredIssues.filter(
-      issue => issue.text.toLowerCase() === searchParams.text,
-    );
-  }
-  if (searchParams.created_by !== undefined) {
-    filteredIssues = filteredIssues.filter(
-      issue => issue.created_by.toLowerCase() === searchParams.created_by,
-    );
-  }
-  if (searchParams.status !== undefined) {
-    filteredIssues = filteredIssues.filter(
-      issue => issue.status.toLowerCase() === searchParams.status,
-    );
-  }
-  if (searchParams.open !== undefined) {
-    const bool = searchParams.open === "true";
-    filteredIssues = filteredIssues.filter(issue => issue.open === bool);
-  }
-  if (searchParams.created_on !== undefined) {
-    filteredIssues = filteredIssues.filter(issue => {
-      const dateUser = new Date(searchParams.created_on as string).toJSON();
-      const dateIssue = new Date(
-        issue.created_on.toJSON().slice(0, 10),
-      ).toJSON();
-      return dateUser === dateIssue;
-    });
-  }
-  if (searchParams.updated_on !== undefined) {
-    filteredIssues = filteredIssues.filter(issue => {
-      const dateUser = new Date(searchParams.updated_on as string).toJSON();
-      const dateIssue = new Date(
-        issue.updated_on.toJSON().slice(0, 10),
-      ).toJSON();
-      return dateUser === dateIssue;
-    });
-  }
-  if (searchParams._id !== undefined) {
-    filteredIssues = filteredIssues.filter(
-      issue => issue._id.toString() === searchParams._id,
-    );
-  }
+
   // At the end, format each issue to display it to the user
   const displayIssue = filteredIssues.map(issue => ({
     _id: issue._id,
@@ -966,6 +938,18 @@ export async function deleteIssue(_id: string) {
 }
 
 /** ------------------------------------------------------------------------ */
+
+const ERROR_BOOKS = {
+  COULD_NOT_DELETE: "Error at deleting a book, please try again.",
+  COULD_NOT_FIND: "Error at finding a book, please try again.",
+  COULD_NOT_SAVE: "Error at saving the new book, please try again.",
+  DELETE_EMPTY_LIBRARY: "Library was empty, you can't delete more books.",
+  DELETE_EMPTY_BOOK: "No book exists",
+  EMPTY_LIBRARY: "Can't find any book, library is empty, please add new books.",
+  NOT_FOUND:
+    "Couldn't found a book matching the given ID, please try with another ID",
+};
+const SUCCESS_DELETE_BOOK = "Delete successful";
 
 /** Function that gets all the books from database */
 export async function getAllBooks() {
