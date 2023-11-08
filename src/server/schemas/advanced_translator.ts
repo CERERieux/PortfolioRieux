@@ -1,4 +1,6 @@
 // For simplicity, we will save the dictionary for the translator here as it was a mongoose model
+export const SAME_INPUT = "Everything looks good to me!";
+
 export const AMERICAN_ONLY = {
   acclimate: "acclimatise",
   acetaminophen: "paracetamol",
