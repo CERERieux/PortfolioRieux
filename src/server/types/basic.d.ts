@@ -12,15 +12,13 @@ export interface UrlMaterial {
   username: string;
 }
 
+export interface CreateUrlMaterial extends UrlMaterial {
+  newExtension: string;
+}
+
 export interface ValidUrlReq {
   isValid: boolean;
   original_url: string;
-}
-
-export interface CreateUrlMaterial {
-  newExtension: string;
-  url: string;
-  username: string;
 }
 
 export interface ValidExtension {
@@ -28,27 +26,36 @@ export interface ValidExtension {
   newExtension: string;
 }
 
+/** ------------------------------------------------------------------------ */
+
 export interface IExTracker {
   _id: Types.ObjectId;
   username: string;
   description: string;
-  duration: number;
-  date: string;
+  status: string;
+  date: Date;
+}
+
+export interface ReqExerciseBody {
+  description: string;
+  status: string;
+  date?: string;
 }
 
 export interface ExerciseElements {
   _id: string;
   description: string;
-  duration: number;
-  date: string;
+  status: string;
+  date: Date;
 }
+export type UpdateExercise = Omit<ExerciseElements, "date">;
 
+export interface ReqParam {
+  _id: string;
+}
 export interface ReqQueryLog {
   from?: string;
   to?: string;
   limit?: string;
 }
-
-export interface LogOptions extends ReqQueryLog {
-  _id: string;
-}
+export type LogOptions = ReqQueryLog & ReqParam;
