@@ -7,6 +7,7 @@ export const ERROR_GUSER = {
     "Could not delete the user you needed, please try again later",
   COULD_NOT_FIND: "Could not find the user you needed, please try again later",
   COULD_NOT_SAVE: "Can't save any user right now, please try again later",
+  COULD_NOT_UPDATE: "Can't update any user right now, please try again later",
   INCORRECT_CREDENTIALS:
     "The username or password are incorrect, please introduce a valid pair of information",
   USER_EXIST: "The username is already taken, please introduce a new one",
