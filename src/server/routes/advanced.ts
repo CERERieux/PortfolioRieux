@@ -25,11 +25,12 @@ advancedRouter
 
 advancedRouter
   .route("/books")
-  .get(AdvancedController.getAllBooks)
-  .post(AdvancedController.createNewBook)
-  .delete(AdvancedController.deleteAllBooks);
+  .get(extratorUser, AdvancedController.getAllBooks)
+  .post(extratorUser, AdvancedController.createNewBook)
+  .delete(extratorUser, AdvancedController.deleteAllBooks);
 advancedRouter
   .route("/books/:id")
-  .get(AdvancedController.getSingleBook)
-  .post(AdvancedController.createBookComment)
-  .delete(AdvancedController.deleteSingleBook);
+  .get(extratorUser, AdvancedController.getSingleBook)
+  .post(extratorUser, AdvancedController.createBookNote)
+  .put(extratorUser, AdvancedController.updateBook)
+  .delete(extratorUser, AdvancedController.deleteSingleBook);
