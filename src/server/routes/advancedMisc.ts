@@ -1,11 +1,12 @@
 import { Router } from "express";
 import * as AdvancedMiscController from "../controllers/advancedMisc";
+import extratorUser from "../middlewares/extractorUser";
 
 export const advancedMiscRouter = Router();
 
 advancedMiscRouter
   .route("/stock-prices")
-  .get(AdvancedMiscController.consultStock);
+  .get(extratorUser, AdvancedMiscController.consultStock);
 
 advancedMiscRouter.get("/boards", AdvancedMiscController.getAllBoards);
 

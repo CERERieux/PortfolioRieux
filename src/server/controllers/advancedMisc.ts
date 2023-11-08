@@ -5,27 +5,22 @@ import type {
   ReqReportThread,
   ReqThreadBody,
   ReqDeleteThread,
-  StockQuery,
+  ReqStockQuery,
   ReqQueryReply,
   ReqCreateReplyBody,
   ReqReportReply,
   ReqDeleteReply,
 } from "../types/advancedMisc";
-
-const INVALID_FORMAT =
-  "The ID you introduce has an invalid format, please revise if the ID is correct";
-const MISSING_ELEMENT =
-  "It seems that some elements that are needed to make this operation are missing, please verify the content of the form or the query in the url";
+import { ERROR_STOCK, ERROR_BOARD } from "../schemas/advancedMisc";
 
 export async function consultStock(
-  req: Request<{}, {}, {}, StockQuery>,
+  req: Request<{}, {}, {}, ReqStockQuery>,
   res: Response,
 ) {
-  const { stock, like, _id } = req.query;
-  if (_id.length !== 24) {
-    return res.status(400).json({ error: INVALID_FORMAT });
-  }
-
+  const _id = req._id;
+  const { stock, like } = req.query;
+  if (stock === undefined || like === undefined)
+    return res.status(400).json({ error: ERROR_STOCK.MISSING_ELEMENTS });
   const resultStock = await AdvancedMiscModel.consultStock({
     stock,
     like,
@@ -58,7 +53,7 @@ export async function createNewThread(
   const text = req.body.text;
   const deletePassword = req.body.delete_password;
   if (text == null || deletePassword == null)
-    return res.status(400).json({ error: MISSING_ELEMENT });
+    return res.status(400).json({ error: ERROR_BOARD.MISSING_ELEMENT });
   else {
     const resultCreate = await AdvancedMiscModel.createNewThread({
       _id: _id.toLowerCase(),
@@ -75,9 +70,10 @@ export async function reportThread(
   res: Response,
 ) {
   const _id = req.body.thread_id;
-  if (_id == null) return res.status(400).json({ error: MISSING_ELEMENT });
+  if (_id == null)
+    return res.status(400).json({ error: ERROR_BOARD.MISSING_ELEMENT });
   else if (_id.length !== 24)
-    return res.status(400).json({ error: INVALID_FORMAT });
+    return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultReport = await AdvancedMiscModel.reportThread(_id);
     if ("error" in resultReport) return res.status(500).json(resultReport);
@@ -92,9 +88,9 @@ export async function deleteThread(
   const deletePassword = req.query.password;
   const _id = req.query.thread_id;
   if (_id == null || deletePassword == null)
-    return res.status(400).json({ error: MISSING_ELEMENT });
+    return res.status(400).json({ error: ERROR_BOARD.MISSING_ELEMENT });
   else if (_id.length !== 24)
-    return res.status(400).json({ error: INVALID_FORMAT });
+    return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultDelete = await AdvancedMiscModel.deleteThread({
       _id,
@@ -112,9 +108,9 @@ export async function getAllReplies(
   const _idBoard = req.params.board;
   const _idThread = req.query.thread_id;
   if (_idThread == null)
-    return res.status(400).json({ error: MISSING_ELEMENT });
+    return res.status(400).json({ error: ERROR_BOARD.MISSING_ELEMENT });
   else if (_idThread.length !== 24)
-    return res.status(400).json({ error: INVALID_FORMAT });
+    return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultQuery = await AdvancedMiscModel.getAllReplies({
       _idBoard,
@@ -133,9 +129,9 @@ export async function createNewReply(
   const text = req.body.text;
   const deletePassword = req.body.delete_password;
   if (_id == null || text == null || deletePassword == null)
-    return res.status(400).json({ error: MISSING_ELEMENT });
+    return res.status(400).json({ error: ERROR_BOARD.MISSING_ELEMENT });
   else if (_id.length !== 24)
-    return res.status(40).json({ error: INVALID_FORMAT });
+    return res.status(40).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultCreate = await AdvancedMiscModel.createNewReply({
       _id,
@@ -152,9 +148,10 @@ export async function reportReply(
   res: Response,
 ) {
   const _id = req.body.reply_id;
-  if (_id == null) return res.status(400).json({ error: MISSING_ELEMENT });
+  if (_id == null)
+    return res.status(400).json({ error: ERROR_BOARD.MISSING_ELEMENT });
   else if (_id.length !== 24)
-    return res.status(400).json({ error: INVALID_FORMAT });
+    return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultReport = await AdvancedMiscModel.reportReply(_id);
     if ("error" in resultReport) return res.status(500).json(resultReport);
@@ -169,9 +166,9 @@ export async function deleteReply(
   const deletePassword = req.query.password;
   const _id = req.query.reply_id;
   if (_id == null || deletePassword == null)
-    return res.status(400).json({ error: MISSING_ELEMENT });
+    return res.status(400).json({ error: ERROR_BOARD.MISSING_ELEMENT });
   else if (_id.length !== 24)
-    return res.status(400).json({ error: INVALID_FORMAT });
+    return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultDelete = await AdvancedMiscModel.deleteReply({
       _id,

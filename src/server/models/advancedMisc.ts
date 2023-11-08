@@ -13,28 +13,26 @@ import type {
   GetReplies,
   DeleteElementBoard,
 } from "../types/advancedMisc";
-import { Stocks, Clients, Board, Thread, Reply } from "../schemas/advancedMisc";
+import {
+  Stock,
+  Client,
+  ERROR_STOCK,
+  Board,
+  Thread,
+  Reply,
+  ERROR_BOARD,
+  ACTION_BOARD,
+} from "../schemas/advancedMisc";
 
 // Link to the API we consult to get the stock market info
 const STOCK_API =
   "https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/[symbol]/quote";
-const ERROR_STOCK = {
-  CREATING_CLIENT: "Couldn't create new client, please try again later",
-  CREATING_STOCK: "Couldn't create new stock, please try again later",
-  FAIL_FETCH: "Couldn't get the info of the user stock, please try again later",
-  FINDING_ALL_CLIENTS:
-    "Couldn't get all clients due a problem, please try again later.",
-  FINDING_STOCK: "Couldn't find the user stock, please try again later",
-  PUTTING_LIKES:
-    "Couldn't assign the likes to the wanted stock, please try again later",
-  UPDATE_STOCK: "Couldn't update the user stock, please try again later",
-};
 
 /** ------------------------------------------------------------------------ */
 
 export async function consultStock({ stock, like, _id }: StockQuery) {
   // We will search if client is new or already exist
-  const dbClientId = await Clients.findById({ _id }).catch(err => {
+  const dbClientId = await Client.findOne({ username: _id }).catch(err => {
     console.error(err);
     return { error: ERROR_STOCK.FINDING_ALL_CLIENTS };
   });
@@ -53,8 +51,7 @@ export async function consultStock({ stock, like, _id }: StockQuery) {
     if ("error" in currentClient) return currentClient;
   } else {
     // If is new, create it the ID and then the new client
-    const newID = new mongoose.Types.ObjectId(_id);
-    currentClient = await createNewClient(newID);
+    currentClient = await createNewClient(_id);
     if ("error" in currentClient) return currentClient;
     currentClient = await putLikes({ currentClient, stock, like });
     if ("error" in currentClient) return currentClient;
@@ -131,9 +128,9 @@ export async function consultStock({ stock, like, _id }: StockQuery) {
 }
 
 /** Function that creates and save a Client in the database */
-async function createNewClient(_id: mongoose.Types.ObjectId) {
-  const newClient = new Clients({
-    _id,
+async function createNewClient(_id: string) {
+  const newClient = new Client({
+    username: _id,
     liked: {},
   });
   const resultSave = await newClient.save().catch(err => {
@@ -173,7 +170,7 @@ async function operationStocks({ currentClient, stock }: OperationStocks) {
   const clientID = currentClient._id.toString(); // Id of current client
   const lStock = stock.toLowerCase();
   // Find the stock to consult
-  const consultStock = await Stocks.findById({ _id: lStock })
+  const consultStock = await Stock.findOne({ stockname: lStock })
     .populate("clients")
     .exec()
     .catch(err => {
@@ -183,12 +180,12 @@ async function operationStocks({ currentClient, stock }: OperationStocks) {
 
   // If the stock don't exist, create it
   if (consultStock === null) {
-    const newStock = new Stocks({
-      _id: stock.toLowerCase(),
+    const newStock = new Stock({
+      stockname: stock.toLowerCase(),
       clients: [],
     });
     newStock.clients.push(currentClient); // Push the client who is consulting
-    const isLikedStock = currentClient.liked.get(newStock._id);
+    const isLikedStock = currentClient.liked.get(newStock.stockname);
     // Put likes to 1 if client liked it and save it
     if (typeof isLikedStock === "boolean" && isLikedStock) newStock.likes = 1;
     resultSave = await newStock.save().catch(err => {
@@ -200,16 +197,16 @@ async function operationStocks({ currentClient, stock }: OperationStocks) {
     if ("error" in consultStock) return consultStock;
     // If it's valid, we see if client is already in the stock
     let likes = 0; // Auxiliar to get the likes of the stock
-    const existClient = consultStock.clients.filter(client => {
+    const existClient = consultStock.clients.find(client => {
       const currentID = client._id.toString();
       return currentID === clientID;
     });
     // If the client is new, push it to the array
-    if (existClient.length === 0) consultStock.clients.push(currentClient);
+    if (existClient === undefined) consultStock.clients.push(currentClient);
 
     // We get the likes of the stock
     consultStock.clients.map(client => {
-      const isLikedStock = client.liked.get(consultStock._id);
+      const isLikedStock = client.liked.get(consultStock.stockname);
       if (typeof isLikedStock === "boolean" && isLikedStock) likes++;
       return null;
     });
@@ -227,7 +224,7 @@ async function operationStocks({ currentClient, stock }: OperationStocks) {
  * user wants from it */
 async function fetchInfo(resultStock: StockDocument) {
   // We need to replace the placeholder from the link
-  const link = STOCK_API.replace("[symbol]", resultStock._id);
+  const link = STOCK_API.replace("[symbol]", resultStock.stockname);
   const consult = await fetch(link) // Send a request to the API
     .then(response => response.json())
     .then((data: StockAPI) => {
@@ -244,47 +241,6 @@ async function fetchInfo(resultStock: StockDocument) {
 }
 
 /** ------------------------------------------------------------------------ */
-
-const ERROR_BOARD = {
-  COULD_NOT_GET_ALL_BOARDS:
-    "We couldn't recover the boards from our database, please try again later",
-  COULD_NOT_FIND_BOARD:
-    "We couldn't find the board you needed to make the operation, please try again later",
-  COULD_NOT_SAVE_BOARD:
-    "Couldn't save the board threads update in the required board, please try again later",
-  COULD_NOT_DELETE_REPLY:
-    "We couldn't delete the reply of the thread you wanted to delete, please try again later",
-  COULD_NOT_FIND_REPLY:
-    "We couldn't find the reply you needed to make the operation, please try again later",
-  COULD_NOT_FIND_ID_REPLY:
-    "The ID reply you introduce don't exist, revise that your ID is correct or exist",
-  COULD_NOT_SAVE_REPLY:
-    "Couldn't save the new reply in the required thread, please try again later",
-  COULD_NOT_UPDATE_REPLY:
-    "Couldn't update the reply information with your data, please try again later",
-  COULD_NOT_DELETE_THREAD:
-    "We couldn't delete the thread you needed, please try again later",
-  COULD_NOT_FIND_THREAD:
-    "We couldn't find the thread you wanted to make your operation, please try again later",
-  COULD_NOT_FIND_ID_THREAD:
-    "The ID thread you introduce don't exist, revise that your ID is correct or exist",
-  COULD_NOT_SAVE_THREAD:
-    "Couldn't save the new thread in the required board, please try again later",
-  COULD_NOT_UPDATE_THREAD:
-    "Couldn't update the thread information with your data, please try again later",
-  EMPTY_BOARD:
-    "There is not a board with the name you introduce, please post in a existent board or create a new one posting a thread on it",
-  EMPTY_ALL_BOARDS:
-    "Right now we have 0 boards created, please start a new one creating a thread about the topic you want to talk about",
-  INCORRECT_PASSWORD:
-    "The password you introduce to delete is incorrect, please revise if your password is the correct one",
-};
-const REPORT_THREAD_SUCCESS =
-  "Your thread report was sucessfully sent to our servers";
-const DELETE_THREAD_SUCCESS = "Your thread was sucessfully deleted";
-const REPORT_REPLY_SUCCESS =
-  "Your reply report was sucessfully sent to our servers";
-const DELETE_REPLY_SUCCESS = "Your reply was sucessfully deleted";
 
 export async function getAllBoards() {
   const allBoards = await Board.find({})
@@ -411,7 +367,7 @@ export async function reportThread(_id: string) {
     return { error: ERROR_BOARD.COULD_NOT_UPDATE_THREAD };
   });
   if ("error" in resultUpdate) return resultUpdate;
-  const resultAction = { action: REPORT_THREAD_SUCCESS };
+  const resultAction = { action: ACTION_BOARD.REPORT_THREAD_SUCCESS };
   return resultAction;
 }
 
@@ -444,7 +400,7 @@ export async function deleteThread({ _id, password }: DeleteElementBoard) {
     // If there was an error in deleting the thread, send it
     if ("error" in deleteResult) return deleteResult;
     // If it was successful, return the action
-    const resultAction = { action: DELETE_THREAD_SUCCESS };
+    const resultAction = { action: ACTION_BOARD.DELETE_THREAD_SUCCESS };
     return resultAction;
   } else {
     // If password is incorrect, return an error
@@ -544,7 +500,7 @@ export async function reportReply(_id: string) {
   });
   // If there was an error while updating, return the error
   if ("error" in updateResult) return updateResult;
-  const resultAction = { action: REPORT_REPLY_SUCCESS };
+  const resultAction = { action: ACTION_BOARD.REPORT_REPLY_SUCCESS };
   return resultAction; // Return the success message
 }
 
@@ -567,7 +523,7 @@ export async function deleteReply({ _id, password }: DeleteElementBoard) {
     });
     // If there was an error while deleting, return the error
     if ("error" in deleteResult) return deleteResult;
-    const resultAction = { action: DELETE_REPLY_SUCCESS };
+    const resultAction = { action: ACTION_BOARD.DELETE_REPLY_SUCCESS };
     return resultAction; // Return the success message
   } else {
     // If password is wrong, then return an error
