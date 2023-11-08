@@ -1,12 +1,24 @@
 import "mongoose"; // Import mongoose to be able to use the models and manage our database
-import { IssueTracker, ERROR_ISSUES, Book } from "../schemas/advanced";
+import {
+  IssueTracker,
+  ERROR_ISSUES,
+  Book,
+  ERROR_BOOKS,
+  METRIC_UNIT,
+  IMPERIAL_UNIT,
+  GAL_TO_L,
+  LBS_TO_KG,
+  MI_TO_KM,
+  ERROR_SUDOKU,
+  REGIONS,
+} from "../schemas/advanced";
 import {
   AMERICAN_ONLY,
   AMER_TO_BRIT_SPELLING,
   AMER_TO_BRIT_TITLES,
   BRITISH_ONLY,
+  SAME_INPUT,
 } from "../schemas/advanced_translator";
-
 import type {
   ConvertStringProps,
   ConvertProps,
@@ -14,48 +26,10 @@ import type {
   UpdateIssue,
   ReqQueryIssue,
   CreateIssue,
+  CreateBook,
+  ReqBodyUpdateBook,
 } from "../types/advanced";
 import { ERROR_GUSER, GUser } from "../schemas/global";
-
-const METRIC_UNIT = {
-  L: "l",
-  L_SO: "liters",
-  KG: "kg",
-  KG_SO: "kilograms",
-  KM: "km",
-  KM_SO: "kilometers",
-};
-const IMPERIAL_UNIT = {
-  GAL: "gal",
-  GAL_SO: "gallons",
-  LBS: "lbs",
-  LBS_SO: "pounds",
-  MI: "mi",
-  MI_SO: "miles",
-};
-const GAL_TO_L = 3.78541;
-const LBS_TO_KG = 0.453592;
-const MI_TO_KM = 1.60934;
-
-const ERROR_SUDOKU = {
-  INVALID_CHARACTER: "Invalid characters in puzzle",
-  INVALID_FORMAT: "Expected puzzle to be 81 characters long",
-  UNSOLVABLE: "Puzzle cannot be solved",
-};
-
-const REGIONS = {
-  REGION_1: "a1a2a3b1b2b3c1c2c3",
-  REGION_2: "a4a5a6b4b5b6c4c5c6",
-  REGION_3: "a7a8a9b7b8b9c7c8c9",
-  REGION_4: "d1d2d3e1e2e3f1f2f3",
-  REGION_5: "d4d5d6e4e5e6f4f5f6",
-  REGION_6: "d7d8d9e7e8e9f7f8f9",
-  REGION_7: "g1g2g3h1h2h3i1i2i3",
-  REGION_8: "g4g5g6h4h5h6i4i5i6",
-  REGION_9: "g7g8g9h7h8h9i7i8i9",
-};
-
-const SAME_INPUT = "Everything looks good to me!";
 
 /** ------------------------------------------------------------------------ */
 
@@ -758,7 +732,7 @@ export class Translator {
 
 /** ------------------------------------------------------------------------ */
 
-/** Function that gets all the issues related to 1 project, in case user send
+/** Function that gets all the issues related to the project, in case user send
  * search parameters, we filter those issues to only show the ones user wants
  * Any parameter can be filtered, it return an error if project isn't found
  */
@@ -785,7 +759,7 @@ export async function getAllIssues(searchParams: ReqQueryIssue) {
   // For each property in the search, if it isn't empty
   for (param in searchParams) {
     if (searchParams[param] !== undefined) {
-      // For those properties that are a string just search by it
+      // For those properties that are a string, just search by it
       if (
         param !== "_id" &&
         param !== "created_on" &&
@@ -924,7 +898,21 @@ export async function updateIssue(issue: UpdateIssue) {
 
 /* Function that gets an ID and delete the Issue that user wants to remove */
 export async function deleteIssue(_id: string) {
-  // Delete document by its ID and if it was successful, return true
+  // We need to find the issue by its id to get user and then remove the issue from they
+  const issueToDelete = await IssueTracker.findById(_id).catch(err => {
+    console.error(err);
+    return { error: ERROR_ISSUES.FAIL_FIND_ID };
+  });
+  if (issueToDelete == null) {
+    return false;
+  }
+  if ("error" in issueToDelete) {
+    return false;
+  }
+  // If we found an issue, then it exist and we can delete it
+  const username = issueToDelete.created_by; // Get the username
+
+  // And delete document
   const issuesDeleted = await IssueTracker.deleteOne({ _id })
     .then(deleteObj => {
       return deleteObj.deletedCount;
@@ -933,28 +921,39 @@ export async function deleteIssue(_id: string) {
       console.error(err);
       return 0;
     });
-  if (issuesDeleted > 0) return true;
+  if (issuesDeleted > 0) {
+    // If we deleted something, we need to remove it from user
+    // Find user by Id, if not found, we send an error
+    const user = await GUser.findById(username).catch(err => {
+      console.error(err);
+      return { error: ERROR_GUSER.COULD_NOT_FIND };
+    });
+    if (user == null) {
+      return false;
+    }
+    if ("error" in user) {
+      return false;
+    }
+    // Erase the issue and save user
+    user.issues = user.issues.filter(issue => issue._id.toString() !== _id);
+    const updatedUser = await user.save().catch(err => {
+      console.error(err);
+      return { error: ERROR_BOOKS.COULD_NOT_DELETE };
+    });
+    if ("error" in updatedUser) {
+      return false;
+    }
+    return true;
+  }
   return false;
 }
 
 /** ------------------------------------------------------------------------ */
 
-const ERROR_BOOKS = {
-  COULD_NOT_DELETE: "Error at deleting a book, please try again.",
-  COULD_NOT_FIND: "Error at finding a book, please try again.",
-  COULD_NOT_SAVE: "Error at saving the new book, please try again.",
-  DELETE_EMPTY_LIBRARY: "Library was empty, you can't delete more books.",
-  DELETE_EMPTY_BOOK: "No book exists",
-  EMPTY_LIBRARY: "Can't find any book, library is empty, please add new books.",
-  NOT_FOUND:
-    "Couldn't found a book matching the given ID, please try with another ID",
-};
-const SUCCESS_DELETE_BOOK = "Delete successful";
-
 /** Function that gets all the books from database */
-export async function getAllBooks() {
-  // We don't need anything from user, we need to get all the books from database
-  const books = await Book.find().catch(err => {
+export async function getAllBooks(username: string) {
+  // Get all the books that have the same username
+  const books = await Book.find({ username }).catch(err => {
     console.error(err);
     return { error: ERROR_BOOKS.COULD_NOT_FIND };
   });
@@ -968,37 +967,64 @@ export async function getAllBooks() {
   }
   // If we have books in database, order the data
   const displayBooks = books.map(book => ({
-    title: book.title,
     _id: book._id,
-    commentcount: book.commentCount,
+    title: book.title,
+    status: book.status,
+    review: book.review,
+    recommend: book.recommend,
   }));
   return displayBooks;
 }
 
 /** Function that creates a new book in database with user data */
-export async function createNewBook(title: string) {
-  // create a new book with user title and save it
+export async function createNewBook({ title, status, username }: CreateBook) {
+  // create a new book with user title, status and save it
   const newBook = new Book({
     title,
-    comments: [],
+    status,
+    username,
   });
   const resultSave = await newBook.save().catch(err => {
     console.error(err);
     return { error: ERROR_BOOKS.COULD_NOT_SAVE };
   });
-  // If the result was successful, return the title and id of the book
-  if (!("error" in resultSave)) {
-    const displayBook = {
-      title: resultSave.title,
-      _id: resultSave._id,
-    };
-    return displayBook;
+  // If the result was an error, return it
+  if ("error" in resultSave) {
+    return resultSave; // Else, return the error
   }
-  return resultSave; // Else, return the error
+  // If book was successfully created, then we added to user
+  // Find user by Id, if not found, we send an error
+  const user = await GUser.findById(resultSave.username).catch(err => {
+    console.error(err);
+    return { error: ERROR_GUSER.COULD_NOT_FIND };
+  });
+  if (user == null) {
+    return {
+      error: ERROR_GUSER.USER_NOT_FOUND,
+    };
+  }
+  if ("error" in user) {
+    return user;
+  }
+  // Put the book in user and save it
+  user.books.push(resultSave);
+  const updatedUser = await user.save().catch(err => {
+    console.error(err);
+    return { error: ERROR_BOOKS.COULD_NOT_SAVE };
+  });
+  if ("error" in updatedUser) {
+    return updatedUser;
+  }
+  // At the end only send the id and title of the book
+  const displayBook = {
+    title: resultSave.title,
+    _id: resultSave._id,
+  };
+  return displayBook;
 }
 
 /** Function that deletes all data from books collection */
-export async function deleteAllBooks() {
+export async function deleteAllBooks(username: string) {
   // Delete all books, if there is an error at deleting, display it
   const deletedBooks = await Book.deleteMany().catch(err => {
     console.error(err);
@@ -1008,10 +1034,32 @@ export async function deleteAllBooks() {
     return deletedBooks;
   }
   // If it was successful, we check if there was any book removed
-  const deletedCount = deletedBooks.deletedCount;
-  // If it was, then the action was successful
+  const { deletedCount } = deletedBooks;
+  // If it was, then the action was successful, and we need to remove books from user
   if (deletedCount > 0) {
-    return { action: SUCCESS_DELETE_BOOK };
+    // Find user by Id, if not found, we send an error
+    const user = await GUser.findById(username).catch(err => {
+      console.error(err);
+      return { error: ERROR_GUSER.COULD_NOT_FIND };
+    });
+    if (user == null) {
+      return {
+        error: ERROR_GUSER.USER_NOT_FOUND,
+      };
+    }
+    if ("error" in user) {
+      return user;
+    }
+    // Erase the array of books
+    user.books = [];
+    const updatedUser = await user.save().catch(err => {
+      console.error(err);
+      return { error: ERROR_BOOKS.COULD_NOT_DELETE };
+    });
+    if ("error" in updatedUser) {
+      return updatedUser;
+    }
+    return { action: `All books were successfully deleted` };
   }
   // If not, we send an error because the was nothing to delete
   return { error: ERROR_BOOKS.DELETE_EMPTY_LIBRARY };
@@ -1020,7 +1068,7 @@ export async function deleteAllBooks() {
 /** Function to get a single book based on the ID given by user */
 export async function getSingleBook(_id: string) {
   // Find the book by its ID, if there was an error while searching, display it
-  const book = await Book.findById({ _id }).catch(err => {
+  const book = await Book.findById(_id).catch(err => {
     console.error(err);
     return { error: ERROR_BOOKS.COULD_NOT_FIND };
   });
@@ -1031,9 +1079,12 @@ export async function getSingleBook(_id: string) {
       return book;
     }
     const bookDisplay = {
-      title: book.title,
       _id: book._id,
-      comments: book.comments,
+      title: book.title,
+      status: book.status,
+      notes: book.notes,
+      review: book.review,
+      recommend: book.recommend,
     };
     return bookDisplay;
   }
@@ -1041,10 +1092,10 @@ export async function getSingleBook(_id: string) {
   return { error: ERROR_BOOKS.NOT_FOUND };
 }
 
-/** Function that creates and appends comments to one book given its ID by user */
-export async function createBookComment(comment: string, _id: string) {
-  // Find the book we want to append a comment
-  const book = await Book.findById({ _id }).catch(err => {
+/** Function that creates and appends notes to one book given its ID by user */
+export async function createBookNote(note: string, _id: string) {
+  // Find the book we want to append a note
+  const book = await Book.findById(_id).catch(err => {
     console.error(err);
     return { error: ERROR_BOOKS.COULD_NOT_FIND };
   });
@@ -1055,9 +1106,8 @@ export async function createBookComment(comment: string, _id: string) {
   if ("error" in book) {
     return book;
   }
-  // If we have a book, append the comment and increment the number of comments it has
-  book.comments.push(comment);
-  book.commentCount = book.commentCount + 1;
+  // If we have a book, append the note to it
+  book.notes.push(note);
   const updatedBook = await book.save().catch(err => {
     console.error(err);
     return { error: ERROR_BOOKS.COULD_NOT_SAVE };
@@ -1069,13 +1119,61 @@ export async function createBookComment(comment: string, _id: string) {
   const displayBook = {
     title: updatedBook.title,
     _id: updatedBook._id,
-    comments: updatedBook.comments,
+    notes: updatedBook.notes,
   };
   return displayBook;
 }
 
+export async function updateBook(dataUpdate: ReqBodyUpdateBook) {
+  // Find book by it's id, send an error if a problem occur or we don't find anything
+  const book = await Book.findById(dataUpdate._id).catch(err => {
+    console.error(err);
+    return { error: ERROR_BOOKS.COULD_NOT_FIND };
+  });
+  if (book == null) return { error: ERROR_BOOKS.NOT_FOUND };
+  if ("error" in book) return book;
+  /* If we have a book, we verify each property to update, we don't update it if
+     it have the same old value and it exist */
+  if (
+    dataUpdate.title !== undefined &&
+    dataUpdate.title !== book.title &&
+    dataUpdate.title !== ""
+  ) {
+    book.title = dataUpdate.title;
+  }
+  if (dataUpdate.review !== undefined && dataUpdate.review !== book.review) {
+    book.review = dataUpdate.review;
+  }
+  if (dataUpdate.status !== book.status) {
+    book.status = dataUpdate.status;
+  }
+  // For the recommended property, we put an undefined value
+  let isRecommended;
+  // Based on what user sends, we put it as true or false or undefined
+  if (dataUpdate.recommend.toLowerCase() === "yes") isRecommended = true;
+  if (dataUpdate.recommend.toLowerCase() === "no") isRecommended = false;
+  // And only update book if the value is different from original
+  if (isRecommended !== book.recommend) {
+    book.recommend = isRecommended;
+  }
+  // Save book and send error if there was one in the process
+  const updatedBook = await book.save().catch(err => {
+    console.error(err);
+    return { error: ERROR_BOOKS.COULD_NOT_UPDATE };
+  });
+  if ("error" in updatedBook) return updatedBook;
+  // At the end send the updated fields to user
+  const updatedData = {
+    title: updatedBook.title,
+    status: updatedBook.status,
+    review: updatedBook.review,
+    recommend: updatedBook.recommend,
+  };
+  return updatedData;
+}
+
 /** Function that deletes a specific book based on the ID given by user */
-export async function deleteSingleBook(_id: string) {
+export async function deleteSingleBook(_id: string, username: string) {
   // Delete the book by its ID, if an error happened while deleting, send it to display
   const deletedBook = await Book.deleteOne({ _id }).catch(err => {
     console.error(err);
@@ -1085,10 +1183,33 @@ export async function deleteSingleBook(_id: string) {
     return deletedBook;
   }
   // If the action was successful, we look if the book was removed
-  const deletedCount = deletedBook.deletedCount;
+  const { deletedCount } = deletedBook;
   // If yes, then action completed
   if (deletedCount > 0) {
-    return { action: SUCCESS_DELETE_BOOK };
+    // But before we end, we need to update user to remove their book
+    // Find user by Id, if not found, we send an error
+    const user = await GUser.findById(username).catch(err => {
+      console.error(err);
+      return { error: ERROR_GUSER.COULD_NOT_FIND };
+    });
+    if (user == null) {
+      return {
+        error: ERROR_GUSER.USER_NOT_FOUND,
+      };
+    }
+    if ("error" in user) {
+      return user;
+    }
+    // Erase the book and save users
+    user.books = user.books.filter(book => book._id.toString() !== _id);
+    const updatedUser = await user.save().catch(err => {
+      console.error(err);
+      return { error: ERROR_BOOKS.COULD_NOT_DELETE };
+    });
+    if ("error" in updatedUser) {
+      return updatedUser;
+    }
+    return { action: `Delete successful book ${_id}` };
   }
   // If nothing happened, then the book didn't exist and send an error about it
   return { error: ERROR_BOOKS.DELETE_EMPTY_BOOK };

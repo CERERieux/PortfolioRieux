@@ -3,50 +3,29 @@ import type { Request, Response } from "express";
 import type {
   ConverterQuery,
   CreateIssue,
-  ReqBodyCommentBook,
   ReqBodyCreateBook,
   ReqBodyIssue,
+  ReqBodyNoteCreate,
+  ReqBodyUpdateBook,
   ReqParamDelete,
-  ReqParamsCommentBook,
+  ReqParamsBook,
   ReqQueryIssue,
   SudokuBody,
   TranslatorBody,
   UpdateIssue,
 } from "../types/advanced";
-import { ERROR_ISSUES } from "../schemas/advanced";
-
-const ERROR_CONVERTER = {
-  INVALID_NUMBER: "Invalid number",
-  INVALID_UNIT: "Invalid unit",
-  INVALID_INPUT: "Invalid number and unit",
-};
-
-const ERROR_SUDOKU = {
-  MISSING_FIELDS: "Required field(s) missing",
-  UNSOLVABLE: "Puzzle cannot be solved",
-  INVALID_CHARACTER: "Invalid characters in puzzle",
-  INVALID_FORMAT: "Expected puzzle to be 81 characters long",
-  INVALID_COORD: "Invalid coordinate",
-  INVALID_VALUE: "Invalid value",
-};
+import {
+  ERROR_ISSUES,
+  ERROR_BOOKS,
+  ERROR_CONVERTER,
+  ERROR_SUDOKU,
+  ERROR_TRANSLATOR,
+  AME_TO_BRIT,
+  BRIT_TO_AME,
+} from "../schemas/advanced";
 
 const UPDATE_SUCCESS = (id: string) => `Successfully updated issue ${id}`;
-const DELETE_SUCCESS = "Successfully deleted";
-
-const ERROR_BOOKS = {
-  MISSING_TITLE: "Missing required field title",
-  MISSING_COMMENT: "Missing required field comment",
-  MISSING_ID: "Missing required field id",
-  INVALID_ID: "Invalid ID, please introduce a valid ID format",
-};
-
-const ERROR_TRANSLATOR = {
-  EMPTY_TEXT: "No text to translate",
-  INVALID_LOCALE: "Invalid value for locale field",
-  MISSING_FIELDS: "Required field(s) missing",
-};
-const AME_TO_BRIT = "american-to-british";
-const BRIT_TO_AME = "british-to-american";
+const DELETE_SUCCESS = (id: string) => `Successfully deleted issue ${id}`;
 const translator = new AdvancedModel.Translator();
 
 /** ------------------------------------------------------------------------ */
@@ -331,8 +310,10 @@ export async function deleteIssue(
 /** ------------------------------------------------------------------------ */
 
 export async function getAllBooks(req: Request, res: Response) {
+  // Get the user from request
+  const username = req._id;
   // Get all the books and extract the 1st book
-  const resultQuery = await AdvancedModel.getAllBooks();
+  const resultQuery = await AdvancedModel.getAllBooks(username);
   const firstBook = resultQuery[0];
   // If the 1st book has the error property, then the result was an error
   if ("error" in firstBook) {
@@ -347,19 +328,25 @@ export async function createNewBook(
   res: Response,
 ) {
   // Get the title from user, if don't exist, send an error
-  const title = req.body.title;
+  const { title, status } = req.body;
+  const username = req._id;
   if (title == null) {
     return res.status(400).json({ error: ERROR_BOOKS.MISSING_TITLE });
   }
   // Create a new book based on the title and show it
-  const newBook = await AdvancedModel.createNewBook(title);
+  const newBook = await AdvancedModel.createNewBook({
+    title,
+    status,
+    username,
+  });
   if ("error" in newBook) return res.status(500).json(newBook);
   return res.status(200).json(newBook);
 }
 
 export async function deleteAllBooks(req: Request, res: Response) {
   // Delete all the books and show the result of the operation
-  const deletedBooks = await AdvancedModel.deleteAllBooks();
+  const username = req._id;
+  const deletedBooks = await AdvancedModel.deleteAllBooks(username);
   if ("error" in deletedBooks) return res.status(500).json(deletedBooks);
   return res.status(200).json(deletedBooks);
 }
@@ -376,8 +363,8 @@ export async function getSingleBook(req: Request, res: Response) {
   return res.status(200).json(book);
 }
 
-export async function createBookComment(
-  req: Request<ReqParamsCommentBook, {}, ReqBodyCommentBook, {}>,
+export async function createBookNote(
+  req: Request<ReqParamsBook, {}, ReqBodyNoteCreate, {}>,
   res: Response,
 ) {
   // Get data sent from user, if there is an error with both data, send an error
@@ -385,14 +372,35 @@ export async function createBookComment(
   if (_id.length !== 24) {
     return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
   }
-  const comment = req.body.comment;
-  if (comment == null) {
-    return res.status(400).json({ error: ERROR_BOOKS.MISSING_COMMENT });
+  const note = req.body.note;
+  if (note == null) {
+    return res.status(400).json({ error: ERROR_BOOKS.MISSING_NOTE });
   }
   // If those are valid, create the comment and show the result of the operation
-  const bookWithComment = await AdvancedModel.createBookComment(comment, _id);
-  if ("error" in bookWithComment) return res.status(500).json(bookWithComment);
-  return res.status(200).json(bookWithComment);
+  const newNote = await AdvancedModel.createBookNote(note, _id);
+  if ("error" in newNote) return res.status(500).json(newNote);
+  return res.status(200).json(newNote);
+}
+
+export async function updateBook(
+  req: Request<ReqParamsBook, {}, ReqBodyUpdateBook, {}>,
+  res: Response,
+) {
+  // Get data sent from user, if there is an error with both data, send an error
+  const _id = req.params.id;
+  if (_id.length !== 24) {
+    return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
+  }
+  const { title, status, review, recommend } = req.body;
+  const resultUpdate = await AdvancedModel.updateBook({
+    title,
+    status,
+    review,
+    recommend,
+    _id,
+  });
+  if ("error" in resultUpdate) return res.status(500).json(resultUpdate);
+  return res.status(200).json(resultUpdate);
 }
 
 export async function deleteSingleBook(req: Request, res: Response) {
@@ -405,7 +413,7 @@ export async function deleteSingleBook(req: Request, res: Response) {
     return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
   }
   // If valid, delete the book and show the result of the operation
-  const resultDelete = await AdvancedModel.deleteSingleBook(_id);
+  const resultDelete = await AdvancedModel.deleteSingleBook(_id, req._id);
   if ("error" in resultDelete) return res.status(500).json(resultDelete);
   return res.status(200).json(resultDelete);
 }
