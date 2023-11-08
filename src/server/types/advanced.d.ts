@@ -97,17 +97,32 @@ export interface ReqParamDelete {
 /** ------------------------------------------------------------------------ */
 
 export interface IBook {
+  _id: Types.ObjectId;
   title: string;
-  comments: string[];
-  commentCount: number;
+  status: string;
+  review: string;
+  recommend: boolean | undefined;
+  notes: string[];
+  username: string;
 }
 
 export interface ReqBodyCreateBook {
   title: string;
+  status: string;
 }
-export interface ReqBodyCommentBook {
-  comment: string;
+export interface CreateBook extends ReqBodyCreateBook {
+  username: string;
 }
-export interface ReqParamsCommentBook {
+export interface ReqBodyNoteCreate {
+  note: string;
+}
+export interface ReqBodyUpdateBook {
+  _id: string;
+  title?: string;
+  status: string;
+  review?: string;
+  recommend: string;
+}
+export interface ReqParamsBook {
   id: string;
 }
