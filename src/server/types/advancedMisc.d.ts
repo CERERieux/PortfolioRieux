@@ -2,16 +2,22 @@ import type { Types, Document } from "mongoose";
 
 export interface IClientStock {
   _id: Types.ObjectId;
+  username: string;
   liked: Map<string, boolean>;
   stocks: IStocks[];
 }
 
 export interface IStocks {
-  _id: string;
+  _id: Types.ObjectId;
+  stockname: string;
   likes: number;
   clients: IClientStock[];
 }
 
+export interface ReqStockQuery {
+  stock?: string | string[];
+  like?: string;
+}
 export interface StockQuery {
   stock: string | string[];
   like: string;
