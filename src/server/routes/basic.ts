@@ -10,14 +10,19 @@ basicRouter.route("/whoami").get(BasicController.headParser);
 
 basicRouter
   .route("/shorturl")
+  .get(extratorUser, BasicController.getUserURL)
   .post(partialExtratorUser, BasicController.shortenerURL);
+basicRouter
+  .route("/shorturl/:_id")
+  .delete(extratorUser, BasicController.deleteShortURL);
 
 basicRouter
   .route("/users/exercises")
   .get(extratorUser, BasicController.displayUserLog)
   .post(extratorUser, BasicController.createNewExercise);
 basicRouter
-  .route("/users/exercise/:_id")
+  .route("/users/exercises/:_id")
+  .put(extratorUser, BasicController.updateExercise)
   .delete(extratorUser, BasicController.deleteExercise);
 
 /** TODO ------------------------------------------
