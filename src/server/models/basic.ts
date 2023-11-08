@@ -1,4 +1,4 @@
-import mongoose from "mongoose"; // Import mongoose to be able to use the models and manage our database
+import "mongoose"; // Import mongoose to be able to use the models and manage our database
 import dns from "node:dns"; // We need "dns" to verify if user hostname exist
 import { nanoid } from "nanoid"; // NanoID to make the short URL in an easier way
 import { Url, ExTracker, ERROR_EXERCISE, ERROR_URL } from "../schemas/basic";
@@ -6,15 +6,32 @@ import type {
   IShortenerUrl,
   ValidUrlReq,
   ValidExtension,
-  IExTracker,
   ExerciseElements,
   LogOptions,
   UrlMaterial,
   CreateUrlMaterial,
+  UpdateExercise,
 } from "../types/basic";
 import { GUser, ERROR_GUSER } from "../schemas/global";
 
 const dnsPromises = dns.promises;
+
+export async function getUserURL(username: string) {
+  // Find all urls created by the user
+  const userUrls = await Url.find({ username }).catch(err => {
+    console.error(err);
+    return { error: ERROR_URL.COULD_NOT_FIND };
+  });
+  // Send an error if something went wrong or user don't have any url created
+  if ("error" in userUrls) return userUrls;
+  if (userUrls.length === 0) return { error: ERROR_URL.EMPTY_USER_URL };
+  const infoUrls = userUrls.map(url => ({
+    shortUrl: url.shortUrl,
+    originalUrl: url.originalUrl,
+    _id: url._id,
+  }));
+  return infoUrls;
+}
 
 export async function createShortURL({ url, username }: UrlMaterial) {
   // If user didn't sent an URL in the form, we end the function
@@ -168,12 +185,42 @@ export async function canRedirectURL(shortUrl: string) {
   return isValidReq;
 }
 
+export async function deleteShortURL(_id: string, username: string) {
+  // Find the url to delete by its id, if there was an error at deleting, show it
+  const resultDelete = await Url.deleteOne({ _id }).catch(err => {
+    console.error(err);
+    return { error: ERROR_URL.COULD_NOT_DELETE };
+  });
+  if ("error" in resultDelete) return resultDelete;
+  // If we deleted the url, update the user to remove their short url
+  if (resultDelete.deletedCount > 0) {
+    // Find user
+    const user = await GUser.findById(username).catch(err => {
+      console.error(err);
+      return { error: ERROR_GUSER.COULD_NOT_FIND };
+    });
+    if (user === null) return { error: ERROR_GUSER.USER_NOT_FOUND };
+    if ("error" in user) return user;
+    // Remove the url and save
+    user.shortUrl = user.shortUrl.filter(url => url._id.toString() !== _id);
+    // Return an error if there was one at saving
+    const resultUpdate = await user.save().catch(err => {
+      console.error(err);
+      return { error: ERROR_GUSER.COULD_NOT_UPDATE };
+    });
+    if ("error" in resultUpdate) return resultUpdate;
+  } else {
+    return { error: ERROR_URL.URL_NOT_EXIST };
+  }
+  return { action: `The short URL with the ID: ${_id} was deleted!` };
+}
+
 /** ---------------------------------------------------------------- */
 
 export async function createNewExercise({
   _id,
   description,
-  duration,
+  status,
   date,
 }: ExerciseElements) {
   // Find user by Id, if not found, we send an error
@@ -191,10 +238,9 @@ export async function createNewExercise({
   }
   // If we found the user, create a new exercise with the elements needed
   const newExercise = new ExTracker({
-    _id: new mongoose.Types.ObjectId(),
     username: user._id,
     description,
-    duration,
+    status,
     date,
   });
 
@@ -213,7 +259,7 @@ export async function createNewExercise({
       return {
         username: u._id,
         description: newExercise.description,
-        duration: newExercise.duration,
+        status: newExercise.status,
         date: newExercise.date,
         _id: newExercise._id,
       };
@@ -229,7 +275,7 @@ export async function createNewExercise({
 export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
   // Find user by it's ID and populate the user's log, if doesn't exist, send an error
   const user = await GUser.findById(_id)
-    .populate({ path: "exercises", select: "description duration date _id" })
+    .populate({ path: "exercises", select: "description status date _id" })
     .exec()
     .catch(err => {
       console.error(err);
@@ -244,21 +290,14 @@ export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
     return user;
   }
   // If we found the user, we filter the info from the logs, we only filter the ID of each activity
-  let orderLog: Array<Partial<IExTracker>> = user.exercises.map(exercise => {
-    return {
-      description: exercise.description,
-      duration: exercise.duration,
-      date: exercise.date,
-      _id: exercise._id,
-    };
-  });
+  let orderLog = user.exercises;
   // Once we get our logs clean, we filter in case user sent queries in the request
   // Do the next 2 filters if there is at least 1 exercise
   if (orderLog.length > 0) {
     // Filter after a specific date
     if (from !== undefined) {
       orderLog = orderLog.filter(log => {
-        const date = new Date(log.date as string).getTime();
+        const date = log.date.getTime();
         const filter = new Date(from).getTime();
         if (date > filter) return true;
         return false;
@@ -267,7 +306,7 @@ export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
     // Filter before a specific date
     if (to !== undefined) {
       orderLog = orderLog.filter(log => {
-        const date = new Date(log.date as string).getTime();
+        const date = log.date.getTime();
         const filter = new Date(to).getTime();
         if (date < filter) return true;
         return false;
@@ -288,6 +327,38 @@ export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
     log: orderLog,
   };
   return orderResult;
+}
+
+export async function updateExercise({
+  _id,
+  description,
+  status,
+}: UpdateExercise) {
+  // First find exercise by ID, if it can't be found, return error
+  const exercise = await ExTracker.findById(_id).catch(err => {
+    console.error(err);
+    return { error: ERROR_EXERCISE.COULD_NOT_FIND_EX };
+  });
+  if (exercise === null) return { error: ERROR_EXERCISE.EXERCISE_NOT_FOUND };
+  if ("error" in exercise) return exercise;
+  // If we found it, modify it
+  if (description !== "") {
+    exercise.description = description;
+  }
+  exercise.status = status;
+  // Save it and return an error if something went wrong
+  const resultUpdate = await exercise.save().catch(err => {
+    console.error(err);
+    return { error: ERROR_EXERCISE.PROBLEM_PUT };
+  });
+  if ("error" in resultUpdate) return resultUpdate;
+  // At the end return the info we need from the update
+  const exerciseUpdated = {
+    _id: resultUpdate._id,
+    description: resultUpdate.description,
+    status: resultUpdate.status,
+  };
+  return exerciseUpdated;
 }
 
 export async function deleteExercise(_id: string) {

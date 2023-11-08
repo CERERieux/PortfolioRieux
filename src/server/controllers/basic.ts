@@ -3,6 +3,8 @@ import type { Request, Response } from "express";
 import type {
   ExerciseElements,
   LogOptions,
+  ReqExerciseBody,
+  ReqParam,
   ReqQueryLog,
   ValidUrlReq,
 } from "../types/basic";
@@ -44,6 +46,13 @@ export function headParser(req: Request, res: Response) {
 
 /** --------------------------------------------------------------- */
 
+export async function getUserURL(req: Request, res: Response) {
+  const username = req._id;
+  const allUserUrl = await BasicModel.getUserURL(username);
+  if ("error" in allUserUrl) return res.status(500).json(allUserUrl);
+  return res.status(200).json(allUserUrl);
+}
+
 export async function shortenerURL(req: Request, res: Response) {
   // Get the username and url from user
   const { url } = req.body;
@@ -75,20 +84,35 @@ export async function visitShortURL(req: Request, res: Response) {
   }
 }
 
+export async function deleteShortURL(
+  req: Request<ReqParam, {}, {}, {}>,
+  res: Response,
+) {
+  const { _id } = req.params;
+  const username = req._id;
+  const resultDelete = await BasicModel.deleteShortURL(_id, username);
+  if ("error" in resultDelete) return res.status(500).json(resultDelete);
+  return res.status(200).json(resultDelete);
+}
+
 /** --------------------------------------------------------------- */
 
-export async function createNewExercise(req: Request, res: Response) {
+export async function createNewExercise(
+  req: Request<{}, {}, ReqExerciseBody, {}>,
+  res: Response,
+) {
+  const { description, status, date } = req.body;
   // We create a date with the actual time
-  let exerciseDate = new Date(Date.now()).toDateString();
-  if (req.body.date !== "") {
+  let exerciseDate = new Date(Date.now());
+  if (date != null && date !== "") {
     // If user sends a date, we replace the old date with the user one
-    exerciseDate = new Date(req.body.date).toDateString();
+    exerciseDate = new Date(date);
   }
   // Create an object with all the elements we need to create a new exercise
   const exerciseData: ExerciseElements = {
     _id: req._id,
-    description: req.body.description,
-    duration: req.body.duration,
+    description,
+    status,
     date: exerciseDate,
   };
   const resultExercise = await BasicModel.createNewExercise(exerciseData);
@@ -112,6 +136,21 @@ export async function displayUserLog(
   const logs = await BasicModel.displayUserLog(options);
   if ("error" in logs) return res.status(500).json(logs);
   return res.status(200).json(logs);
+}
+
+export async function updateExercise(
+  req: Request<ReqParam, {}, ReqExerciseBody, {}>,
+  res: Response,
+) {
+  const { _id } = req.params;
+  const { description, status } = req.body;
+  const resultUpdate = await BasicModel.updateExercise({
+    _id,
+    description,
+    status,
+  });
+  if ("error" in resultUpdate) return res.status(500).json(resultUpdate);
+  return res.status(200).json(resultUpdate);
 }
 
 export async function deleteExercise(req: Request, res: Response) {
