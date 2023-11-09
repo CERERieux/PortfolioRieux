@@ -34,3 +34,6 @@ advancedRouter
   .post(extratorUser, AdvancedController.createBookNote)
   .put(extratorUser, AdvancedController.updateBook)
   .delete(extratorUser, AdvancedController.deleteSingleBook);
+advancedRouter
+  .route("/books/note/:id")
+  .put(extratorUser, AdvancedController.deleteBookNote);

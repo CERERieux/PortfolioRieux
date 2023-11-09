@@ -439,3 +439,21 @@ export async function deleteSingleBook(req: Request, res: Response) {
   }
   return res.status(200).json(resultDelete);
 }
+
+export async function deleteBookNote(
+  req: Request<ReqParamsBook, {}, { note_number: string }, {}>,
+  res: Response,
+) {
+  const { id } = req.params;
+  if (id == null)
+    return res.status(400).json({ error: ERROR_BOOKS.MISSING_ID });
+  if (id.length !== 24)
+    return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
+  const number = parseInt(req.body.note_number);
+  const resultUpdate = await AdvancedModel.deleteBookNote({ id, number });
+  if ("error" in resultUpdate && resultUpdate._id === undefined) {
+    const status = advancedError(resultUpdate);
+    return res.status(status).json(resultUpdate);
+  }
+  return res.status(200).json(resultUpdate);
+}

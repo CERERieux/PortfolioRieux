@@ -126,3 +126,7 @@ export interface ReqBodyUpdateBook {
 export interface ReqParamsBook {
   id: string;
 }
+
+export interface UpdateNote extends ReqParamsBook {
+  number: number;
+}

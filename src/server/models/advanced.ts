@@ -28,6 +28,7 @@ import type {
   CreateIssue,
   CreateBook,
   ReqBodyUpdateBook,
+  UpdateNote,
 } from "../types/advanced";
 import { ERROR_GUSER, GUser } from "../schemas/global";
 
@@ -1082,11 +1083,12 @@ export async function getSingleBook(_id: string) {
     if ("error" in book) {
       return book;
     }
+    const notes = book.notes.filter(note => note !== "");
     const bookDisplay = {
       _id: book._id,
       title: book.title,
       status: book.status,
-      notes: book.notes,
+      notes,
       review: book.review,
       recommend: book.recommend,
     };
@@ -1221,4 +1223,31 @@ export async function deleteSingleBook(_id: string, username: string) {
   }
   // If nothing happened, then the book didn't exist and send an error about it
   return { error: ERROR_BOOKS.DELETE_EMPTY_BOOK, category: "book" };
+}
+
+/** Function that "deletes" 1 note in the book sent by user  */
+export async function deleteBookNote({ id, number }: UpdateNote) {
+  // Find the book we want to delete 1 note by its ID
+  const book = await Book.findById(id).catch(err => {
+    console.error(err);
+    return { error: ERROR_BOOKS.COULD_NOT_FIND, category: "book" };
+  });
+  // Return an error if book don't exist or something went wrong
+  if (book === null) return { error: ERROR_BOOKS.NOT_FOUND, category: "book" };
+  if ("error" in book) return book;
+  // Once we got the book, we delete the note based on their array index
+  book.notes[number] = "";
+  // We delete it by putting it in blank, this way we don't move the id and
+  // react can keep rendering ok the notes, the empty notes will be ignored in rendering
+  // Save the book and show an error if there was 1 at saving
+  const resultUpdate = await book.save().catch(err => {
+    console.error(err);
+    return { error: ERROR_BOOKS.COULD_NOT_UPDATE, category: "book" };
+  });
+  if ("error" in resultUpdate) return resultUpdate;
+  // At the end return the notes updated
+  return {
+    _id: resultUpdate._id,
+    notes: resultUpdate.notes,
+  };
 }
