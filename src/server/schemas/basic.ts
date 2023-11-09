@@ -12,6 +12,9 @@ export const ERROR_URL = {
     "Looks like you haven't create any short URL, try creating one!",
   INVALID_FORMAT:
     "Invalid format, please put an URL with the format http(s)://hostname.com",
+  INVALID_ID:
+    "Invalid ID format, please put a valid ID to perform the next operation successfully",
+  INVALID_SHORTURL: "Please introduce a valid shortURL",
   LOOKUP:
     "Error at trying to verify if URL is a valid hostname, verify if the URL is correct or try again later",
   URL_NOT_EXIST: "Error: This short URL doesn't exist, please put a valid URL",

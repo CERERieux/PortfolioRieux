@@ -1,4 +1,5 @@
 import * as BasicModel from "../models/basic";
+import { basicError } from "./error";
 import type { Request, Response } from "express";
 import type {
   ExerciseElements,
@@ -8,6 +9,7 @@ import type {
   ReqQueryLog,
   ValidUrlReq,
 } from "../types/basic";
+import { ERROR_EXERCISE, ERROR_URL } from "../schemas/basic";
 
 /** --------------------------------------------------------------- */
 
@@ -49,7 +51,10 @@ export function headParser(req: Request, res: Response) {
 export async function getUserURL(req: Request, res: Response) {
   const username = req._id;
   const allUserUrl = await BasicModel.getUserURL(username);
-  if ("error" in allUserUrl) return res.status(500).json(allUserUrl);
+  if ("error" in allUserUrl) {
+    const status = basicError(allUserUrl);
+    return res.status(status).json(allUserUrl);
+  }
   return res.status(200).json(allUserUrl);
 }
 
@@ -57,14 +62,15 @@ export async function shortenerURL(req: Request, res: Response) {
   // Get the username and url from user
   const { url } = req.body;
   const username = req._id;
-  const shortURL = await BasicModel.createShortURL({ url, username }); // Create a short URL with the user data
+  const resultURL = await BasicModel.createShortURL({ url, username }); // Create a short URL with the user data
   // If the short URL is bigger then 8 characters, then it's an error
-  if (shortURL.length > 8) {
-    return res.status(400).json({ error: shortURL });
+  if ("error" in resultURL) {
+    const status = basicError(resultURL);
+    return res.status(status).json({ error: resultURL });
   } else {
     return res
-      .status(200)
-      .json({ original_url: req.body.url, short_url: shortURL });
+      .status(201)
+      .json({ original_url: url, short_url: resultURL.shortUrl });
   }
 }
 
@@ -72,7 +78,7 @@ export async function visitShortURL(req: Request, res: Response) {
   // We check if user sent a short url that exist
   const userURL = req.params.user_url;
   if (userURL.length !== 8) {
-    return res.status(400).json({ error: "Please introduce a valid shortURL" });
+    return res.status(400).json({ error: ERROR_URL.INVALID_SHORTURL });
   }
   const isValidReq: ValidUrlReq = await BasicModel.canRedirectURL(userURL);
   // If it exist/it's valid, we redirect the user to its original url
@@ -80,7 +86,11 @@ export async function visitShortURL(req: Request, res: Response) {
     res.redirect(301, isValidReq.original_url);
   } else {
     // If it don't exist, we indicate an error
-    return res.status(400).json(isValidReq.original_url);
+    const status = basicError({
+      error: isValidReq.original_url,
+      category: "url",
+    });
+    return res.status(status).json(isValidReq.original_url);
   }
 }
 
@@ -89,9 +99,14 @@ export async function deleteShortURL(
   res: Response,
 ) {
   const { _id } = req.params;
+  if (_id.length !== 24)
+    return res.status(400).json({ error: ERROR_URL.INVALID_ID });
   const username = req._id;
   const resultDelete = await BasicModel.deleteShortURL(_id, username);
-  if ("error" in resultDelete) return res.status(500).json(resultDelete);
+  if ("error" in resultDelete) {
+    const status = basicError(resultDelete);
+    return res.status(status).json(resultDelete);
+  }
   return res.status(200).json(resultDelete);
 }
 
@@ -116,8 +131,11 @@ export async function createNewExercise(
     date: exerciseDate,
   };
   const resultExercise = await BasicModel.createNewExercise(exerciseData);
-  if ("error" in resultExercise) return res.status(500).json(resultExercise);
-  return res.status(200).json(resultExercise);
+  if ("error" in resultExercise) {
+    const status = basicError(resultExercise);
+    return res.status(status).json(resultExercise);
+  }
+  return res.status(201).json(resultExercise);
 }
 
 export async function displayUserLog(
@@ -134,7 +152,10 @@ export async function displayUserLog(
     _id: req._id,
   };
   const logs = await BasicModel.displayUserLog(options);
-  if ("error" in logs) return res.status(500).json(logs);
+  if ("error" in logs) {
+    const status = basicError(logs);
+    return res.status(status).json(logs);
+  }
   return res.status(200).json(logs);
 }
 
@@ -143,20 +164,38 @@ export async function updateExercise(
   res: Response,
 ) {
   const { _id } = req.params;
+  // If id isn't valid or exercise isn't found, return an error
+  if (_id.length !== 24) {
+    return res.status(400).json({ error: ERROR_EXERCISE.ID_FORMAT });
+  }
   const { description, status } = req.body;
   const resultUpdate = await BasicModel.updateExercise({
     _id,
     description,
     status,
   });
-  if ("error" in resultUpdate) return res.status(500).json(resultUpdate);
+  if ("error" in resultUpdate) {
+    const status = basicError(resultUpdate);
+    return res.status(status).json(resultUpdate);
+  }
   return res.status(200).json(resultUpdate);
 }
 
-export async function deleteExercise(req: Request, res: Response) {
-  const result = await BasicModel.deleteExercise(req.params._id);
-  if ("error" in result) return res.status(500).json(result);
-  return res.status(200).json(result);
+export async function deleteExercise(
+  req: Request<ReqParam, {}, {}, {}>,
+  res: Response,
+) {
+  const { _id } = req.params;
+  // If id isn't valid or exercise isn't found, return an error
+  if (_id.length !== 24) {
+    return res.status(400).json({ error: ERROR_EXERCISE.ID_FORMAT });
+  }
+  const resultDelete = await BasicModel.deleteExercise(req.params._id);
+  if ("error" in resultDelete) {
+    const status = basicError(resultDelete);
+    return res.status(status).json(resultDelete);
+  }
+  return res.status(200).json(resultDelete);
 }
 
 /** --------------------------------------------------------------- */

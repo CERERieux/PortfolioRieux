@@ -20,11 +20,12 @@ export async function getUserURL(username: string) {
   // Find all urls created by the user
   const userUrls = await Url.find({ username }).catch(err => {
     console.error(err);
-    return { error: ERROR_URL.COULD_NOT_FIND };
+    return { error: ERROR_URL.COULD_NOT_FIND, category: "url" };
   });
   // Send an error if something went wrong or user don't have any url created
   if ("error" in userUrls) return userUrls;
-  if (userUrls.length === 0) return { error: ERROR_URL.EMPTY_USER_URL };
+  if (userUrls.length === 0)
+    return { error: ERROR_URL.EMPTY_USER_URL, category: "url" };
   const infoUrls = userUrls.map(url => ({
     shortUrl: url.shortUrl,
     originalUrl: url.originalUrl,
@@ -36,12 +37,12 @@ export async function getUserURL(username: string) {
 export async function createShortURL({ url, username }: UrlMaterial) {
   // If user didn't sent an URL in the form, we end the function
   if (url === "") {
-    return ERROR_URL.EMPTY_URL;
+    return { error: ERROR_URL.EMPTY_URL, category: "url" };
   }
   // If the url don't have the format http(s)://hostname.com, we end the function
   const urlToCheck = url.split("/");
   if (urlToCheck.length < 3) {
-    return ERROR_URL.INVALID_FORMAT;
+    return { error: ERROR_URL.INVALID_FORMAT, category: "url" };
   }
   // Object to configure the lookup function
   const options = {
@@ -65,7 +66,7 @@ export async function createShortURL({ url, username }: UrlMaterial) {
         }); // Save result in DB
         // If there was an error in the process, display it
         if ("error" in validExtension) {
-          return validExtension.error;
+          return validExtension;
         }
         // If we had a duplicate, we need keep validating the url
         if (!validExtension.valid) {
@@ -76,12 +77,12 @@ export async function createShortURL({ url, username }: UrlMaterial) {
           validatingURL = false;
         }
       } while (validatingURL);
-      return newExtension;
+      return { shortUrl: newExtension };
     })
     .catch(err => {
       // If there was an error while looking up for the hostname, we send an error as result
       console.error(err);
-      return ERROR_URL.LOOKUP;
+      return { error: ERROR_URL.LOOKUP, category: "url" };
     });
 
   return newURL;
@@ -97,7 +98,7 @@ async function createUrlDB({ newExtension, url, username }: CreateUrlMaterial) {
     })
     .catch(err => {
       console.error(err);
-      return { error: ERROR_URL.COULD_NOT_FIND };
+      return { error: ERROR_URL.COULD_NOT_FIND, category: "url" };
     });
   // If we had an error while finding, end the function
   if (typeof query !== "boolean") {
@@ -117,7 +118,7 @@ async function createUrlDB({ newExtension, url, username }: CreateUrlMaterial) {
     // Save new URL
     const resultSave = await newUserUrl.save().catch(err => {
       console.error(err);
-      return { error: ERROR_URL.COULD_NOT_SAVE };
+      return { error: ERROR_URL.COULD_NOT_SAVE, category: "url" };
     });
     if ("error" in resultSave) {
       return resultSave;
@@ -128,12 +129,10 @@ async function createUrlDB({ newExtension, url, username }: CreateUrlMaterial) {
       // Return an error if user was not found or there was an error in the search
       const user = await GUser.findById(username).catch(err => {
         console.error(err);
-        return { error: ERROR_GUSER.COULD_NOT_FIND };
+        return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
       });
       if (user == null) {
-        return {
-          error: ERROR_GUSER.USER_NOT_FOUND,
-        };
+        return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
       }
       if ("error" in user) {
         return user;
@@ -141,7 +140,7 @@ async function createUrlDB({ newExtension, url, username }: CreateUrlMaterial) {
       user.shortUrl.push(newUserUrl); // Push new url to user and save user
       const userSave = await user.save().catch(err => {
         console.error(err);
-        return { error: ERROR_GUSER.COULD_NOT_SAVE };
+        return { error: ERROR_GUSER.COULD_NOT_SAVE, category: "guser" };
       });
       // If there was an error while saving, send it
       if ("error" in userSave) return userSave;
@@ -189,7 +188,7 @@ export async function deleteShortURL(_id: string, username: string) {
   // Find the url to delete by its id, if there was an error at deleting, show it
   const resultDelete = await Url.deleteOne({ _id }).catch(err => {
     console.error(err);
-    return { error: ERROR_URL.COULD_NOT_DELETE };
+    return { error: ERROR_URL.COULD_NOT_DELETE, category: "url" };
   });
   if ("error" in resultDelete) return resultDelete;
   // If we deleted the url, update the user to remove their short url
@@ -197,20 +196,21 @@ export async function deleteShortURL(_id: string, username: string) {
     // Find user
     const user = await GUser.findById(username).catch(err => {
       console.error(err);
-      return { error: ERROR_GUSER.COULD_NOT_FIND };
+      return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
     });
-    if (user === null) return { error: ERROR_GUSER.USER_NOT_FOUND };
+    if (user === null)
+      return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
     if ("error" in user) return user;
     // Remove the url and save
     user.shortUrl = user.shortUrl.filter(url => url._id.toString() !== _id);
     // Return an error if there was one at saving
     const resultUpdate = await user.save().catch(err => {
       console.error(err);
-      return { error: ERROR_GUSER.COULD_NOT_UPDATE };
+      return { error: ERROR_GUSER.COULD_NOT_UPDATE, category: "guser" };
     });
     if ("error" in resultUpdate) return resultUpdate;
   } else {
-    return { error: ERROR_URL.URL_NOT_EXIST };
+    return { error: ERROR_URL.URL_NOT_EXIST, category: "url" };
   }
   return { action: `The short URL with the ID: ${_id} was deleted!` };
 }
@@ -226,11 +226,12 @@ export async function createNewExercise({
   // Find user by Id, if not found, we send an error
   const user = await GUser.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_GUSER.COULD_NOT_FIND };
+    return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
   });
   if (user == null) {
     return {
       error: ERROR_GUSER.USER_NOT_FOUND,
+      category: "guser",
     };
   }
   if ("error" in user) {
@@ -246,7 +247,7 @@ export async function createNewExercise({
 
   const resultSave = await newExercise.save().catch(err => {
     console.error(err);
-    return { error: ERROR_EXERCISE.PROBLEM_POST };
+    return { error: ERROR_EXERCISE.PROBLEM_POST, category: "extracker" };
   }); // Save it
   if ("error" in resultSave) {
     return resultSave;
@@ -266,7 +267,10 @@ export async function createNewExercise({
     })
     .catch(err => {
       console.error(err);
-      return { error: ERROR_EXERCISE.PROBLEM_UPDATE_USER };
+      return {
+        error: ERROR_EXERCISE.PROBLEM_UPDATE_USER,
+        category: "extracker",
+      };
     });
 
   return result;
@@ -279,11 +283,12 @@ export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
     .exec()
     .catch(err => {
       console.error(err);
-      return { error: ERROR_GUSER.COULD_NOT_FIND };
+      return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
     });
   if (user == null) {
     return {
       error: ERROR_GUSER.USER_NOT_FOUND,
+      category: "guser",
     };
   }
   if ("error" in user) {
@@ -337,9 +342,10 @@ export async function updateExercise({
   // First find exercise by ID, if it can't be found, return error
   const exercise = await ExTracker.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_EXERCISE.COULD_NOT_FIND_EX };
+    return { error: ERROR_EXERCISE.COULD_NOT_FIND_EX, category: "extracker" };
   });
-  if (exercise === null) return { error: ERROR_EXERCISE.EXERCISE_NOT_FOUND };
+  if (exercise === null)
+    return { error: ERROR_EXERCISE.EXERCISE_NOT_FOUND, category: "extracker" };
   if ("error" in exercise) return exercise;
   // If we found it, modify it
   if (description !== "") {
@@ -349,7 +355,7 @@ export async function updateExercise({
   // Save it and return an error if something went wrong
   const resultUpdate = await exercise.save().catch(err => {
     console.error(err);
-    return { error: ERROR_EXERCISE.PROBLEM_PUT };
+    return { error: ERROR_EXERCISE.PROBLEM_PUT, category: "extracker" };
   });
   if ("error" in resultUpdate) return resultUpdate;
   // At the end return the info we need from the update
@@ -362,17 +368,13 @@ export async function updateExercise({
 }
 
 export async function deleteExercise(_id: string) {
-  // If id isn't valid or exercise isn't found, return an error
-  if (_id.length !== 24) {
-    return { error: ERROR_EXERCISE.ID_FORMAT };
-  }
-
+  // Find the exercise by it's id, if something wrong happened, send an error
   const exercise = await ExTracker.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_EXERCISE.COULD_NOT_FIND_EX };
+    return { error: ERROR_EXERCISE.COULD_NOT_FIND_EX, category: "extracker" };
   });
   if (exercise == null) {
-    return { error: ERROR_EXERCISE.EXERCISE_NOT_FOUND };
+    return { error: ERROR_EXERCISE.EXERCISE_NOT_FOUND, category: "extracker" };
   }
   if ("error" in exercise) {
     return exercise;
@@ -381,10 +383,10 @@ export async function deleteExercise(_id: string) {
   // Get the user because later we need to decrement the count of their exercises
   const user = await GUser.findById(exercise.username).catch(err => {
     console.error(err);
-    return { error: ERROR_GUSER.COULD_NOT_FIND };
+    return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
   });
   if (user == null) {
-    return { error: ERROR_GUSER.USER_NOT_FOUND };
+    return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
   }
   if ("error" in user) {
     return user;
@@ -400,14 +402,14 @@ export async function deleteExercise(_id: string) {
       return -1;
     });
   if (deletedExercises === -1) {
-    return { error: ERROR_EXERCISE.PROBLEM_DELETE };
+    return { error: ERROR_EXERCISE.PROBLEM_DELETE, category: "extracker" };
   }
 
   // Remove the exercise from the user
   user.exercises = user.exercises.filter(ex => ex._id.toString() !== _id);
   user.save().catch(err => {
     console.error(err);
-    return { error: ERROR_EXERCISE.PROBLEM_DELETE };
+    return { error: ERROR_EXERCISE.PROBLEM_DELETE, category: "extracker" };
   });
   const resultAction = {
     action: `The exercise ${_id} was sucessfully deleted.`,
