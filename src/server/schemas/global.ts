@@ -10,6 +10,7 @@ export const ERROR_GUSER = {
   COULD_NOT_UPDATE: "Can't update any user right now, please try again later",
   INCORRECT_CREDENTIALS:
     "The username or password are incorrect, please introduce a valid pair of information",
+  MISSING_FIELDS: "There are 1 or more field missing to perform this operation",
   USER_EXIST: "The username is already taken, please introduce a new one",
   USER_NOT_FOUND:
     "Oh... Somehow you are trying to use our services without being logged in, please login or create a new user before using this service.",

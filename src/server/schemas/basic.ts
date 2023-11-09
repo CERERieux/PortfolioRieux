@@ -3,6 +3,8 @@ import type { IShortenerUrl, IExTracker } from "../types/basic";
 
 export const ERROR_URL = {
   COULD_NOT_DELETE: "Couldn't delete your shortURL, please try again later",
+  COULD_NOT_DELETE_ALL:
+    "Couldn't delete all the shortURL of user, please try again later",
   COULD_NOT_FIND: "Couldn't find your shortURL, please try again later",
   COULD_NOT_SAVE: "Couldn't save your new shortURL, please try again later",
   EMPTY_URL: "Please put an URL in the form",
@@ -22,13 +24,15 @@ export const ERROR_EXERCISE = {
     "The exercise doesn't exist in database, check if the exerciseID you entered is correct",
   ID_FORMAT:
     "The ID you entered doesn't match the required format, please put a valid ID format",
+  PROBLEM_DELETE:
+    "Error at trying to delete the exercise you asked us to delete, please try again",
+  PROBLEM_DELETE_ALL:
+    "Error at trying to delete all exercises from user, please try again",
   PROBLEM_POST: "Error at trying to create a new exercise, please try again",
   PROBLEM_PUT:
     "Error at trying to update your exercise, please try again later",
   PROBLEM_UPDATE_USER:
     "Error at trying to update user's new exercise, please try again",
-  PROBLEM_DELETE:
-    "Error at trying to delete the exercise you asked us to delete, please try again",
 };
 
 const shortUrlSchema = new Schema<IShortenerUrl>({

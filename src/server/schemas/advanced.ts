@@ -3,6 +3,8 @@ import type { IBook, IIssueTracker } from "../types/advanced";
 
 export const ERROR_ISSUES = {
   ERROR_DELETE: (_id: string) => `Could not delete issue ${_id}`,
+  FAIL_DELETE_ALL:
+    "Couldn't delete all the issues from user, please try again later",
   FAIL_CREATE: "Couldn't create your new issue, please try again later.",
   FAIL_FIND: "Error at trying to get all the issues, please try again later",
   FAIL_FIND_ID: "Error at trying to find your issue, please try again later",
@@ -19,6 +21,8 @@ export const ERROR_ISSUES = {
 
 export const ERROR_BOOKS = {
   COULD_NOT_DELETE: "Error at deleting a book, please try again.",
+  COULD_NOT_DELETE_ALL:
+    "Error at deleting all books of user, please try again.",
   COULD_NOT_FIND: "Error at finding a book, please try again.",
   COULD_NOT_SAVE: "Error at saving the new book, please try again.",
   COULD_NOT_UPDATE: "Error at updating your book, please try again.",
