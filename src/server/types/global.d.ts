@@ -9,6 +9,11 @@ declare global {
   }
 }
 
+export interface ErrorStatus {
+  error: string;
+  category: string;
+}
+
 export interface IGlobalUser {
   _id: string;
   password: string;
