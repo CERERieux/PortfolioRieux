@@ -23,9 +23,9 @@ import {
   AME_TO_BRIT,
   BRIT_TO_AME,
 } from "../schemas/advanced";
+import { advancedError } from "./error";
 
 const UPDATE_SUCCESS = (id: string) => `Successfully updated issue ${id}`;
-const DELETE_SUCCESS = (id: string) => `Successfully deleted issue ${id}`;
 const translator = new AdvancedModel.Translator();
 
 /** ------------------------------------------------------------------------ */
@@ -94,9 +94,9 @@ export function checkSudoku(
   const regexCoordinate = /^[A-I][1-9]$/i;
   const regexValue = /^[1-9]$/;
   if (!regexCoordinate.test(coord)) {
-    res.json({ error: ERROR_SUDOKU.INVALID_COORD });
+    return res.status(400).json({ error: ERROR_SUDOKU.INVALID_COORD });
   } else if (!regexValue.test(value)) {
-    res.json({ error: ERROR_SUDOKU.INVALID_VALUE });
+    return res.status(400).json({ error: ERROR_SUDOKU.INVALID_VALUE });
   }
   /* If coordinate and value are valid, then we start to check the user's input into the puzzle
     and see if those are valid to solve the sudoku or not
@@ -216,7 +216,10 @@ export async function getAllIssues(
     _id,
   };
   const resultQuery = await AdvancedModel.getAllIssues(searchParams);
-  if ("error" in resultQuery) return res.status(500).json(resultQuery);
+  if ("error" in resultQuery) {
+    const status = advancedError(resultQuery);
+    return res.status(status).json(resultQuery);
+  }
   return res.status(200).json(resultQuery);
 }
 
@@ -240,8 +243,11 @@ export async function createNewIssue(
       updated_on: createdOn,
     };
     const resultCreated = await AdvancedModel.createNewIssue(issue);
-    if ("error" in resultCreated) return res.status(500).json(resultCreated);
-    return res.status(200).json(resultCreated);
+    if ("error" in resultCreated) {
+      const status = advancedError(resultCreated);
+      return res.status(status).json(resultCreated);
+    }
+    return res.status(201).json(resultCreated);
   }
 }
 
@@ -272,7 +278,10 @@ export async function updateIssue(
   };
   const resultUpdate = await AdvancedModel.updateIssue(issue);
   // If there was an error at updating, display it
-  if ("error" in resultUpdate) return res.status(500).json(resultUpdate);
+  if ("error" in resultUpdate) {
+    const status = advancedError(resultUpdate);
+    return res.status(status).json(resultUpdate);
+  }
   return res.status(200).json(UPDATE_SUCCESS(_id));
 }
 
@@ -293,17 +302,11 @@ export async function deleteIssue(
   } else {
     const wasDeleted = await AdvancedModel.deleteIssue(_id);
     // If an issue was deleted, it was a success, if not then it's an error
-    if (wasDeleted) {
-      return res.status(200).json({
-        result: DELETE_SUCCESS,
-        _id,
-      });
-    } else {
-      return res.status(500).json({
-        error: ERROR_ISSUES.ERROR_DELETE(_id),
-        _id,
-      });
+    if ("error" in wasDeleted && wasDeleted.action === undefined) {
+      const status = advancedError(wasDeleted);
+      return res.status(status).json(wasDeleted);
     }
+    return res.status(200).json(wasDeleted);
   }
 }
 
@@ -317,7 +320,8 @@ export async function getAllBooks(req: Request, res: Response) {
   const firstBook = resultQuery[0];
   // If the 1st book has the error property, then the result was an error
   if ("error" in firstBook) {
-    return res.status(500).json(firstBook);
+    const status = advancedError(firstBook);
+    return res.status(status).json(firstBook);
   } else {
     return res.status(200).json(resultQuery); // Else, send all the book
   }
@@ -330,7 +334,7 @@ export async function createNewBook(
   // Get the title from user, if don't exist, send an error
   const { title, status } = req.body;
   const username = req._id;
-  if (title == null) {
+  if (title == null || title === "") {
     return res.status(400).json({ error: ERROR_BOOKS.MISSING_TITLE });
   }
   // Create a new book based on the title and show it
@@ -339,15 +343,21 @@ export async function createNewBook(
     status,
     username,
   });
-  if ("error" in newBook) return res.status(500).json(newBook);
-  return res.status(200).json(newBook);
+  if ("error" in newBook) {
+    const status = advancedError(newBook);
+    return res.status(status).json(newBook);
+  }
+  return res.status(201).json(newBook);
 }
 
 export async function deleteAllBooks(req: Request, res: Response) {
   // Delete all the books and show the result of the operation
   const username = req._id;
   const deletedBooks = await AdvancedModel.deleteAllBooks(username);
-  if ("error" in deletedBooks) return res.status(500).json(deletedBooks);
+  if ("error" in deletedBooks) {
+    const status = advancedError(deletedBooks);
+    return res.status(status).json(deletedBooks);
+  }
   return res.status(200).json(deletedBooks);
 }
 
@@ -359,7 +369,10 @@ export async function getSingleBook(req: Request, res: Response) {
   }
   // Find the book and show the result of the operation
   const book = await AdvancedModel.getSingleBook(_id);
-  if ("error" in book) return res.status(500).json(book);
+  if ("error" in book) {
+    const status = advancedError(book);
+    return res.status(status).json(book);
+  }
   return res.status(200).json(book);
 }
 
@@ -373,13 +386,16 @@ export async function createBookNote(
     return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
   }
   const note = req.body.note;
-  if (note == null) {
+  if (note == null || note === "") {
     return res.status(400).json({ error: ERROR_BOOKS.MISSING_NOTE });
   }
   // If those are valid, create the comment and show the result of the operation
   const newNote = await AdvancedModel.createBookNote(note, _id);
-  if ("error" in newNote) return res.status(500).json(newNote);
-  return res.status(200).json(newNote);
+  if ("error" in newNote) {
+    const status = advancedError(newNote);
+    return res.status(status).json(newNote);
+  }
+  return res.status(201).json(newNote);
 }
 
 export async function updateBook(
@@ -399,7 +415,10 @@ export async function updateBook(
     recommend,
     _id,
   });
-  if ("error" in resultUpdate) return res.status(500).json(resultUpdate);
+  if ("error" in resultUpdate) {
+    const status = advancedError(resultUpdate);
+    return res.status(status).json(resultUpdate);
+  }
   return res.status(200).json(resultUpdate);
 }
 
@@ -414,6 +433,9 @@ export async function deleteSingleBook(req: Request, res: Response) {
   }
   // If valid, delete the book and show the result of the operation
   const resultDelete = await AdvancedModel.deleteSingleBook(_id, req._id);
-  if ("error" in resultDelete) return res.status(500).json(resultDelete);
+  if ("error" in resultDelete) {
+    const status = advancedError(resultDelete);
+    return res.status(status).json(resultDelete);
+  }
   return res.status(200).json(resultDelete);
 }

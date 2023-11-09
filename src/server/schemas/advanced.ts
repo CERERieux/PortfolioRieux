@@ -2,7 +2,8 @@ import { Schema, model } from "mongoose";
 import type { IBook, IIssueTracker } from "../types/advanced";
 
 export const ERROR_ISSUES = {
-  ERROR_DELETE: (_id: string) => `Could not delete issue ${_id}`,
+  EMPTY_DELETE:
+    "Error, don't try to delete a issue that don't exist, please send a valid ID",
   FAIL_DELETE_ALL:
     "Couldn't delete all the issues from user, please try again later",
   FAIL_CREATE: "Couldn't create your new issue, please try again later.",

@@ -740,7 +740,7 @@ export async function getAllIssues(searchParams: ReqQueryIssue) {
   // Find all issues
   const projectIssues = await IssueTracker.find({}).catch(err => {
     console.error(err);
-    return { error: ERROR_ISSUES.FAIL_FIND };
+    return { error: ERROR_ISSUES.FAIL_FIND, category: "issue" };
   });
   if ("error" in projectIssues) {
     return projectIssues;
@@ -749,6 +749,7 @@ export async function getAllIssues(searchParams: ReqQueryIssue) {
   if (projectIssues.length === 0) {
     return {
       error: ERROR_ISSUES.NOT_ISSUES_FIND,
+      category: "issue",
     };
   }
   // If we have issues, we need to filter those if user needs it
@@ -815,7 +816,7 @@ export async function createNewIssue(issue: CreateIssue) {
   const newIssue = new IssueTracker(issue);
   const resultSave = await newIssue.save().catch(err => {
     console.error(err);
-    return { error: ERROR_ISSUES.FAIL_CREATE };
+    return { error: ERROR_ISSUES.FAIL_CREATE, category: "issue" };
   });
   // If there exist an error at saving it, display it
   if ("error" in resultSave) {
@@ -826,11 +827,12 @@ export async function createNewIssue(issue: CreateIssue) {
     // Find user by Id, if not found, we send an error
     const user = await GUser.findById(resultSave.created_by).catch(err => {
       console.error(err);
-      return { error: ERROR_GUSER.COULD_NOT_FIND };
+      return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
     });
     if (user == null) {
       return {
         error: ERROR_GUSER.USER_NOT_FOUND,
+        category: "guser",
       };
     }
     if ("error" in user) {
@@ -840,7 +842,7 @@ export async function createNewIssue(issue: CreateIssue) {
     user.issues.push(resultSave);
     const updatedUser = await user.save().catch(err => {
       console.error(err);
-      return { error: ERROR_ISSUES.FAIL_CREATE };
+      return { error: ERROR_ISSUES.FAIL_CREATE, category: "issue" };
     });
     if ("error" in updatedUser) {
       return updatedUser;
@@ -867,10 +869,10 @@ export async function updateIssue(issue: UpdateIssue) {
   // Find the issue by ID, if not found return error
   const issueToUpdate = await IssueTracker.findById(issue._id).catch(err => {
     console.error(err);
-    return { error: ERROR_ISSUES.FAIL_FIND_ID };
+    return { error: ERROR_ISSUES.FAIL_FIND_ID, category: "issue" };
   });
   if (issueToUpdate == null) {
-    return { error: ERROR_ISSUES.NOT_FOUND };
+    return { error: ERROR_ISSUES.NOT_FOUND, category: "issue" };
   }
   if ("error" in issueToUpdate) {
     return issueToUpdate;
@@ -891,7 +893,7 @@ export async function updateIssue(issue: UpdateIssue) {
   issueToUpdate.updated_on = new Date(Date.now());
   const issueUpdated = await issueToUpdate.save().catch(err => {
     console.error(err);
-    return { error: ERROR_ISSUES.FAIL_UPDATE };
+    return { error: ERROR_ISSUES.FAIL_UPDATE, category: "issue" };
   }); // Save it
   return issueUpdated; // Return the updated issue
 }
@@ -901,13 +903,13 @@ export async function deleteIssue(_id: string) {
   // We need to find the issue by its id to get user and then remove the issue from they
   const issueToDelete = await IssueTracker.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_ISSUES.FAIL_FIND_ID };
+    return { error: ERROR_ISSUES.FAIL_FIND_ID, category: "issue" };
   });
   if (issueToDelete == null) {
-    return false;
+    return { error: ERROR_ISSUES.NOT_FOUND, category: "issue" };
   }
   if ("error" in issueToDelete) {
-    return false;
+    return issueToDelete;
   }
   // If we found an issue, then it exist and we can delete it
   const username = issueToDelete.created_by; // Get the username
@@ -926,26 +928,26 @@ export async function deleteIssue(_id: string) {
     // Find user by Id, if not found, we send an error
     const user = await GUser.findById(username).catch(err => {
       console.error(err);
-      return { error: ERROR_GUSER.COULD_NOT_FIND };
+      return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
     });
     if (user == null) {
-      return false;
+      return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
     }
     if ("error" in user) {
-      return false;
+      return user;
     }
     // Erase the issue and save user
     user.issues = user.issues.filter(issue => issue._id.toString() !== _id);
     const updatedUser = await user.save().catch(err => {
       console.error(err);
-      return { error: ERROR_BOOKS.COULD_NOT_DELETE };
+      return { error: ERROR_BOOKS.COULD_NOT_DELETE, category: "issue" };
     });
     if ("error" in updatedUser) {
-      return false;
+      return updatedUser;
     }
-    return true;
+    return { action: `Issue ${_id} was deleted successfully!` };
   }
-  return false;
+  return { error: ERROR_ISSUES.EMPTY_DELETE, category: "issue" };
 }
 
 /** ------------------------------------------------------------------------ */
@@ -955,7 +957,7 @@ export async function getAllBooks(username: string) {
   // Get all the books that have the same username
   const books = await Book.find({ username }).catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_FIND };
+    return { error: ERROR_BOOKS.COULD_NOT_FIND, category: "book" };
   });
   // If the query had an error, return the error
   if ("error" in books) {
@@ -963,7 +965,7 @@ export async function getAllBooks(username: string) {
   }
   // If "library" is empty, then we send an "error"
   if (books.length === 0) {
-    return [{ error: ERROR_BOOKS.EMPTY_LIBRARY }];
+    return [{ error: ERROR_BOOKS.EMPTY_LIBRARY, category: "book" }];
   }
   // If we have books in database, order the data
   const displayBooks = books.map(book => ({
@@ -986,7 +988,7 @@ export async function createNewBook({ title, status, username }: CreateBook) {
   });
   const resultSave = await newBook.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_SAVE };
+    return { error: ERROR_BOOKS.COULD_NOT_SAVE, category: "book" };
   });
   // If the result was an error, return it
   if ("error" in resultSave) {
@@ -996,11 +998,12 @@ export async function createNewBook({ title, status, username }: CreateBook) {
   // Find user by Id, if not found, we send an error
   const user = await GUser.findById(resultSave.username).catch(err => {
     console.error(err);
-    return { error: ERROR_GUSER.COULD_NOT_FIND };
+    return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
   });
   if (user == null) {
     return {
       error: ERROR_GUSER.USER_NOT_FOUND,
+      category: "guser",
     };
   }
   if ("error" in user) {
@@ -1010,7 +1013,7 @@ export async function createNewBook({ title, status, username }: CreateBook) {
   user.books.push(resultSave);
   const updatedUser = await user.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_SAVE };
+    return { error: ERROR_BOOKS.COULD_NOT_SAVE, category: "book" };
   });
   if ("error" in updatedUser) {
     return updatedUser;
@@ -1028,7 +1031,7 @@ export async function deleteAllBooks(username: string) {
   // Delete all books, if there is an error at deleting, display it
   const deletedBooks = await Book.deleteMany().catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_DELETE };
+    return { error: ERROR_BOOKS.COULD_NOT_DELETE, category: "book" };
   });
   if ("error" in deletedBooks) {
     return deletedBooks;
@@ -1040,11 +1043,12 @@ export async function deleteAllBooks(username: string) {
     // Find user by Id, if not found, we send an error
     const user = await GUser.findById(username).catch(err => {
       console.error(err);
-      return { error: ERROR_GUSER.COULD_NOT_FIND };
+      return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
     });
     if (user == null) {
       return {
         error: ERROR_GUSER.USER_NOT_FOUND,
+        category: "guser",
       };
     }
     if ("error" in user) {
@@ -1054,7 +1058,7 @@ export async function deleteAllBooks(username: string) {
     user.books = [];
     const updatedUser = await user.save().catch(err => {
       console.error(err);
-      return { error: ERROR_BOOKS.COULD_NOT_DELETE };
+      return { error: ERROR_BOOKS.COULD_NOT_DELETE, category: "book" };
     });
     if ("error" in updatedUser) {
       return updatedUser;
@@ -1062,7 +1066,7 @@ export async function deleteAllBooks(username: string) {
     return { action: `All books were successfully deleted` };
   }
   // If not, we send an error because the was nothing to delete
-  return { error: ERROR_BOOKS.DELETE_EMPTY_LIBRARY };
+  return { error: ERROR_BOOKS.DELETE_EMPTY_LIBRARY, category: "book" };
 }
 
 /** Function to get a single book based on the ID given by user */
@@ -1070,7 +1074,7 @@ export async function getSingleBook(_id: string) {
   // Find the book by its ID, if there was an error while searching, display it
   const book = await Book.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_FIND };
+    return { error: ERROR_BOOKS.COULD_NOT_FIND, category: "book" };
   });
   // If we found a book we display the info needed
   if (book !== null) {
@@ -1089,7 +1093,7 @@ export async function getSingleBook(_id: string) {
     return bookDisplay;
   }
   // If we didn't found a book, display we couldn't find a book
-  return { error: ERROR_BOOKS.NOT_FOUND };
+  return { error: ERROR_BOOKS.NOT_FOUND, category: "book" };
 }
 
 /** Function that creates and appends notes to one book given its ID by user */
@@ -1097,11 +1101,11 @@ export async function createBookNote(note: string, _id: string) {
   // Find the book we want to append a note
   const book = await Book.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_FIND };
+    return { error: ERROR_BOOKS.COULD_NOT_FIND, category: "book" };
   });
   // If there was an error while searching or there isn't a book, display error
   if (book == null) {
-    return { error: ERROR_BOOKS.NOT_FOUND };
+    return { error: ERROR_BOOKS.NOT_FOUND, category: "book" };
   }
   if ("error" in book) {
     return book;
@@ -1110,7 +1114,7 @@ export async function createBookNote(note: string, _id: string) {
   book.notes.push(note);
   const updatedBook = await book.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_SAVE };
+    return { error: ERROR_BOOKS.COULD_NOT_SAVE, category: "book" };
   }); // Save it and if there was an error at saving it, display the error
   if ("error" in updatedBook) {
     return updatedBook;
@@ -1124,13 +1128,16 @@ export async function createBookNote(note: string, _id: string) {
   return displayBook;
 }
 
+/** Function that updates a book, which is title, status, review and
+ * if recommends the book
+ */
 export async function updateBook(dataUpdate: ReqBodyUpdateBook) {
   // Find book by it's id, send an error if a problem occur or we don't find anything
   const book = await Book.findById(dataUpdate._id).catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_FIND };
+    return { error: ERROR_BOOKS.COULD_NOT_FIND, category: "book" };
   });
-  if (book == null) return { error: ERROR_BOOKS.NOT_FOUND };
+  if (book == null) return { error: ERROR_BOOKS.NOT_FOUND, category: "book" };
   if ("error" in book) return book;
   /* If we have a book, we verify each property to update, we don't update it if
      it have the same old value and it exist */
@@ -1159,7 +1166,7 @@ export async function updateBook(dataUpdate: ReqBodyUpdateBook) {
   // Save book and send error if there was one in the process
   const updatedBook = await book.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_UPDATE };
+    return { error: ERROR_BOOKS.COULD_NOT_UPDATE, category: "book" };
   });
   if ("error" in updatedBook) return updatedBook;
   // At the end send the updated fields to user
@@ -1177,7 +1184,7 @@ export async function deleteSingleBook(_id: string, username: string) {
   // Delete the book by its ID, if an error happened while deleting, send it to display
   const deletedBook = await Book.deleteOne({ _id }).catch(err => {
     console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_DELETE };
+    return { error: ERROR_BOOKS.COULD_NOT_DELETE, category: "book" };
   });
   if ("error" in deletedBook) {
     return deletedBook;
@@ -1190,11 +1197,12 @@ export async function deleteSingleBook(_id: string, username: string) {
     // Find user by Id, if not found, we send an error
     const user = await GUser.findById(username).catch(err => {
       console.error(err);
-      return { error: ERROR_GUSER.COULD_NOT_FIND };
+      return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
     });
     if (user == null) {
       return {
         error: ERROR_GUSER.USER_NOT_FOUND,
+        category: "guser",
       };
     }
     if ("error" in user) {
@@ -1204,7 +1212,7 @@ export async function deleteSingleBook(_id: string, username: string) {
     user.books = user.books.filter(book => book._id.toString() !== _id);
     const updatedUser = await user.save().catch(err => {
       console.error(err);
-      return { error: ERROR_BOOKS.COULD_NOT_DELETE };
+      return { error: ERROR_BOOKS.COULD_NOT_DELETE, category: "book" };
     });
     if ("error" in updatedUser) {
       return updatedUser;
@@ -1212,5 +1220,5 @@ export async function deleteSingleBook(_id: string, username: string) {
     return { action: `Delete successful book ${_id}` };
   }
   // If nothing happened, then the book didn't exist and send an error about it
-  return { error: ERROR_BOOKS.DELETE_EMPTY_BOOK };
+  return { error: ERROR_BOOKS.DELETE_EMPTY_BOOK, category: "book" };
 }
