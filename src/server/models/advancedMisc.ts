@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import "mongoose";
 import type {
   StockAPI,
   LikeStock,
@@ -34,7 +34,7 @@ export async function consultStock({ stock, like, _id }: StockQuery) {
   // We will search if client is new or already exist
   const dbClientId = await Client.findOne({ username: _id }).catch(err => {
     console.error(err);
-    return { error: ERROR_STOCK.FINDING_ALL_CLIENTS };
+    return { error: ERROR_STOCK.FINDING_ALL_CLIENTS, category: "stock" };
   });
 
   let currentClient; // Auxiliar to get the current client
@@ -135,7 +135,7 @@ async function createNewClient(_id: string) {
   });
   const resultSave = await newClient.save().catch(err => {
     console.error(err);
-    return { error: ERROR_STOCK.CREATING_CLIENT };
+    return { error: ERROR_STOCK.CREATING_CLIENT, category: "stock" };
   });
   return resultSave;
 }
@@ -158,7 +158,7 @@ async function putLikes({ currentClient, stock, like }: LikeStock) {
   }
   const resultSave = await currentClient.save().catch(err => {
     console.error(err);
-    return { error: ERROR_STOCK.PUTTING_LIKES };
+    return { error: ERROR_STOCK.PUTTING_LIKES, category: "stock" };
   });
   return resultSave;
 }
@@ -175,7 +175,7 @@ async function operationStocks({ currentClient, stock }: OperationStocks) {
     .exec()
     .catch(err => {
       console.error(err);
-      return { error: ERROR_STOCK.FINDING_STOCK };
+      return { error: ERROR_STOCK.FINDING_STOCK, category: "stock" };
     });
 
   // If the stock don't exist, create it
@@ -190,7 +190,7 @@ async function operationStocks({ currentClient, stock }: OperationStocks) {
     if (typeof isLikedStock === "boolean" && isLikedStock) newStock.likes = 1;
     resultSave = await newStock.save().catch(err => {
       console.error(err);
-      return { error: ERROR_STOCK.CREATING_STOCK };
+      return { error: ERROR_STOCK.CREATING_STOCK, category: "stock" };
     });
   } else {
     // If the stock exist and was an error, return the error
@@ -214,7 +214,7 @@ async function operationStocks({ currentClient, stock }: OperationStocks) {
     // And save the stock updated
     resultSave = await consultStock.save().catch(err => {
       console.error(err);
-      return { error: ERROR_STOCK.UPDATE_STOCK };
+      return { error: ERROR_STOCK.UPDATE_STOCK, category: "stock" };
     });
   }
   return resultSave;
@@ -235,7 +235,7 @@ async function fetchInfo(resultStock: StockDocument) {
     })
     .catch(err => {
       console.error(err);
-      return { error: ERROR_STOCK.FAIL_FETCH };
+      return { error: ERROR_STOCK.FAIL_FETCH, category: "stock" };
     });
   return consult;
 }
@@ -248,10 +248,11 @@ export async function getAllBoards() {
     .exec()
     .catch(err => {
       console.error(err);
-      return { error: ERROR_BOARD.COULD_NOT_GET_ALL_BOARDS };
+      return { error: ERROR_BOARD.COULD_NOT_GET_ALL_BOARDS, category: "board" };
     });
   if ("error" in allBoards) return allBoards;
-  if (allBoards.length === 0) return { error: ERROR_BOARD.EMPTY_ALL_BOARDS };
+  if (allBoards.length === 0)
+    return { error: ERROR_BOARD.EMPTY_ALL_BOARDS, category: "board" };
   const resultQuery = allBoards.map(board => ({
     id: board._id,
     thread_count: board.threads.length,
@@ -263,7 +264,7 @@ export async function getAllBoards() {
  * recent replies, if nothing is found, return an empty array */
 export async function getTopThreads(_id: string) {
   // First we find the board that user want to see with all the info filtered
-  const userBoard = await Board.findById({ _id })
+  const userBoard = await Board.findById(_id)
     .populate({
       path: "threads",
       options: { sort: "-bumped_on", limit: 10 },
@@ -277,10 +278,11 @@ export async function getTopThreads(_id: string) {
     .exec()
     .catch(err => {
       console.error(err);
-      return { error: ERROR_BOARD.COULD_NOT_FIND_BOARD };
+      return { error: ERROR_BOARD.COULD_NOT_FIND_BOARD, category: "board" };
     });
   // If we got an error while finding or we don't found a board, end function
-  if (userBoard === null) return { error: ERROR_BOARD.EMPTY_BOARD };
+  if (userBoard === null)
+    return { error: ERROR_BOARD.EMPTY_BOARD, category: "board" };
   if ("error" in userBoard) return userBoard;
   else {
     // If we got a board, we need to put the number of replies of each thread
@@ -316,12 +318,12 @@ export async function createNewThread({
   deletePassword,
 }: UserDataCreate) {
   // First we will get the board we are posting a thread for
-  const userBoard = await Board.findById({ _id })
+  const userBoard = await Board.findById(_id)
     .populate("threads")
     .exec()
     .catch(err => {
       console.error(err);
-      return { error: ERROR_BOARD.COULD_NOT_FIND_BOARD };
+      return { error: ERROR_BOARD.COULD_NOT_FIND_BOARD, category: "board" };
     });
 
   let resultSaveThread; // Auxiliar to save the new thread
@@ -353,18 +355,19 @@ export async function createNewThread({
 
 export async function reportThread(_id: string) {
   // First we get the thread by its ID to report it
-  const thread = await Thread.findById({ _id }).catch(err => {
+  const thread = await Thread.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_FIND_THREAD };
+    return { error: ERROR_BOARD.COULD_NOT_FIND_THREAD, category: "board" };
   });
   // If we got an error while finding or the thread don't exist, end the function
-  if (thread === null) return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD };
+  if (thread === null)
+    return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD, category: "board" };
   if ("error" in thread) return thread;
   // If we found it and it's valid, then report it
   thread.reported = true;
   const resultUpdate = await thread.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_UPDATE_THREAD };
+    return { error: ERROR_BOARD.COULD_NOT_UPDATE_THREAD, category: "board" };
   });
   if ("error" in resultUpdate) return resultUpdate;
   const resultAction = { action: ACTION_BOARD.REPORT_THREAD_SUCCESS };
@@ -373,12 +376,13 @@ export async function reportThread(_id: string) {
 
 export async function deleteThread({ _id, password }: DeleteElementBoard) {
   // First we get the thread by its ID to delete it
-  const thread = await Thread.findById({ _id }).catch(err => {
+  const thread = await Thread.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_FIND_THREAD };
+    return { error: ERROR_BOARD.COULD_NOT_FIND_THREAD, category: "board" };
   });
   // If we got an error while finding or the thread don't exist, end the function
-  if (thread === null) return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD };
+  if (thread === null)
+    return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD, category: "board" };
   if ("error" in thread) return thread;
   // If user gave the correct password, we delete it
   if (password === thread.delete_password) {
@@ -387,7 +391,10 @@ export async function deleteThread({ _id, password }: DeleteElementBoard) {
       const deleteReplies = await Reply.deleteMany({ thread_id: _id }).catch(
         err => {
           console.error(err);
-          return { error: ERROR_BOARD.COULD_NOT_DELETE_REPLY };
+          return {
+            error: ERROR_BOARD.COULD_NOT_DELETE_REPLY,
+            category: "board",
+          };
         },
       );
       if ("error" in deleteReplies) return deleteReplies;
@@ -395,7 +402,7 @@ export async function deleteThread({ _id, password }: DeleteElementBoard) {
     // Then we can delete the thread
     const deleteResult = await Thread.deleteOne({ _id }).catch(err => {
       console.error(err);
-      return { error: ERROR_BOARD.COULD_NOT_DELETE_THREAD };
+      return { error: ERROR_BOARD.COULD_NOT_DELETE_THREAD, category: "board" };
     });
     // If there was an error in deleting the thread, send it
     if ("error" in deleteResult) return deleteResult;
@@ -404,13 +411,13 @@ export async function deleteThread({ _id, password }: DeleteElementBoard) {
     return resultAction;
   } else {
     // If password is incorrect, return an error
-    return { error: ERROR_BOARD.INCORRECT_PASSWORD };
+    return { error: ERROR_BOARD.INCORRECT_PASSWORD, category: "board" };
   }
 }
 
 export async function getAllReplies({ _idBoard, _idThread }: GetReplies) {
   // First, we find the board by its name
-  const userBoard = await Board.findById({ _id: _idBoard })
+  const userBoard = await Board.findById(_idBoard)
     .populate({
       path: "threads",
       select: "_id text created_on bumped_on replies",
@@ -423,10 +430,11 @@ export async function getAllReplies({ _idBoard, _idThread }: GetReplies) {
     .exec()
     .catch(err => {
       console.error(err);
-      return { error: ERROR_BOARD.COULD_NOT_FIND_BOARD };
+      return { error: ERROR_BOARD.COULD_NOT_FIND_BOARD, category: "board" };
     });
   // If the board wasn't found or it had an error while finding, end function
-  if (userBoard === null) return { error: ERROR_BOARD.EMPTY_BOARD };
+  if (userBoard === null)
+    return { error: ERROR_BOARD.EMPTY_BOARD, category: "board" };
   if ("error" in userBoard) return userBoard;
   // If we have a valid board, we need to find the user thread
   const userThread = userBoard.threads.filter(
@@ -434,7 +442,7 @@ export async function getAllReplies({ _idBoard, _idThread }: GetReplies) {
   );
   // If the thread don't exist, return an error
   if (userThread.length === 0)
-    return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD };
+    return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD, category: "board" };
   const currentThread = userThread[0]; // Get user thread
 
   return currentThread;
@@ -446,20 +454,19 @@ export async function createNewReply({
   deletePassword,
 }: UserDataCreate) {
   // Find the thread by its ID to add a reply
-  const userThread = await Thread.findById({ _id })
+  const userThread = await Thread.findById(_id)
     .populate("replies")
     .exec()
     .catch(err => {
       console.error(err);
-      return { error: ERROR_BOARD.COULD_NOT_FIND_THREAD };
+      return { error: ERROR_BOARD.COULD_NOT_FIND_THREAD, category: "board" };
     });
   // If the thread don't exist or we had an error while finding, return the error
   if (userThread === null)
-    return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD };
+    return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD, category: "board" };
   if ("error" in userThread) return userThread;
   // If the thread exist, create the reply and save it
   const newReply = new Reply({
-    _id: new mongoose.Types.ObjectId(),
     thread_id: _id,
     text,
     delete_password: deletePassword,
@@ -467,7 +474,7 @@ export async function createNewReply({
   });
   const saveReply = await newReply.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_SAVE_REPLY };
+    return { error: ERROR_BOARD.COULD_NOT_SAVE_REPLY, category: "board" };
   });
   // If an error happened while saving, end function
   if ("error" in saveReply) return saveReply;
@@ -476,7 +483,7 @@ export async function createNewReply({
   // And save it, if an error happened, return the error
   const saveThread = await userThread.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_SAVE_THREAD };
+    return { error: ERROR_BOARD.COULD_NOT_SAVE_THREAD, category: "board" };
   });
   if ("error" in saveThread) return saveThread;
   // If all was successful, return the new reply
@@ -485,18 +492,19 @@ export async function createNewReply({
 
 export async function reportReply(_id: string) {
   // First we need to find the user reply that they want to report
-  const userReply = await Reply.findById({ _id }).catch(err => {
+  const userReply = await Reply.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_FIND_REPLY };
+    return { error: ERROR_BOARD.COULD_NOT_FIND_REPLY, category: "board" };
   });
   // If reply don't exist or there was an error while finding, return the error
-  if (userReply === null) return { error: ERROR_BOARD.COULD_NOT_FIND_ID_REPLY };
+  if (userReply === null)
+    return { error: ERROR_BOARD.COULD_NOT_FIND_ID_REPLY, category: "board" };
   if ("error" in userReply) return userReply;
   // If the reply exist, then update it and save it
   userReply.reported = true;
   const updateResult = await userReply.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_UPDATE_REPLY };
+    return { error: ERROR_BOARD.COULD_NOT_UPDATE_REPLY, category: "board" };
   });
   // If there was an error while updating, return the error
   if ("error" in updateResult) return updateResult;
@@ -506,12 +514,13 @@ export async function reportReply(_id: string) {
 
 export async function deleteReply({ _id, password }: DeleteElementBoard) {
   // First we need to find the user reply that they want to delete
-  const userReply = await Reply.findById({ _id }).catch(err => {
+  const userReply = await Reply.findById(_id).catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_FIND_REPLY };
+    return { error: ERROR_BOARD.COULD_NOT_FIND_REPLY, category: "board" };
   });
   // If reply don't exist or there was an error while finding, return the error
-  if (userReply === null) return { error: ERROR_BOARD.COULD_NOT_FIND_ID_REPLY };
+  if (userReply === null)
+    return { error: ERROR_BOARD.COULD_NOT_FIND_ID_REPLY, category: "board" };
   if ("error" in userReply) return userReply;
   // If the reply exist, verify if the password is correct
   if (userReply.delete_password === password) {
@@ -519,24 +528,24 @@ export async function deleteReply({ _id, password }: DeleteElementBoard) {
     userReply.text = "[Deleted]";
     const deleteResult = await userReply.save().catch(err => {
       console.error(err);
-      return { error: ERROR_BOARD.COULD_NOT_UPDATE_REPLY };
+      return { error: ERROR_BOARD.COULD_NOT_UPDATE_REPLY, category: "board" };
     });
     // If there was an error while deleting, return the error
     if ("error" in deleteResult) return deleteResult;
-    const resultAction = { action: ACTION_BOARD.DELETE_REPLY_SUCCESS };
+    const resultAction = {
+      action: ACTION_BOARD.DELETE_REPLY_SUCCESS,
+    };
     return resultAction; // Return the success message
   } else {
     // If password is wrong, then return an error
-    return { error: ERROR_BOARD.INCORRECT_PASSWORD };
+    return { error: ERROR_BOARD.INCORRECT_PASSWORD, category: "board" };
   }
 }
 
 /** Function that creates threads for boards */
 async function createThread({ board, text, deletePassword }: CreateThread) {
-  const _id = new mongoose.Types.ObjectId(); // Create new id
   // Create the new thread with the data that user sent
   const newThread = new Thread({
-    _id,
     text,
     delete_password: deletePassword,
     replies: [],
@@ -546,7 +555,7 @@ async function createThread({ board, text, deletePassword }: CreateThread) {
   // Save the thread, if an error happened, return the error
   const saveThread = await newThread.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_SAVE_THREAD };
+    return { error: ERROR_BOARD.COULD_NOT_SAVE_THREAD, category: "board" };
   });
   if ("error" in saveThread) return saveThread;
 
@@ -555,7 +564,7 @@ async function createThread({ board, text, deletePassword }: CreateThread) {
   // Save the board and return the result of the thread
   const saveBoard = await board.save().catch(err => {
     console.error(err);
-    return { error: ERROR_BOARD.COULD_NOT_SAVE_BOARD };
+    return { error: ERROR_BOARD.COULD_NOT_SAVE_BOARD, category: "board" };
   });
   if ("error" in saveBoard) return saveBoard;
   // If both elements were successful at saving, return the thread

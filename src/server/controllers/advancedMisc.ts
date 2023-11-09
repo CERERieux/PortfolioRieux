@@ -12,6 +12,7 @@ import type {
   ReqDeleteReply,
 } from "../types/advancedMisc";
 import { ERROR_STOCK, ERROR_BOARD } from "../schemas/advancedMisc";
+import { miscError } from "./error";
 
 export async function consultStock(
   req: Request<{}, {}, {}, ReqStockQuery>,
@@ -26,7 +27,10 @@ export async function consultStock(
     like,
     _id,
   });
-  if ("error" in resultStock) return res.status(500).json(resultStock);
+  if ("error" in resultStock) {
+    const status = miscError(resultStock);
+    return res.status(status).json(resultStock);
+  }
   return res.status(200).json(resultStock);
 }
 
@@ -34,14 +38,20 @@ export async function consultStock(
 
 export async function getAllBoards(req: Request, res: Response) {
   const resultQuery = await AdvancedMiscModel.getAllBoards();
-  if ("error" in resultQuery) return res.status(500).json(resultQuery);
+  if ("error" in resultQuery) {
+    const status = miscError(resultQuery);
+    return res.status(status).json(resultQuery);
+  }
   return res.status(200).json(resultQuery);
 }
 
 export async function getTopThreads(req: Request, res: Response) {
   const _id = req.params.board.toLowerCase();
   const resultThreads = await AdvancedMiscModel.getTopThreads(_id);
-  if ("error" in resultThreads) return res.status(200).json(resultThreads);
+  if ("error" in resultThreads) {
+    const status = miscError(resultThreads);
+    return res.status(status).json(resultThreads);
+  }
   return res.status(200).json(resultThreads);
 }
 
@@ -60,7 +70,10 @@ export async function createNewThread(
       text,
       deletePassword,
     });
-    if ("error" in resultCreate) return res.status(500).json(resultCreate);
+    if ("error" in resultCreate) {
+      const status = miscError(resultCreate);
+      return res.status(status).json(resultCreate);
+    }
     return res.status(200).json(resultCreate);
   }
 }
@@ -76,7 +89,10 @@ export async function reportThread(
     return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultReport = await AdvancedMiscModel.reportThread(_id);
-    if ("error" in resultReport) return res.status(500).json(resultReport);
+    if ("error" in resultReport) {
+      const status = miscError(resultReport);
+      return res.status(status).json(resultReport);
+    }
     return res.status(200).json(resultReport);
   }
 }
@@ -96,7 +112,10 @@ export async function deleteThread(
       _id,
       password: deletePassword,
     });
-    if ("error" in resultDelete) return res.status(500).json(resultDelete);
+    if ("error" in resultDelete) {
+      const status = miscError(resultDelete);
+      return res.status(status).json(resultDelete);
+    }
     return res.status(200).json(resultDelete);
   }
 }
@@ -116,7 +135,10 @@ export async function getAllReplies(
       _idBoard,
       _idThread,
     });
-    if ("error" in resultQuery) return res.status(500).json(resultQuery);
+    if ("error" in resultQuery) {
+      const status = miscError(resultQuery);
+      return res.status(status).json(resultQuery);
+    }
     return res.status(200).json(resultQuery);
   }
 }
@@ -138,7 +160,10 @@ export async function createNewReply(
       text,
       deletePassword,
     });
-    if ("error" in resultCreate) return res.status(500).json(resultCreate);
+    if ("error" in resultCreate) {
+      const status = miscError(resultCreate);
+      return res.status(status).json(resultCreate);
+    }
     return res.status(200).json(resultCreate);
   }
 }
@@ -154,7 +179,10 @@ export async function reportReply(
     return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultReport = await AdvancedMiscModel.reportReply(_id);
-    if ("error" in resultReport) return res.status(500).json(resultReport);
+    if ("error" in resultReport) {
+      const status = miscError(resultReport);
+      return res.status(status).json(resultReport);
+    }
     return res.status(200).json(resultReport);
   }
 }
@@ -174,7 +202,10 @@ export async function deleteReply(
       _id,
       password: deletePassword,
     });
-    if ("error" in resultDelete) return res.status(500).json(resultDelete);
+    if ("error" in resultDelete) {
+      const status = miscError(resultDelete);
+      return res.status(status).json(resultDelete);
+    }
     return res.status(200).json(resultDelete);
   }
 }

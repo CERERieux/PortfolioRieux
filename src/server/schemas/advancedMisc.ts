@@ -87,7 +87,7 @@ const boardSchema = new Schema<IBoard>({
 });
 
 const threadSchema = new Schema<IThread>({
-  _id: { type: Schema.Types.ObjectId },
+  _id: { type: Schema.Types.ObjectId, auto: true },
   text: { type: String, required: true },
   created_on: { type: String, default: new Date().toISOString() },
   bumped_on: { type: String, default: new Date().toISOString() },
@@ -97,7 +97,7 @@ const threadSchema = new Schema<IThread>({
 });
 
 const replySchema = new Schema<IReply>({
-  _id: { type: Schema.Types.ObjectId },
+  _id: { type: Schema.Types.ObjectId, auto: true },
   thread_id: { type: String, required: true },
   text: { type: String, required: true },
   created_on: { type: String, default: new Date().toISOString() },
