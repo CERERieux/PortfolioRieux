@@ -1083,12 +1083,11 @@ export async function getSingleBook(_id: string) {
     if ("error" in book) {
       return book;
     }
-    const notes = book.notes.filter(note => note !== "");
     const bookDisplay = {
       _id: book._id,
       title: book.title,
       status: book.status,
-      notes,
+      notes: book.notes,
       review: book.review,
       recommend: book.recommend,
     };
