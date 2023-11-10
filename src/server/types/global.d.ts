@@ -29,10 +29,6 @@ export interface ReqBodyCreateUser {
   password: string;
 }
 
-export interface TokenGUser {
-  username: string;
-}
-
 export interface ImgSelected {
   img: string;
 }
