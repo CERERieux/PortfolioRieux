@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
-import jwt from "jsonwebtoken";
-import type { TokenGUser } from "../types/global";
+import jwt, { type JwtPayload, TokenExpiredError } from "jsonwebtoken";
+import { ERROR_GUSER } from "../schemas/global";
 
 /** Function that extract the user depending if there is a token or not */
 export default function partialExtratorUser(
@@ -24,19 +24,25 @@ export default function partialExtratorUser(
     let decodedToken;
     // Decode the token, if there is an error, send it
     try {
-      decodedToken = jwt.verify(token, process.env.SECRET_WORD as string);
+      decodedToken = jwt.verify(
+        token,
+        process.env.SECRET_WORD as string,
+      ) as JwtPayload;
+      // For any reason the token don't have an username, put the id as the dump user
+      if (decodedToken.username == null) {
+        req._id = process.env.DUMP_USER as string;
+      } else {
+        const _id = decodedToken.username;
+        req._id = _id;
+      }
     } catch (error) {
       console.error(error);
-      return res
-        .status(400)
-        .json({ error: "Error at verifying your user in our services" });
-    }
-    // For any reason the token don't have an username, put the id as the dump user
-    if ((decodedToken as TokenGUser).username == null) {
+      // If token expired, send an error in case user wants to login again
+      if (error instanceof TokenExpiredError) {
+        return res.status(401).json({ error: ERROR_GUSER.EXPIRED_TOKEN });
+      }
+      // If the token its invalid, put the id as Dump user
       req._id = process.env.DUMP_USER as string;
-    } else {
-      const _id = (decodedToken as TokenGUser).username;
-      req._id = _id;
     }
   }
   // Go to next middleware
