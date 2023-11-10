@@ -1,6 +1,7 @@
 import { type FormEvent, type ChangeEvent, useState } from "react"
 import type { TranslateResult } from "../../types"
 import "./translatorEng.css"
+import { sanitizeInput } from "../../utils/sanitize"
 
 const AME_TO_BRIT = "american-to-british"
 const BRIT_TO_AME = "british-to-american"
@@ -60,7 +61,7 @@ export default function TranslatorEng() {
                 </label>
             </form>
             {error !== "" && <p>{error}</p>}
-            {translation !== "" && <p dangerouslySetInnerHTML={{ __html: translation }}></p>}
+            {translation !== "" && <p dangerouslySetInnerHTML={{ __html: sanitizeInput(translation) }}></p>}
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import { marked } from "marked"; // Library that translate text to HTML
 import { useState } from "react"; // Function to save our App state
+import { sanitizeInput } from "../utils/sanitize";
 
 // An example of markdown that displays at the start
 const PREVIEW_TEXT = `# Header size H1
@@ -40,9 +41,10 @@ export function useMarkdown() {
   };
 
   // Function that accepts a string and parse it to HTML Elements
-  // TODO: Clean the user's input so it can't do malicious stuff
   function translateMarkdown(input: string) {
-    return marked.parse(input);
+    // But before parsing, sanitize the input
+    const cleanInput = sanitizeInput(input);
+    return marked.parse(cleanInput);
   }
 
   // Return the markdown, the parser and the function that change the markdown when textarea changes
