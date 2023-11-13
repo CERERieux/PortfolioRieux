@@ -12,12 +12,14 @@ import ConverterUnit from "./components/ConverterUnit/ConverterUnit";
 import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
 import AnonBoard from "./components/AnonBoard/AnonBoard";
 import AnonThread from "./components/AnonBoard/AnonThread";
+import Login from "./components/Login/Login";
 
 export default function App() {
 
   return (
     <Routes>
       <Route path="/home" element={<Home />}></Route>
+      <Route path="/login" element={<Login />}></Route>
       <Route path="/front-end/quote" element={<Quote />}></Route>
       <Route path="/front-end/calculator" element={<Calculator />}></Route>
       <Route path="/front-end/markdown" element={<Markdown />}></Route>

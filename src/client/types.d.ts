@@ -69,3 +69,28 @@ export interface CreateThread {
   text: string;
   password: string;
 }
+
+/** ----------------------------------------------------------------------- */
+
+export interface User {
+  username: string;
+  password: string;
+}
+export interface UserState {
+  username: string;
+  token: string;
+  error: null | string;
+  action: null | string;
+  createUser: ({ username, password }: User) => Promise<boolean>;
+  loginUser: ({ username, password }: User) => Promise<boolean>;
+  logoffUser: () => void;
+}
+
+// Axios types
+export interface responseCreate {
+  action: string;
+}
+export interface responseLogin {
+  username: string;
+  token: string;
+}
