@@ -10,3 +10,4 @@ globalRouter
   .put(extratorUser, GlobalController.updateImageUser)
   .delete(extratorUser, GlobalController.deleteUser);
 globalRouter.route("/verify-user").post(GlobalController.verifyLogin);
+globalRouter.route("/verify-token").post(GlobalController.verifyToken);

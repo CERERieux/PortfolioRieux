@@ -66,3 +66,16 @@ export async function deleteUser(req: Request, res: Response) {
   }
   return res.status(200).json(deleteResult);
 }
+
+export async function verifyToken(
+  req: Request<{}, {}, { token: string }, {}>,
+  res: Response,
+) {
+  const { token } = req.body;
+  const resultVerify = await GlobalModel.verifyToken(token);
+  if ("error" in resultVerify && resultVerify.newToken === undefined) {
+    const status = gUserError(resultVerify);
+    return res.status(status).json(resultVerify);
+  }
+  return res.status(200).json(resultVerify);
+}

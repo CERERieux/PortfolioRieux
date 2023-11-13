@@ -1,6 +1,6 @@
 import { GUser, ERROR_GUSER } from "../schemas/global";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload, TokenExpiredError } from "jsonwebtoken";
 import type { ReqBodyCreateUser } from "../types/global";
 import {
   Book,
@@ -146,4 +146,40 @@ export async function deleteUser(_id: string) {
   if (deletedUser.deletedCount > 0)
     return { action: `User ${_id} was deleted successfully` };
   else return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
+}
+
+export async function verifyToken(token: string) {
+  // First try to verify the token
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(
+      token,
+      process.env.SECRET_WORD as string,
+    ) as JwtPayload;
+  } catch (error) {
+    // If there is an error, send it
+    console.error(error);
+    if (error instanceof TokenExpiredError)
+      return { error: ERROR_GUSER.EXPIRED_TOKEN, category: "guser" };
+    else {
+      return { error: ERROR_GUSER.ERROR_VERIFY_TOKEN, category: "guser" };
+    }
+  }
+  // If token is valid, we check for the time expiration
+  const todayAsMs = new Date(Date.now()).getTime();
+  const expDateToken = (decodedToken.exp as number) * 1000;
+  const timeLeft = expDateToken - todayAsMs;
+  // Only generate a new token if the expiration date is close (1 day or less close
+  if (timeLeft < 86400000) {
+    const dataToken = {
+      username: decodedToken.username,
+    };
+    // A new token with expiration of 5 days and the username as information
+    const newToken = jwt.sign(dataToken, process.env.SECRET_WORD as string, {
+      expiresIn: 60 * 60 * 24 * 5,
+    });
+    return { newToken };
+  }
+  // If there is time left, just return the old token
+  return { newToken: token };
 }

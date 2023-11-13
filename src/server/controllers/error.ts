@@ -145,7 +145,12 @@ export function gUserError({ error, category }: ErrorStatus) {
   )
     return 503;
 
-  if (error === ERROR_GUSER.USER_NOT_FOUND) return 401;
+  if (
+    error === ERROR_GUSER.USER_NOT_FOUND ||
+    error === ERROR_GUSER.EXPIRED_TOKEN ||
+    error === ERROR_GUSER.ERROR_VERIFY_TOKEN
+  )
+    return 401;
   if (
     error === ERROR_GUSER.USER_EXIST ||
     error === ERROR_GUSER.INCORRECT_CREDENTIALS
