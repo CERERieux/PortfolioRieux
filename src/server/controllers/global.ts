@@ -9,7 +9,7 @@ export async function createUser(
   res: Response,
 ) {
   const { _id, password } = req.body;
-  if (_id == null || password == null)
+  if (_id == null || password == null || _id === "" || password === "")
     return res.status(400).json({ error: ERROR_GUSER.MISSING_FIELDS });
   // Create the user with user data
   const resultCreate = await GlobalModel.createUser({
