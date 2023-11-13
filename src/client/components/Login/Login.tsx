@@ -1,57 +1,44 @@
-import { type ChangeEvent, useState, type FormEvent } from "react"
+import { useUser } from "../../store/user"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import LogInForm from "./LoginForm"
+import SignInForm from "./SignInForm"
 
 export default function Login() {
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
+    const navigate = useNavigate()
+    const { action, error, token, createUser, loginUser } = useUser()
     const [signIn, setSignIn] = useState(false)
 
-    const handleUsername = (e: ChangeEvent<HTMLInputElement>) => {
-        setUsername(e.target.value)
-    }
-    const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value)
-    }
+    // An useEffect hook to redirect user in case they is already logged in
+    useEffect(() => {
+        if (token !== "") {
+            setTimeout(() => {
+                navigate("/home")
+            }, 1000)
+        }
+    }, [])
+
     const handleView = () => {
         setSignIn(state => !state)
     }
 
-    const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-    }
-    // cYSvQmg9kR/global
-    const handleCreateUser = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-    }
-
-
     return (
         <div>
-            {signIn
-                ?
-                <div>
-                    <h2>Login to have access to our services!</h2>
-                    <form onSubmit={handleSignIn}>
-                        <label htmlFor="">
-                            Username: <input type="text" value={username} onChange={handleUsername} />
-                        </label>
-                        <label htmlFor="">
-                            Password: <input type="password" value={password} onChange={handlePassword} />
-                        </label>
-                    </form>
+            {error != null && <p>{error}</p>}
+            {action !== "" && <h1>{action}</h1>}
+            {token === ""
+                ? <div>
+                    {!signIn
+                        ? <LogInForm loginUser={loginUser} />
+                        : <SignInForm createUser={createUser} setSignIn={setSignIn} />}
+                    <button onClick={handleView}>{signIn ? "Login with your user!" : "Register new user!"}</button>
                 </div>
                 : <div>
-                    <h2>Create a new user to have access to our services!</h2>
-                    <form onSubmit={handleCreateUser}>
-                        <label htmlFor="">
-                            Username: <input type="text" value={username} onChange={handleUsername} />
-                        </label>
-                        <label htmlFor="">
-                            Password: <input type="password" value={password} onChange={handlePassword} />
-                        </label>
-                    </form>
+                    <h2>Redirecting to Home...</h2>
+                    <p>Remember to log off before using another account or creating a new one</p>
                 </div>
             }
-            <button onClick={handleView}>Register new user!</button>
+
         </div>
 
 
