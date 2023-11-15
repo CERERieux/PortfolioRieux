@@ -42,3 +42,19 @@ export async function loginUser({ username, password }: User) {
     });
   return resultLoginUser;
 }
+
+export async function verifyToken(token: string) {
+  const resultVerifyToken = await axios<{ newToken: string }>({
+    url: "/cYSvQmg9kR/global/verify-token",
+    method: "post",
+    data: { token },
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
+  return resultVerifyToken;
+}

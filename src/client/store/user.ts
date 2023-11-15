@@ -83,4 +83,22 @@ export const useUser = create<UserState>((set, get) => ({
       action: null,
     });
   },
+  /** Function that verify a token, if needed return a new one */
+  verifyToken: async token => {
+    // Call the service to verify the user token
+    const verifiedToken = await UserService.verifyToken(token);
+    // If there is an error, send it to display an interface about it
+    if ("error" in verifiedToken) {
+      return verifiedToken.error;
+    } else {
+      // If we have a verified token, we get the old one
+      const { token } = get();
+      // If those are different, set the new one in the local storage
+      if (verifiedToken.newToken !== token) {
+        window.localStorage.setItem(TOKEN_NAME, verifiedToken.newToken);
+      }
+      // Return the result of it
+      return "Your token was refreshed.";
+    }
+  },
 }));
