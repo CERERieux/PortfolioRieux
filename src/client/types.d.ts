@@ -1,3 +1,5 @@
+import type { IExTracker } from "../server/types/basic";
+
 export interface Welcome {
   quotes: Quote[];
   total: number;
@@ -81,9 +83,14 @@ export interface UserState {
   token: string;
   error: null | string;
   action: null | string;
+  verifyToken: (token: string) => Promise<string>;
   createUser: ({ username, password }: User) => Promise<boolean>;
   loginUser: ({ username, password }: User) => Promise<boolean>;
   logoffUser: () => void;
+}
+export interface ErrorAuth {
+  message: string;
+  cause: null | "ExpiredToken" | "BadToken";
 }
 
 // Axios types
@@ -94,3 +101,28 @@ export interface responseLogin {
   username: string;
   token: string;
 }
+export interface ExerciseData {
+  token: string;
+  from?: string;
+  to?: string;
+  limit?: string;
+}
+
+export interface resGetExercise {
+  username: string;
+  count: number;
+  log: IExTracker[];
+}
+export interface NewExercise {
+  token: string;
+  description: string;
+  status: string;
+  date?: Date;
+}
+export type NewExerciseHook = Omit<NewExercise, "token">;
+export type StatusEx = "Pending" | "Completed" | "Deleted" | "Current";
+export interface DeleteExercise {
+  id: string;
+  token: string;
+}
+export type DeleteExerciseHook = Omit<DeleteExercise, "token">;
