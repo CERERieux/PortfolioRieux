@@ -14,6 +14,7 @@ import AnonBoard from "./components/AnonBoard/AnonBoard";
 import AnonThread from "./components/AnonBoard/AnonThread";
 import Login from "./components/Login/Login";
 import ExerciseTracker from "./components/ExTracker/ExerciseTracker";
+import Library from "./components/Library/Library";
 
 export default function App() {
 
@@ -22,6 +23,7 @@ export default function App() {
       <Route path="/home" element={<Home />}></Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/services/exercises" element={<ExerciseTracker />}></Route>
+      <Route path="/services/library" element={<Library />}></Route>
       <Route path="/front-end/quote" element={<Quote />}></Route>
       <Route path="/front-end/calculator" element={<Calculator />}></Route>
       <Route path="/front-end/markdown" element={<Markdown />}></Route>
