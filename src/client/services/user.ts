@@ -1,9 +1,8 @@
 import axios from "axios";
-import type { User } from "../types";
-import { type responseCreate, type responseLogin } from "../types";
+import type { User, ResponseAction, responseLogin } from "../types";
 
 export async function createUser({ username, password }: User) {
-  const resultCreateUser = await axios<responseCreate>({
+  const resultCreateUser = await axios<ResponseAction>({
     url: "/cYSvQmg9kR/global/user",
     method: "post",
     data: {
