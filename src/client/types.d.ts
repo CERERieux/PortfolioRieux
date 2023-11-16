@@ -1,3 +1,4 @@
+import type { IBook } from "../server/types/advanced";
 import type { IExTracker } from "../server/types/basic";
 
 export interface Welcome {
@@ -94,20 +95,25 @@ export interface ErrorAuth {
 }
 
 // Axios types
-export interface responseCreate {
+export interface ResponseAction {
   action: string;
 }
 export interface responseLogin {
   username: string;
   token: string;
 }
+export type Token = Pick<responseLogin, "token">;
+export interface SingleOperation {
+  id: string;
+  token: string;
+}
+
 export interface ExerciseData {
   token: string;
   from?: string;
   to?: string;
   limit?: string;
 }
-
 export interface resGetExercise {
   username: string;
   count: number;
@@ -119,10 +125,42 @@ export interface NewExercise {
   status: string;
   date?: Date;
 }
+export interface updateExerciseService {
+  token: string;
+  id: string;
+  description: string;
+  status: string;
+}
+export type UpdateExerciseHook = Omit<updateExerciseService, "token">;
+export type ResultUpdate = Pick<IExTracker, "_id" | "description" | "status">;
 export type NewExerciseHook = Omit<NewExercise, "token">;
 export type StatusEx = "Pending" | "Completed" | "Deleted" | "Current";
-export interface DeleteExercise {
-  id: string;
-  token: string;
-}
 export type DeleteExerciseHook = Omit<DeleteExercise, "token">;
+
+export type BookService = Omit<IBook, "username" | "notes">;
+export interface CreateBookService {
+  token: string;
+  title: string;
+  status: string;
+}
+export type CreateBookHook = Omit<CreateBookService, "token">;
+export type ResultCreateBook = Pick<BookService, "_id" | "title">;
+export type SingleBook = Omit<IBook, "username">;
+export interface UpdateBookService extends SingleOperation {
+  title?: string;
+  status: string;
+  review?: string;
+  recommend: string;
+}
+export type ResultUpdateBook = Omit<BookService, "_id">;
+export type UpdateBookHook = Omit<UpdateBookService, "token">;
+export interface CreateNoteService extends SingleOperation {
+  note: string;
+}
+export type CreateNoteHook = Pick<CreateNoteService, "note">;
+export type ResultCreateNote = Pick<IBook, "_id" | "title" | "notes">;
+export interface DeleteNoteService extends SingleOperation {
+  number: string;
+}
+export type DeleteNoteHook = Pick<DeleteNoteService, "number">;
+export type ResultDeleteNote = Omit<ResultCreateNote, "title">;
