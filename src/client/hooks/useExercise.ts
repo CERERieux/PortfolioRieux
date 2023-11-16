@@ -3,10 +3,12 @@ import {
   createNewExercise,
   deleteExercise,
   getExercises,
+  updateExercise,
 } from "../services/exercises";
 import type {
   DeleteExerciseHook,
   NewExerciseHook,
+  UpdateExerciseHook,
   resGetExercise,
 } from "../types";
 import { useVerification } from "./useVerification";
@@ -40,6 +42,17 @@ export function useExercise() {
       setSuccessMutation(false);
     },
   });
+  /** Function to update an exercise with new data */
+  const updateUserExercise = useMutation({
+    mutationFn: updateExercise,
+    onSuccess: () => {
+      setSuccessMutation(true);
+      client.invalidateQueries({ queryKey: ["exercises"] });
+    },
+    onError: () => {
+      setSuccessMutation(false);
+    },
+  });
   /** Functions to delete user exercises */
   const deleteUserExercise = useMutation({
     mutationFn: deleteExercise,
@@ -57,6 +70,9 @@ export function useExercise() {
     errorEx: getUserExercises.error,
     createExercise: ({ description, date, status }: NewExerciseHook) => {
       createExercise.mutate({ description, date, status, token });
+    },
+    updateExercise: ({ description, status, id }: UpdateExerciseHook) => {
+      updateUserExercise.mutate({ description, status, token, id });
     },
     deleteExercise: ({ id }: DeleteExerciseHook) => {
       deleteUserExercise.mutate({ id, token });

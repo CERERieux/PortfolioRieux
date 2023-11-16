@@ -1,44 +1,22 @@
 import axios from "axios";
 import type {
-  DeleteExercise,
+  SingleOperation,
   ExerciseData,
   NewExercise,
   resGetExercise,
+  ResponseAction,
+  updateExerciseService,
+  ResultUpdate,
 } from "../types";
 import { type IExTracker } from "../../server/types/basic";
-
-// export async function getExercises({ token, from, to, limit }: ExerciseData) {
-//   const exercises = await axios<resGetExercise>({
-//     url: "/cYSvQmg9kR/basic/users/exercises",
-//     method: "get",
-//     headers: { Authorization: `Bearer ${token}` },
-//     params: {
-//       from,
-//       to,
-//       limit,
-//     },
-//   })
-//     .then(({ data }) => {
-//       return data;
-//     })
-//     .catch(err => {
-//       console.error(err);
-//       return { error: err.response.data.error as string };
-//     });
-//   console.log(exercises);
-//   return exercises;
-// }
+// Here belongs all the fetches needed to do operations with exercises in db
 
 export function getExercises({ token, from, to, limit }: ExerciseData) {
   return axios<resGetExercise>({
     url: "/cYSvQmg9kR/basic/users/exercises",
     method: "get",
     headers: { Authorization: `Bearer ${token}` },
-    params: {
-      from,
-      to,
-      limit,
-    },
+    params: { from, to, limit },
   }).then(({ data }) => {
     return data;
   });
@@ -54,16 +32,26 @@ export function createNewExercise({
     url: "/cYSvQmg9kR/basic/users/exercises",
     method: "post",
     headers: { Authorization: `Bearer ${token}` },
-    data: {
-      description,
-      status,
-      date,
-    },
+    data: { description, status, date },
   });
 }
 
-export function deleteExercise({ id, token }: DeleteExercise) {
-  return axios({
+export function updateExercise({
+  id,
+  token,
+  status,
+  description,
+}: updateExerciseService) {
+  return axios<ResultUpdate>({
+    url: `/cYSvQmg9kR/basic/users/exercises/${id}`,
+    method: "put",
+    headers: { Authorization: `Bearer ${token}` },
+    data: { status, description },
+  });
+}
+
+export function deleteExercise({ id, token }: SingleOperation) {
+  return axios<ResponseAction>({
     url: `/cYSvQmg9kR/basic/users/exercises/${id}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
