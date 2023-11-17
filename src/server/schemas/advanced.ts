@@ -27,7 +27,7 @@ export const ERROR_BOOKS = {
   COULD_NOT_FIND: "Error at finding a book, please try again.",
   COULD_NOT_SAVE: "Error at saving the new book, please try again.",
   COULD_NOT_UPDATE: "Error at updating your book, please try again.",
-  DELETE_EMPTY_LIBRARY: "Library was empty, you can't delete more books.",
+  DELETE_EMPTY_LIBRARY: "Library is empty, you can't delete more books.",
   DELETE_EMPTY_BOOK: "No book exists",
   EMPTY_LIBRARY: "Can't find any book, library is empty, please add new books.",
   INVALID_ID: "Invalid ID, please introduce a valid ID format",
