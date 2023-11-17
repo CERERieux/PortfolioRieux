@@ -95,6 +95,10 @@ export interface ErrorAuth {
 }
 
 // Axios types
+export interface EmptyData {
+  error: string;
+  category: string;
+}
 export interface ResponseAction {
   action: string;
 }
@@ -143,7 +147,6 @@ export interface CreateBookService {
   title: string;
   status: string;
 }
-export type CreateBookHook = Omit<CreateBookService, "token">;
 export type ResultCreateBook = Pick<BookService, "_id" | "title">;
 export type SingleBook = Omit<IBook, "username">;
 export interface UpdateBookService extends SingleOperation {
@@ -164,3 +167,8 @@ export interface DeleteNoteService extends SingleOperation {
 }
 export type DeleteNoteHook = Pick<DeleteNoteService, "number">;
 export type ResultDeleteNote = Omit<ResultCreateNote, "title">;
+export type BookStatus =
+  | "Plan to Read"
+  | "Current Reading"
+  | "Completed"
+  | "Dropped/Unfinish";
