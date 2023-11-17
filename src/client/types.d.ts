@@ -138,7 +138,7 @@ export interface updateExerciseService {
 export type UpdateExerciseHook = Omit<updateExerciseService, "token">;
 export type ResultUpdate = Pick<IExTracker, "_id" | "description" | "status">;
 export type NewExerciseHook = Omit<NewExercise, "token">;
-export type StatusEx = "Pending" | "Completed" | "Deleted" | "Current";
+export type StatusEx = "Pending" | "Completed" | "Current";
 export type DeleteExerciseHook = Omit<DeleteExercise, "token">;
 
 export type BookService = Omit<IBook, "username" | "notes">;
