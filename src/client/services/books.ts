@@ -4,6 +4,7 @@ import type {
   CreateBookService,
   CreateNoteService,
   DeleteNoteService,
+  EmptyData,
   ResponseAction,
   ResultCreateBook,
   ResultCreateNote,
@@ -17,7 +18,7 @@ import type {
 // Here belongs all the fetches needed to do operations with books in db
 
 export function getAllBooks({ token }: Token) {
-  return axios<BookService[]>({
+  return axios<BookService[] | EmptyData>({
     url: "/cYSvQmg9kR/advanced/books",
     method: "get",
     headers: { Authorization: `Bearer ${token}` },
@@ -50,6 +51,8 @@ export function createBook({ token, title, status }: CreateBookService) {
     method: "post",
     data: { title, status },
     headers: { Authorization: `Bearer ${token}` },
+  }).then(({ data }) => {
+    return data;
   });
 }
 
@@ -79,7 +82,7 @@ export function deleteBook({ id, token }: SingleOperation) {
 
 export function createNote({ id, token, note }: CreateNoteService) {
   return axios<ResultCreateNote>({
-    url: `/cYSvQmg9kR/advanced/books/note/${id}`,
+    url: `/cYSvQmg9kR/advanced/books/${id}`,
     method: "post",
     data: { note },
     headers: { Authorization: `Bearer ${token}` },
