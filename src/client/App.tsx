@@ -15,6 +15,7 @@ import AnonThread from "./components/AnonBoard/AnonThread";
 import Login from "./components/Login/Login";
 import ExerciseTracker from "./components/ExTracker/ExerciseTracker";
 import Library from "./components/Library/Library";
+import Book from "./components/Library/Book";
 
 export default function App() {
 
@@ -24,6 +25,7 @@ export default function App() {
       <Route path="/login" element={<Login />}></Route>
       <Route path="/services/exercises" element={<ExerciseTracker />}></Route>
       <Route path="/services/library" element={<Library />}></Route>
+      <Route path="/services/library/:id" element={<Book />}></Route>
       <Route path="/front-end/quote" element={<Quote />}></Route>
       <Route path="/front-end/calculator" element={<Calculator />}></Route>
       <Route path="/front-end/markdown" element={<Markdown />}></Route>
