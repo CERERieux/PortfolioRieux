@@ -156,16 +156,13 @@ export interface UpdateBookService extends SingleOperation {
   recommend: string;
 }
 export type ResultUpdateBook = Omit<BookService, "_id">;
-export type UpdateBookHook = Omit<UpdateBookService, "token">;
 export interface CreateNoteService extends SingleOperation {
   note: string;
 }
-export type CreateNoteHook = Pick<CreateNoteService, "note">;
 export type ResultCreateNote = Pick<IBook, "_id" | "title" | "notes">;
 export interface DeleteNoteService extends SingleOperation {
   number: string;
 }
-export type DeleteNoteHook = Pick<DeleteNoteService, "number">;
 export type ResultDeleteNote = Omit<ResultCreateNote, "title">;
 export type BookStatus =
   | "Plan to Read"

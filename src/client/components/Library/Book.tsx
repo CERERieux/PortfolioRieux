@@ -169,7 +169,7 @@ export default function Book() {
                         <option value="No">No</option>
                     </select>
                 </label>
-                <button>Update book!</button>
+                <button disabled={updateBook.isPending}>Update book!</button>
             </form>
             <h2>Add a note to your book</h2>
 
@@ -177,7 +177,7 @@ export default function Book() {
                 <label htmlFor="">
                     Note: <input type="text" value={note} onChange={handleNote} />
                 </label>
-                <button>Add Note!</button>
+                <button disabled={addNote.isPending}>Add Note!</button>
             </form>
             <div>
                 {data !== undefined ?
@@ -193,7 +193,8 @@ export default function Book() {
                                     return (
                                         <li key={i}>
                                             {note}
-                                            <button onClick={() => { handleDeleteNote(`${i}`) }}>Remove note</button>
+                                            <button onClick={() => { handleDeleteNote(`${i}`) }}
+                                                disabled={removeNote.isPending}>Remove note</button>
                                         </li>
                                     )
                                 return null

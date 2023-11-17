@@ -127,7 +127,8 @@ export default function Library() {
                 </label>
                 <button disabled={createNewBook.isPending}>Put it in the Library!</button>
             </form>
-            <button onClick={handleDeleteLibrary} disabled={data !== undefined && ("error" in data)}>Delete all your books!!!</button>
+            <button onClick={handleDeleteLibrary} disabled={(data !== undefined && ("error" in data))
+                || deleteLibrary.isPending}>Delete all your books!!!</button>
             {data !== undefined ?
                 <div>
                     {!("error" in data) ?
@@ -140,7 +141,8 @@ export default function Library() {
                                         <p>{book.status}</p>
                                         <p>{book.review}</p>
                                         <p>{book.recommend}</p>
-                                        <button onClick={() => { handleRemove(id) }}>Remove from my Library</button>
+                                        <button onClick={() => { handleRemove(id) }}
+                                            disabled={removeBook.isPending}>Remove from my Library</button>
                                     </div>
                                 </li>
                             })}
