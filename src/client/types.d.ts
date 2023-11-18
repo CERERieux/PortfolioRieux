@@ -1,4 +1,8 @@
-import type { IBook } from "../server/types/advanced";
+import type {
+  IBook,
+  ReqBodyIssue,
+  ReqQueryIssue,
+} from "../server/types/advanced";
 import type { IExTracker } from "../server/types/basic";
 
 export interface Welcome {
@@ -135,11 +139,8 @@ export interface updateExerciseService {
   description: string;
   status: string;
 }
-export type UpdateExerciseHook = Omit<updateExerciseService, "token">;
 export type ResultUpdate = Pick<IExTracker, "_id" | "description" | "status">;
-export type NewExerciseHook = Omit<NewExercise, "token">;
 export type StatusEx = "Pending" | "Completed" | "Current";
-export type DeleteExerciseHook = Omit<DeleteExercise, "token">;
 
 export type BookService = Omit<IBook, "username" | "notes">;
 export interface CreateBookService {
@@ -169,3 +170,23 @@ export type BookStatus =
   | "Current Reading"
   | "Completed"
   | "Dropped/Unfinish";
+
+export interface GetIssuesService extends ReqQueryIssue {
+  token?: string;
+}
+export interface CreateIssueService {
+  token?: string;
+  project: string;
+  title: string;
+  text: string;
+}
+export interface UpdateIssueService extends ReqBodyIssue {
+  token: string;
+}
+export type StatusIssue =
+  | "Any"
+  | "Pending"
+  | "Read"
+  | "Completed"
+  | "Trying to fix"
+  | "Ignored";
