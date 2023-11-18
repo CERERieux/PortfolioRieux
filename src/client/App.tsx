@@ -17,6 +17,7 @@ import ExerciseTracker from "./components/ExTracker/ExerciseTracker";
 import Library from "./components/Library/Library";
 import Book from "./components/Library/Book";
 import IssueBoard from "./components/IssueBoard/IssueBoard";
+import IssueProfile from "./components/IssueBoard/IssuesProfile";
 
 export default function App() {
 
@@ -28,6 +29,7 @@ export default function App() {
       <Route path="/services/library" element={<Library />}></Route>
       <Route path="/services/library/:id" element={<Book />}></Route>
       <Route path="/services/issues" element={<IssueBoard />}></Route>
+      <Route path="/my-profile/issues" element={<IssueProfile />}></Route>
       <Route path="/front-end/quote" element={<Quote />}></Route>
       <Route path="/front-end/calculator" element={<Calculator />}></Route>
       <Route path="/front-end/markdown" element={<Markdown />}></Route>
