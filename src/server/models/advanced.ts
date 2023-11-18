@@ -768,10 +768,12 @@ export async function getAllIssues(searchParams: ReqQueryIssue) {
         param !== "updated_on" &&
         param !== "open"
       ) {
-        filteredIssues = filteredIssues.filter(
-          issue =>
-            (issue[param] as string).toLowerCase() === searchParams[param],
-        );
+        filteredIssues = filteredIssues.filter(issue => {
+          return (issue[param] as string)
+            .toLowerCase()
+            .includes(searchParams[param] as string);
+        });
+        console.log(filteredIssues);
       } else if (param !== "_id" && param !== "open") {
         // If the parameter is a date, ensure we get it as string and compare it
         filteredIssues = filteredIssues.filter(issue => {
