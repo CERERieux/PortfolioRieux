@@ -22,7 +22,7 @@ export function useSingleBook(id: string) {
   const updateDataBook = useMutation({
     mutationFn: BookService.updateBook,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["books", id] });
+      client.invalidateQueries({ queryKey: ["books", id], exact: true });
     },
   });
 
@@ -30,14 +30,14 @@ export function useSingleBook(id: string) {
   const createNote = useMutation({
     mutationFn: BookService.createNote,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["books", id] });
+      client.invalidateQueries({ queryKey: ["books", id], exact: true });
     },
   });
   /** Function that removes notes from the book */
   const deleteNote = useMutation({
     mutationFn: BookService.deleteNote,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["books", id] });
+      client.invalidateQueries({ queryKey: ["books", id], exact: true });
     },
   });
 
