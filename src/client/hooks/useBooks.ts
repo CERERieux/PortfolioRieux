@@ -22,21 +22,21 @@ export function useBooks() {
   const createBook = useMutation({
     mutationFn: BookService.createBook,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["books"] });
+      client.invalidateQueries({ queryKey: ["books"], exact: true });
     },
   });
   /** Function that remove all books from the user library */
   const deleteBooks = useMutation({
     mutationFn: BookService.deleteLibrary,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["books"] });
+      client.invalidateQueries({ queryKey: ["books"], exact: true });
     },
   });
   /** Function that can delete the book from database if needed */
   const deleteBook = useMutation({
     mutationFn: BookService.deleteBook,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["books"] });
+      client.invalidateQueries({ queryKey: ["books"], exact: true });
     },
   });
 

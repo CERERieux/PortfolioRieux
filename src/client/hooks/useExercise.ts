@@ -23,21 +23,21 @@ export function useExercise() {
   const createExercise = useMutation({
     mutationFn: ExerciseService.createNewExercise,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["exercises"] });
+      client.invalidateQueries({ queryKey: ["exercises"], exact: true });
     },
   });
   /** Function to update an exercise with new data */
   const updateUserExercise = useMutation({
     mutationFn: ExerciseService.updateExercise,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["exercises"] });
+      client.invalidateQueries({ queryKey: ["exercises"], exact: true });
     },
   });
   /** Functions to delete user exercises */
   const deleteUserExercise = useMutation({
     mutationFn: ExerciseService.deleteExercise,
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["exercises"] });
+      client.invalidateQueries({ queryKey: ["exercises"], exact: true });
     },
   });
 
