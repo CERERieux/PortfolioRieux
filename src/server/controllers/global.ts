@@ -42,6 +42,25 @@ export async function verifyLogin(
   return res.status(200).json(resultVerify);
 }
 
+export async function verifyAdmin(
+  req: Request<{}, {}, ReqBodyCreateUser, {}>,
+  res: Response,
+) {
+  const { _id, password } = req.body;
+  if (_id == null || password == null)
+    return res.status(400).json({ error: ERROR_GUSER.MISSING_FIELDS });
+  // Verify user login
+  const resultVerify = await GlobalModel.verifyLogin({
+    _id,
+    password,
+  });
+  if ("error" in resultVerify) {
+    const status = gUserError(resultVerify);
+    return res.status(status).json(resultVerify);
+  }
+  return res.status(200).json(resultVerify);
+}
+
 export async function updateImageUser(
   req: Request<{}, {}, ImgSelected, {}>,
   res: Response,
