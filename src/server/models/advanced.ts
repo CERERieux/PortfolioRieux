@@ -773,7 +773,6 @@ export async function getAllIssues(searchParams: ReqQueryIssue) {
             .toLowerCase()
             .includes(searchParams[param] as string);
         });
-        console.log(filteredIssues);
       } else if (param !== "_id" && param !== "open") {
         // If the parameter is a date, ensure we get it as string and compare it
         filteredIssues = filteredIssues.filter(issue => {

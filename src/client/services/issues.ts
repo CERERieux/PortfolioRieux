@@ -19,7 +19,6 @@ export function getIssues(QueryOptions: GetIssuesService) {
     }
   }
   if (options.endsWith("&")) options = options.slice(0, options.length - 1);
-  console.log(options);
   return axios<IIssueTracker[] | EmptyData>({
     url: `/cYSvQmg9kR/advanced/issue-tracker/?${options}`,
     method: "get",
