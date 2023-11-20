@@ -57,3 +57,23 @@ export async function verifyToken(token: string) {
     });
   return resultVerifyToken;
 }
+
+export async function verifyAdmin({ username, password }: User) {
+  const resultVerifyAdmin = await axios<responseLogin>({
+    url: "/cYSvQmg9kR/global/verify-admin",
+    method: "post",
+    data: {
+      _id: username,
+      password,
+    },
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
+
+  return resultVerifyAdmin;
+}

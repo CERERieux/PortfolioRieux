@@ -91,11 +91,12 @@ export interface UserState {
   verifyToken: (token: string) => Promise<string>;
   createUser: ({ username, password }: User) => Promise<boolean>;
   loginUser: ({ username, password }: User) => Promise<boolean>;
+  loginAdmin: ({ username, password }: User) => Promise<boolean>;
   logoffUser: () => void;
 }
 export interface ErrorAuth {
   message: string;
-  cause: null | "ExpiredToken" | "BadToken";
+  cause: null | "ExpiredToken" | "BadToken" | "NotAdmin";
 }
 
 // Axios types

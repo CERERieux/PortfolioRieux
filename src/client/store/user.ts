@@ -72,6 +72,36 @@ export const useUser = create<UserState>((set, get) => ({
       return true;
     }
   },
+  /** Similar as login User, but we need to do it like this for a very few changes */
+  loginAdmin: async ({ username, password }) => {
+    // Login the admin through the service
+    const loggedAdmin = await UserService.verifyAdmin({ username, password });
+    // If there was an error, set it in the state to display it
+    if ("error" in loggedAdmin) {
+      /** The difference is the error we get from the service and the way
+       * it verify the admin in the model, so we need to do it in another function
+       * and not in the loginUser one */
+      set({
+        token: "",
+        username: "",
+        error: loggedAdmin.error,
+        action: null,
+      });
+      return false;
+    } else {
+      // If it went well, assign the action to the state and notify it later
+      set({
+        token: loggedAdmin.token,
+        username: loggedAdmin.username,
+        action: `Successful login, ${loggedAdmin.username}.`,
+        error: null,
+      });
+      // And save the token and username in the local storage
+      window.localStorage.setItem(TOKEN_NAME, loggedAdmin.token);
+      window.localStorage.setItem(USER_NAME, loggedAdmin.username);
+      return true;
+    }
+  },
   /** Function to lof off our user, deleting the token from localstorage */
   logoffUser: () => {
     window.localStorage.removeItem(TOKEN_NAME);
