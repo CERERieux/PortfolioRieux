@@ -1,6 +1,6 @@
 import { useQuote } from '../../hooks/useQuote' // Import a custom hook to manage the quotes
 
-export function Quote() {
+export default function Quote() {
     const { quote, getNewQuote } = useQuote() // Bring a quote and a function that returns a new quote from the hook
 
     // Function that handle the user's input when they do click in the button

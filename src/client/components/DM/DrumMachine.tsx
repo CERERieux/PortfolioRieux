@@ -2,7 +2,7 @@ import { useState } from "react"    // React hook that let us store the state of
 import { SoundButton } from "./SoundButton" // Our component that shows a button that plays a sound
 import { SOUND_NAMES } from "./soundHub"    // A dictionary that give us the name of the mp3 to play 
 
-export function DrumMachine() {
+export default function DrumMachine() {
     // We start the state of the component as empty, it will show later the name of the mp3 file that was played
     const [display, setDisplay] = useState("")
     return (

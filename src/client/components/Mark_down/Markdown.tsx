@@ -1,6 +1,6 @@
 import { useMarkdown } from "../../hooks/useMarkdown"  // Our custom hook that manages the users input and translate it
 
-export function Markdown() {
+export default function Markdown() {
     const { markdown, handleEditorChange, translateMarkdown } = useMarkdown()
 
     return (

@@ -3,7 +3,7 @@ import { StudySession } from "./StudySession";
 import { Timer } from "./Timer";
 
 
-export function PomodoroClock() {
+export default function PomodoroClock() {
     return (
         <main className="pomodoro-clock">
             <StudySession />

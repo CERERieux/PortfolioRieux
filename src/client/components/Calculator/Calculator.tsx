@@ -4,7 +4,7 @@ import { useCalculatorStore, TYPE_INPUT } from "../../store/calculator"
 import { CalculatorButton } from "./CalculatorButton"
 import { calculatorInputLogic } from "./calculatorLogic"
 
-export function Calculator() {
+export default function Calculator() {
     const { display, log } = useCalculatorStore()
     const { handleOperationInput, disableBackButton } = calculatorInputLogic()
 
