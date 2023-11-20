@@ -1,23 +1,23 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import { Quote } from "./components/Quotes/Quotes";
-import { Calculator } from "./components/Calculator/Calculator";
-import { DrumMachine } from "./components/DM/DrumMachine";
-import { PomodoroClock } from "./components/Pomodoro/PomodoroClock";
-import { Markdown } from "./components/Mark_down/Markdown";
-import NotFound from "./components/NotFound/NotFound";
-import DataRequest from "./components/DataRequest/DataRequest";
-import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
-import ConverterUnit from "./components/ConverterUnit/ConverterUnit";
-import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
 import AnonBoard from "./components/AnonBoard/AnonBoard";
 import AnonThread from "./components/AnonBoard/AnonThread";
-import Login from "./components/Login/Login";
-import ExerciseTracker from "./components/ExTracker/ExerciseTracker";
-import Library from "./components/Library/Library";
 import Book from "./components/Library/Book";
+import Calculator from "./components/Calculator/Calculator";
+import ConverterUnit from "./components/ConverterUnit/ConverterUnit";
+import DataRequest from "./components/DataRequest/DataRequest";
+import DrumMachine from "./components/DM/DrumMachine";
+import ExerciseTracker from "./components/ExTracker/ExerciseTracker";
+import Home from "./components/Home";
 import IssueBoard from "./components/IssueBoard/IssueBoard";
 import IssueProfile from "./components/IssueBoard/IssuesProfile";
+import Library from "./components/Library/Library";
+import Login from "./components/Login/Login";
+import Markdown from "./components/Mark_down/Markdown";
+import NotFound from "./components/NotFound/NotFound";
+import PomodoroClock from "./components/Pomodoro/PomodoroClock";
+import Quote from "./components/Quotes/Quotes";
+import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
+import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
 
 export default function App() {
 
@@ -25,22 +25,46 @@ export default function App() {
     <Routes>
       <Route path="/home" element={<Home />}></Route>
       <Route path="/login" element={<Login />}></Route>
-      <Route path="/services/exercises" element={<ExerciseTracker />}></Route>
-      <Route path="/services/library" element={<Library />}></Route>
-      <Route path="/services/library/:id" element={<Book />}></Route>
-      <Route path="/services/issues" element={<IssueBoard />}></Route>
-      <Route path="/my-profile/issues" element={<IssueProfile />}></Route>
-      <Route path="/front-end/quote" element={<Quote />}></Route>
-      <Route path="/front-end/calculator" element={<Calculator />}></Route>
-      <Route path="/front-end/markdown" element={<Markdown />}></Route>
-      <Route path="/front-end/drum-machine" element={<DrumMachine />}></Route>
-      <Route path="/front-end/pomodoro" element={<PomodoroClock />}></Route>
-      <Route path="/front-end/request-information" element={<DataRequest />}></Route>
-      <Route path="/front-end/shortener-url" element={<ShortenerUrl />}></Route>
-      <Route path="/front-end/converter" element={<ConverterUnit />}></Route>
-      <Route path="/front-end/translate-eng" element={<TranslatorEng />}></Route>
-      <Route path="/front-end/anon-board" element={<AnonBoard />}></Route>
-      <Route path="/front-end/anon-board/thread/:board" element={<AnonThread />}></Route>
+      <Route path="/issues-and-suggestions" element={<IssueBoard />}></Route>
+      <Route path="/shortener-url" element={<ShortenerUrl />}></Route>
+      <Route path="/communicationNameApp" element={<Home />}></Route>
+      <Route path="/my-profile">
+        <Route index element={<Home />}></Route>
+        <Route path="exercises" element={<ExerciseTracker />}></Route>
+        <Route path="library" element={<Library />}></Route>
+        <Route path="library/:id" element={<Book />}></Route>
+        <Route path="issues" element={<IssueProfile />}></Route>
+        <Route path="urls" element={<Home />}></Route>
+      </Route>
+      <Route path="/user/:id">
+        <Route index element={<Home />}></Route>
+        <Route path="library" element={<Home />}></Route>
+      </Route>
+      <Route path="/demo">
+        <Route path="quote" element={<Quote />}></Route>
+        <Route path="calculator" element={<Calculator />}></Route>
+        <Route path="markdown" element={<Markdown />}></Route>
+        <Route path="drum-machine" element={<DrumMachine />}></Route>
+        <Route path="pomodoro" element={<PomodoroClock />}></Route>
+        <Route path="converter" element={<ConverterUnit />}></Route>
+        <Route path="translate-eng" element={<TranslatorEng />}></Route>
+      </Route>
+      <Route path="/anon-board">
+        <Route index element={<AnonBoard />}></Route>
+        <Route path="thread/:board" element={<AnonThread />}></Route>
+        {/** Todo: finish the route of this part */}
+      </Route>
+      <Route path="/games">
+        <Route index element={<Home />}></Route>
+        <Route path="sudoku" element={<Home />}></Route>
+        <Route path="ifIDosomethingExtra" element={<Home />}></Route>
+      </Route>
+      <Route path="/cut-content/portfolio">
+        <Route index element={<Home />}></Route>
+        <Route path="request-information" element={<DataRequest />}></Route>
+        <Route path="stock-api-cert" element={<Home />}></Route>
+      </Route>
+      <Route path="/documentation" element={<Home />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );
