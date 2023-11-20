@@ -98,9 +98,9 @@ export default function IssueProfile() {
                                                     <label htmlFor="">
                                                         Description*: <input type="text" name="" id="" value={text} onChange={handleText} />
                                                     </label>
-                                                    <button onClick={() => { setIsUpdate({ isUpdate: false, id: "" }) }}>Cancel</button>
                                                     <button>Update my Issue!</button>
                                                 </form>
+                                                <button onClick={() => { setIsUpdate({ isUpdate: false, id: "" }) }}>Cancel</button>
                                             </div>
                                         }
                                     </li>
