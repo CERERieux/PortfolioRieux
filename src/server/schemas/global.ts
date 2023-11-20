@@ -14,6 +14,8 @@ export const ERROR_GUSER = {
     "The username or password are incorrect, please introduce a valid pair of information",
   MISSING_FIELDS: "There are 1 or more field missing to perform this operation",
   MISSING_TOKEN: "Invalid or missing token",
+  NOT_ADMIN:
+    "You are NOT an admin, please do not try to login in this endpoint again.",
   USER_EXIST: "The username is already taken, please introduce a new one",
   USER_NOT_FOUND:
     "Oh... Somehow you are trying to use our services without being logged in, please login or create a new user before using this service.",

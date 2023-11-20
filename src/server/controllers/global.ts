@@ -58,6 +58,8 @@ export async function verifyAdmin(
     const status = gUserError(resultVerify);
     return res.status(status).json(resultVerify);
   }
+  if (resultVerify.username !== process.env.ADMIN)
+    return res.status(401).json({ error: ERROR_GUSER.NOT_ADMIN });
   return res.status(200).json(resultVerify);
 }
 
