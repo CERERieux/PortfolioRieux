@@ -19,13 +19,20 @@ export function useVerification() {
 
   useEffect(() => {
     const verification = async () => {
-      const resultToken = await verifyToken(token);
-      if (resultToken === ERROR_GUSER.EXPIRED_TOKEN) {
-        setErrorAuth({ message: resultToken, cause: "ExpiredToken" });
-      } else if (resultToken === ERROR_GUSER.ERROR_VERIFY_TOKEN) {
-        setErrorAuth({ message: resultToken, cause: "BadToken" });
-      } else {
-        setEnableEx(true);
+      if (token === "")
+        setErrorAuth({
+          message: ERROR_GUSER.USER_NOT_FOUND,
+          cause: "NotLoggedIn",
+        });
+      else {
+        const resultToken = await verifyToken(token);
+        if (resultToken === ERROR_GUSER.EXPIRED_TOKEN) {
+          setErrorAuth({ message: resultToken, cause: "ExpiredToken" });
+        } else if (resultToken === ERROR_GUSER.ERROR_VERIFY_TOKEN) {
+          setErrorAuth({ message: resultToken, cause: "BadToken" });
+        } else {
+          setEnableEx(true);
+        }
       }
     };
 

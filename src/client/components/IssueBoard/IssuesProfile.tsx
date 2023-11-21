@@ -1,6 +1,8 @@
 import { isAxiosError } from "axios"
 import { type FormEvent, useState, type ChangeEvent, useEffect } from "react"
 import { useProfileIssues } from "../../hooks/useProfileIssues"
+import UnauthorizedAccess from "../NotFound/AuthError"
+
 
 export default function IssueProfile() {
     const { data, error, errorAuth, token, updateIssue } = useProfileIssues()
@@ -10,6 +12,7 @@ export default function IssueProfile() {
     const [project, setProject] = useState("")
     const [title, setTitle] = useState("")
     const [text, setText] = useState("")
+    const isError = errorAuth.cause !== null
 
     useEffect(() => {
         if (updateIssue.isSuccess) {
@@ -53,7 +56,7 @@ export default function IssueProfile() {
     return (
         <div>
             <div>
-                {errorAuth.cause !== null && <h2>{errorAuth.message}</h2>}
+                {isError && <UnauthorizedAccess errorAuth={errorAuth} />}
                 {error !== null && isAxiosError(error) && <h2>{error.response?.data.error}</h2>}
                 {localError !== null && <h2>{localError}</h2>}
                 {action !== null && <h2>{action}</h2>}
@@ -109,7 +112,7 @@ export default function IssueProfile() {
                         </ul>
                         : <h2>There is no issues or suggestion that coincide with your search!</h2>
                     : <h2>{data.error}</h2>
-                : <p>Loading</p>}
-        </div>
+                : !isError && <p>Loading</p>}
+        </div >
     )
 }
