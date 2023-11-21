@@ -94,9 +94,14 @@ export interface UserState {
   loginAdmin: ({ username, password }: User) => Promise<boolean>;
   logoffUser: () => void;
 }
+export type CauseError =
+  | "ExpiredToken"
+  | "BadToken"
+  | "NotAdmin"
+  | "NotLoggedIn";
 export interface ErrorAuth {
   message: string;
-  cause: null | "ExpiredToken" | "BadToken" | "NotAdmin";
+  cause: null | CauseError;
 }
 
 // Axios types
