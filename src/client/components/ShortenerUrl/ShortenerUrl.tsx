@@ -1,10 +1,12 @@
 import { useState, type FormEvent, type ChangeEvent } from "react"
 import type { ShortUrlResult } from "../../types"
+import { useUser } from "../../store/user"
 
 export default function ShortenerUrl() {
     const [userUrl, setUserUrl] = useState("")
     const [shortUrl, setShortUrl] = useState("")
     const [error, setError] = useState("")
+    const { token } = useUser()
 
     const handleUserInput = (e: ChangeEvent<HTMLInputElement>) => {
         setUserUrl(e.target.value)
@@ -16,6 +18,7 @@ export default function ShortenerUrl() {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
                 url: userUrl
@@ -23,17 +26,16 @@ export default function ShortenerUrl() {
         }).then(async (data) => {
             if (data.ok) {
                 const shortUrl: ShortUrlResult = await data.json()
-                console.log(shortUrl)
                 return shortUrl
             }
             return { error: "Can't make your short URL right now" }
         })
-        console.log(fetchResult)
         if ("error" in fetchResult) {
             setError(fetchResult.error)
             setShortUrl("")
         }
         else {
+            setUserUrl("")
             setShortUrl(fetchResult.short_url)
             setError("")
         }
@@ -53,7 +55,6 @@ export default function ShortenerUrl() {
             {shortUrl !== "" &&
                 <div>
                     <p>Your short URL is: {shortUrl}</p>
-                    <p>Your original URL is: {userUrl}</p>
                 </div>}
             {error !== "" &&
                 <div>
