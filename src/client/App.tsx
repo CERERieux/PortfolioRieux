@@ -18,6 +18,7 @@ import PomodoroClock from "./components/Pomodoro/PomodoroClock";
 import Quote from "./components/Quotes/Quotes";
 import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
 import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
+import Url from "./components/Url/Url";
 
 export default function App() {
 
@@ -34,7 +35,7 @@ export default function App() {
         <Route path="library" element={<Library />}></Route>
         <Route path="library/:id" element={<Book />}></Route>
         <Route path="issues" element={<IssueProfile />}></Route>
-        <Route path="urls" element={<Home />}></Route>
+        <Route path="urls" element={<Url />}></Route>
       </Route>
       <Route path="/user/:id">
         <Route index element={<Home />}></Route>
