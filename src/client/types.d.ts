@@ -3,7 +3,7 @@ import type {
   ReqBodyIssue,
   ReqQueryIssue,
 } from "../server/types/advanced";
-import type { IExTracker } from "../server/types/basic";
+import type { IExTracker, IShortenerUrl } from "../server/types/basic";
 
 export interface Welcome {
   quotes: Quote[];
@@ -196,3 +196,9 @@ export type StatusIssue =
   | "Completed"
   | "Trying to fix"
   | "Ignored";
+
+export interface CreateShortUrl {
+  url: string;
+  token: string;
+}
+export type UserUrls = Omit<IShortenerUrl, "username">;
