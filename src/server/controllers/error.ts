@@ -98,6 +98,7 @@ export function miscError({ error, category }: ErrorStatus) {
       error === ERROR_STOCK.UPDATE_STOCK
     )
       return 503;
+    if (error === ERROR_STOCK.INVALID) return 400;
   }
   if (category === "board") {
     if (
