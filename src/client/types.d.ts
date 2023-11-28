@@ -202,3 +202,8 @@ export interface CreateShortUrl {
   token: string;
 }
 export type UserUrls = Omit<IShortenerUrl, "username">;
+
+export interface ViewStockData {
+  stock: string | string[];
+  like: boolean;
+}
