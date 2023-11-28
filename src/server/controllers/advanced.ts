@@ -327,6 +327,21 @@ export async function getAllBooks(req: Request, res: Response) {
   }
 }
 
+export async function getUserBooks(req: Request, res: Response) {
+  // Get the user from request
+  const { user } = req.params;
+  // Get all the books and extract the 1st book
+  const resultQuery = await AdvancedModel.getAllBooks(user);
+  const firstBook = resultQuery[0];
+  // If the 1st book has the error property, then the result was an error
+  if ("error" in firstBook) {
+    const status = advancedError(firstBook);
+    return res.status(status).json(firstBook);
+  } else {
+    return res.status(200).json(resultQuery); // Else, send all the book
+  }
+}
+
 export async function createNewBook(
   req: Request<{}, {}, ReqBodyCreateBook, {}>,
   res: Response,

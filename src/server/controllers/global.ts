@@ -5,7 +5,7 @@ import { ERROR_GUSER } from "../schemas/global";
 import { gUserError } from "./error";
 
 export async function getUserBasicInfo(req: Request, res: Response) {
-  const { _id } = req;
+  const { _id } = req.params;
   const resultUser = await GlobalModel.getUserBasicInfo(_id);
   if ("error" in resultUser && resultUser.error !== undefined) {
     const status = gUserError(resultUser);

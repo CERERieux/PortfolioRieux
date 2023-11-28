@@ -37,3 +37,6 @@ advancedRouter
 advancedRouter
   .route("/books/note/:id")
   .put(extratorUser, AdvancedController.deleteBookNote);
+advancedRouter
+  .route("/books/external/:user")
+  .get(AdvancedController.getUserBooks);

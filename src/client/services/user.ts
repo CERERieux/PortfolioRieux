@@ -3,16 +3,16 @@ import type {
   User,
   ResponseAction,
   responseLogin,
-  Token,
   UserInfo,
   UpdateUserService,
+  BookService,
+  EmptyData,
 } from "../types";
 
-export function getUserInfo({ token }: Token) {
+export function getUserInfo(user: string) {
   return axios<UserInfo>({
-    url: "/cYSvQmg9kR/global/user",
+    url: `/cYSvQmg9kR/global/user/${user}`,
     method: "get",
-    headers: { Authorization: `Bearer ${token}` },
   }).then(({ data }) => data);
 }
 
@@ -103,4 +103,12 @@ export async function verifyAdmin({ username, password }: User) {
     });
 
   return resultVerifyAdmin;
+}
+
+export function getUserBooks(user: string) {
+  console.log(user);
+  return axios<BookService[] | EmptyData>({
+    url: `/cYSvQmg9kR/advanced/books/external/${user}`,
+    method: "get",
+  }).then(({ data }) => data);
 }
