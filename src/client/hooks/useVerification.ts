@@ -10,7 +10,7 @@ import { type ErrorAuth } from "../types";
  * And the token of the user also is added here
  */
 export function useVerification() {
-  const { token, verifyToken } = useUser();
+  const { token, verifyToken, username } = useUser();
   const [errorAuth, setErrorAuth] = useState<ErrorAuth>({
     message: "",
     cause: null,
@@ -40,6 +40,7 @@ export function useVerification() {
   }, []);
 
   return {
+    username,
     token,
     validFetch: enableEx,
     errorAuth,
