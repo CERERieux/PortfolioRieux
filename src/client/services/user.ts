@@ -1,5 +1,20 @@
 import axios from "axios";
-import type { User, ResponseAction, responseLogin } from "../types";
+import type {
+  User,
+  ResponseAction,
+  responseLogin,
+  Token,
+  UserInfo,
+  UpdateUserService,
+} from "../types";
+
+export function getUserInfo({ token }: Token) {
+  return axios<UserInfo>({
+    url: "/cYSvQmg9kR/global/user",
+    method: "get",
+    headers: { Authorization: `Bearer ${token}` },
+  }).then(({ data }) => data);
+}
 
 export async function createUser({ username, password }: User) {
   const resultCreateUser = await axios<ResponseAction>({
@@ -18,6 +33,18 @@ export async function createUser({ username, password }: User) {
       return { error: err.response.data.error as string };
     });
   return resultCreateUser;
+}
+
+export function updateInfoUser({ token, bio, img }: UpdateUserService) {
+  return axios<ResponseAction>({
+    url: "/cYSvQmg9kR/global/user",
+    method: "put",
+    headers: { Authorization: `Bearer ${token}` },
+    data: {
+      bio,
+      img,
+    },
+  }).then(({ data }) => data);
 }
 
 export async function loginUser({ username, password }: User) {
