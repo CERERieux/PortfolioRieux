@@ -6,7 +6,7 @@ import type { UserInfo, ImgProfile } from "../../types"
 import { Link } from "react-router-dom"
 
 export default function MyProfile() {
-    const { data, error, errorAuth, updateInfo } = useProfile()
+    const { data, error, errorAuth, updateInfo } = useProfile({})
     const [aboutMe, setAboutMe] = useState("")
     const [imgProfile, setImgProfile] = useState<ImgProfile>("type-img-1")
     const [isUpdating, setIsUpdating] = useState(false)

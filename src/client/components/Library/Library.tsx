@@ -6,7 +6,7 @@ import { ERROR_BOOKS } from "../../../server/schemas/advanced"
 import { useNavigate, Link } from "react-router-dom"
 
 export default function Library() {
-    const { data, errorAuth, errorBook, createNewBook, deleteLibrary, removeBook, token } = useBooks()
+    const { data, errorAuth, errorBook, createNewBook, deleteLibrary, removeBook, token } = useBooks({})
     const [title, setTitle] = useState("")
     const [status, setStatus] = useState<BookStatus>("Plan to Read")
     const [errorLocal, setErrorLocal] = useState<string | null>(null)

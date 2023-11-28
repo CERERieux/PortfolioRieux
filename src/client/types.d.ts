@@ -128,6 +128,9 @@ export interface UserInfo {
 }
 export type UpdateUserService = Partial<Omit<UserInfo, "username">> & Token;
 export type UpdateUserHook = Omit<UpdateUserService, "token">;
+export interface UserProfileHook {
+  externalUser?: string;
+}
 export type ImgProfile =
   | "type-img-1"
   | "type-img-2"

@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useVerification } from "./useVerification";
 import * as BookService from "../services/books";
+import { getUserBooks } from "../services/user";
+import type { UserProfileHook } from "../types";
 
 /** Custom hook that manages the operations of the library, from getting all the
  * user books, add a new one or deleting all the library.
@@ -8,8 +10,10 @@ import * as BookService from "../services/books";
  * It returns the functions to perform those operations and information
  * about if user session still valid or need to login to use this service.
  */
-export function useBooks() {
+export function useBooks({ externalUser }: UserProfileHook) {
   const client = useQueryClient();
+  const currentUser = externalUser ?? "";
+  console.log(externalUser);
   const { errorAuth, token, validFetch } = useVerification();
 
   /** Function that brings all the user books from database */
@@ -17,6 +21,12 @@ export function useBooks() {
     queryKey: ["books"],
     queryFn: () => BookService.getAllBooks({ token }),
     enabled: validFetch,
+  });
+  /** Function that brings all the user books from database */
+  const getExternalUserBooks = useQuery({
+    queryKey: ["books"],
+    queryFn: () => getUserBooks(currentUser),
+    enabled: currentUser !== "",
   });
   /** Function that adds a new book to the library */
   const createBook = useMutation({
@@ -49,5 +59,6 @@ export function useBooks() {
     createNewBook: createBook,
     removeBook: deleteBook,
     deleteLibrary: deleteBooks,
+    getExternalUserBooks,
   };
 }
