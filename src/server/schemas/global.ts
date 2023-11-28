@@ -29,6 +29,7 @@ const gUserSchema = new Schema<IGlobalUser>({
   _id: { type: String, required: true },
   password: { type: String, required: true },
   img: { type: String, default: `type-img-${generateImgNumber()}` },
+  bio: { type: String, default: "" },
   exercises: [{ type: Schema.Types.ObjectId, default: [], ref: "ExTracker" }],
   issues: [{ type: Schema.Types.ObjectId, default: [], ref: "IssueTracker" }],
   books: [{ type: Schema.Types.ObjectId, default: [], ref: "Book" }],

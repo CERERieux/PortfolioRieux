@@ -1,8 +1,18 @@
 import type { Request, Response } from "express";
-import type { ImgSelected, ReqBodyCreateUser } from "../types/global";
+import type { ReqBodyCreateUser, UpdateUserBody } from "../types/global";
 import * as GlobalModel from "../models/global";
 import { ERROR_GUSER } from "../schemas/global";
 import { gUserError } from "./error";
+
+export async function getUserBasicInfo(req: Request, res: Response) {
+  const { _id } = req;
+  const resultUser = await GlobalModel.getUserBasicInfo(_id);
+  if ("error" in resultUser && resultUser.error !== undefined) {
+    const status = gUserError(resultUser);
+    return res.status(status).json(resultUser);
+  }
+  return res.status(200).json(resultUser);
+}
 
 export async function createUser(
   req: Request<{}, {}, ReqBodyCreateUser, {}>,
@@ -63,14 +73,17 @@ export async function verifyAdmin(
   return res.status(200).json(resultVerify);
 }
 
-export async function updateImageUser(
-  req: Request<{}, {}, ImgSelected, {}>,
+export async function updateUser(
+  req: Request<{}, {}, UpdateUserBody, {}>,
   res: Response,
 ) {
   const { _id } = req;
-  const { img } = req.body;
-  const imgNum = parseInt(img);
-  const resultUpdate = await GlobalModel.updateImageUser(_id, imgNum);
+  const { img, bio } = req.body;
+  const resultUpdate = await GlobalModel.updateUser({
+    _id,
+    img: img ?? "-1",
+    bio,
+  });
   if ("error" in resultUpdate && resultUpdate.action === undefined) {
     const status = gUserError(resultUpdate);
     return res.status(status).json(resultUpdate);

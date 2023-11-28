@@ -18,6 +18,7 @@ export interface IGlobalUser {
   _id: string;
   password: string;
   img: string;
+  bio: string;
   exercises: IExTracker[];
   issues: IIssueTracker[];
   books: IBook[];
@@ -29,6 +30,12 @@ export interface ReqBodyCreateUser {
   password: string;
 }
 
-export interface ImgSelected {
+export interface UpdateUserBody {
+  bio?: string;
+  img?: string;
+}
+export interface UpdateUserData {
+  bio?: string;
   img: string;
+  _id: string;
 }

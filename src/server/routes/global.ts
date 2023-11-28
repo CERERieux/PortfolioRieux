@@ -6,8 +6,9 @@ export const globalRouter = Router();
 
 globalRouter
   .route("/user")
+  .get(extratorUser, GlobalController.getUserBasicInfo)
   .post(GlobalController.createUser)
-  .put(extratorUser, GlobalController.updateImageUser)
+  .put(extratorUser, GlobalController.updateUser)
   .delete(extratorUser, GlobalController.deleteUser);
 globalRouter.route("/verify-user").post(GlobalController.verifyLogin);
 globalRouter.route("/verify-admin").post(GlobalController.verifyAdmin);

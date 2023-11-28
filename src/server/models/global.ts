@@ -1,7 +1,7 @@
 import { GUser, ERROR_GUSER } from "../schemas/global";
 import bcrypt from "bcrypt";
 import jwt, { type JwtPayload, TokenExpiredError } from "jsonwebtoken";
-import type { ReqBodyCreateUser } from "../types/global";
+import type { ReqBodyCreateUser, UpdateUserData } from "../types/global";
 import {
   Book,
   ERROR_BOOKS,
@@ -9,6 +9,23 @@ import {
   IssueTracker,
 } from "../schemas/advanced";
 import { ERROR_EXERCISE, ERROR_URL, ExTracker, Url } from "../schemas/basic";
+
+export async function getUserBasicInfo(_id: string) {
+  const user = await GUser.findById(_id).catch(err => {
+    console.error(err);
+    return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
+  });
+  if (user === null)
+    return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
+  if ("error" in user) return user;
+  else {
+    return {
+      username: user._id,
+      img: user.img,
+      bio: user.bio,
+    };
+  }
+}
 
 export async function createUser({ _id, password }: ReqBodyCreateUser) {
   // First, find user by its ID, if exist, send an error
@@ -68,7 +85,7 @@ export async function verifyLogin({ _id, password }: ReqBodyCreateUser) {
   return verifiedUser;
 }
 
-export async function updateImageUser(_id: string, number: number) {
+export async function updateUser({ _id, img, bio }: UpdateUserData) {
   // Find user by its ID and return error if something went wrong
   const user = await GUser.findById(_id).catch(err => {
     console.error(err);
@@ -77,8 +94,9 @@ export async function updateImageUser(_id: string, number: number) {
   if (user === null)
     return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
   if ("error" in user) return user;
-  // If we found a user, put the new image
-  user.img = `type-img-${number}`;
+  // If we found a user, put the new image and the new bio
+  if (img !== "-1" && img !== user.img) user.img = `type-img-${img}`;
+  if (bio !== undefined && bio !== user.bio) user.bio = bio;
   // Save user and return an error if needed
   const resultUpdate = await user.save().catch(err => {
     console.error(err);
@@ -86,7 +104,7 @@ export async function updateImageUser(_id: string, number: number) {
   });
   if ("error" in resultUpdate) return resultUpdate;
   // At the end return the result action of this operation
-  return { action: `Your profile image was changed to type-img-${number}` };
+  return { action: `Your profile was updated!` };
 }
 
 export async function deleteUser(_id: string) {
