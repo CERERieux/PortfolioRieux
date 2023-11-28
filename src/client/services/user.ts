@@ -106,7 +106,6 @@ export async function verifyAdmin({ username, password }: User) {
 }
 
 export function getUserBooks(user: string) {
-  console.log(user);
   return axios<BookService[] | EmptyData>({
     url: `/cYSvQmg9kR/advanced/books/external/${user}`,
     method: "get",
