@@ -121,6 +121,20 @@ export interface SingleOperation {
   id: string;
   token: string;
 }
+export interface UserInfo {
+  username: string;
+  bio: string;
+  img: string;
+}
+export type UpdateUserService = Partial<Omit<UserInfo, "username">> & Token;
+export type UpdateUserHook = Omit<UpdateUserService, "token">;
+export type ImgProfile =
+  | "type-img-1"
+  | "type-img-2"
+  | "type-img-3"
+  | "type-img-4"
+  | "type-img-5"
+  | "type-img-6";
 
 export interface ExerciseData {
   token: string;
