@@ -21,6 +21,7 @@ import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
 import Url from "./components/Url/Url";
 import StockViewer from "./components/Stocks/StockViewer";
 import MyProfile from "./components/MyProfile/MyProfile";
+import ExternalProfile from "./components/MyProfile/ExternalProfile";
 
 export default function App() {
 
@@ -40,8 +41,7 @@ export default function App() {
         <Route path="urls" element={<Url />}></Route>
       </Route>
       <Route path="/user/:id">
-        <Route index element={<Home />}></Route>
-        <Route path="library" element={<Home />}></Route>
+        <Route index element={<ExternalProfile />}></Route>
       </Route>
       <Route path="/demo">
         <Route path="quote" element={<Quote />}></Route>
