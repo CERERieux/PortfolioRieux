@@ -20,6 +20,7 @@ import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
 import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
 import Url from "./components/Url/Url";
 import StockViewer from "./components/Stocks/StockViewer";
+import MyProfile from "./components/MyProfile/MyProfile";
 
 export default function App() {
 
@@ -31,7 +32,7 @@ export default function App() {
       <Route path="/shortener-url" element={<ShortenerUrl />}></Route>
       <Route path="/communicationNameApp" element={<Home />}></Route>
       <Route path="/my-profile">
-        <Route index element={<Home />}></Route>
+        <Route index element={<MyProfile />}></Route>
         <Route path="exercises" element={<ExerciseTracker />}></Route>
         <Route path="library" element={<Library />}></Route>
         <Route path="library/:id" element={<Book />}></Route>
