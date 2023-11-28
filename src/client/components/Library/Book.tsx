@@ -143,7 +143,7 @@ export default function Book() {
                 {errorBook !== null && isAxiosError(errorBook) && <h1>Error: {errorBook.response?.data.error}</h1>}
                 {localError !== null && <h2>{localError}</h2>}
             </div>
-            <Link to="/services/library"><button>Return to Library</button></Link>
+            <Link to="/my-profile/library"><button>Return to Library</button></Link>
             <h2>Update your book!</h2>
             <form onSubmit={handleUpdate}>
                 <label htmlFor="">

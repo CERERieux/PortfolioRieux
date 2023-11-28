@@ -2,6 +2,7 @@ import { isAxiosError } from "axios"
 import { type FormEvent, useState, type ChangeEvent, useEffect } from "react"
 import { useProfileIssues } from "../../hooks/useProfileIssues"
 import UnauthorizedAccess from "../NotFound/AuthError"
+import { Link } from "react-router-dom"
 
 
 export default function IssueProfile() {
@@ -55,6 +56,7 @@ export default function IssueProfile() {
 
     return (
         <div>
+            <Link to="/my-profile"><button>Return to My Profile</button></Link>
             <div>
                 {isError && <UnauthorizedAccess errorAuth={errorAuth} />}
                 {error !== null && isAxiosError(error) && <h2>{error.response?.data.error}</h2>}

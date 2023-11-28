@@ -71,6 +71,7 @@ export default function Url() {
 
     return (
         <div>
+            <Link to="/my-profile"><button>Return to My Profile</button></Link>
             {isError && <UnauthorizedAccess errorAuth={errorAuth} />}
             {error !== null && isAxiosError(error) && <h2>{error.response?.data.error}</h2>}
             {action !== null && <h2>{action}</h2>}
@@ -101,8 +102,8 @@ export default function Url() {
                                     const id = url._id.toString()
                                     return (
                                         <tr key={id}>
-                                            <td><a href={`${url.originalUrl}`}>{url.originalUrl}</a></td>
-                                            <td><Link to={`/url/${url.shortUrl}`} reloadDocument>{url.shortUrl}</Link></td>
+                                            <td><a href={`${url.originalUrl}`} target="_blank" rel="noopener noreferrer">{url.originalUrl}</a></td>
+                                            <td><a href={`/url/${url.shortUrl}`} target="_blank" rel="noopener noreferrer">{url.shortUrl}</a></td>
                                             <td><button onClick={() => { handleDelete(id); }}>Delete</button></td>
                                         </tr>
                                     )

@@ -23,7 +23,7 @@ export default function Library() {
             setErrorLocal(null)
             setAction("New book added! Redirecting you to your new book added...")// Later change this to redirect to new book
             setTimeout(() => { setAction(null) }, 2000)
-            setTimeout(() => { navigate(`/services/library/${bookID}`) }, 2000)
+            setTimeout(() => { navigate(`/my-profile/library/${bookID}`) }, 2000)
         }
         else if (createNewBook.isError) {
             // If it wasn't a success, maybe was an error, if that is the case
@@ -106,6 +106,7 @@ export default function Library() {
 
     return (
         <div>
+            <Link to="/my-profile"><button>Return to My Profile</button></Link>
             <div>
                 {errorAuth.cause !== null && <h1>Error: You are not logged in to use this service </h1>}
                 {errorBook !== null && isAxiosError(errorBook) && <h1>Error: {errorBook.response?.data.error}</h1>}
@@ -137,7 +138,7 @@ export default function Library() {
                                 const id = book._id.toString()
                                 return <li key={id}>
                                     <div>
-                                        <Link to={`/services/library/${id}`}><h2>{book.title}</h2></Link>
+                                        <Link to={`/my-profile/library/${id}`}><h2>{book.title}</h2></Link>
                                         <p>{book.status}</p>
                                         <p>{book.review}</p>
                                         <p>{book.recommend}</p>
@@ -149,7 +150,6 @@ export default function Library() {
                         </ul>
                         : <h2>{data.error}</h2>
                     }
-
                 </div>
                 : <p>Loading...</p>}
 

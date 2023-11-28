@@ -2,6 +2,7 @@ import { type FormEvent, useState, type ChangeEvent, useEffect } from "react";
 import type { StatusEx } from "../../types";
 import { isAxiosError } from "axios";
 import { useExercise } from "../../hooks/useExercise";
+import { Link } from "react-router-dom";
 
 export default function ExerciseTracker() {
     const { data, errorEx, errorAuth, createExercise, deleteExercise, token, updateExercise } = useExercise()
@@ -112,6 +113,7 @@ export default function ExerciseTracker() {
 
     return (
         <div>
+            <Link to="/my-profile"><button>Return to My Profile</button></Link>
             <div>
                 {localError !== null && <h2>{localError}</h2>}
                 {errorAuth.cause !== null && <h1>Error: You are not logged in to use this service </h1>}
