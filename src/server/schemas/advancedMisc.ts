@@ -14,6 +14,7 @@ export const ERROR_STOCK = {
   FINDING_ALL_CLIENTS:
     "Couldn't get all clients due a problem, please try again later.",
   FINDING_STOCK: "Couldn't find the user stock, please try again later",
+  INVALID: "Invalid symbol",
   MISSING_ELEMENTS: "Please introduce the correct query to use this function",
   PUTTING_LIKES:
     "Couldn't assign the likes to the wanted stock, please try again later",

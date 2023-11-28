@@ -227,7 +227,7 @@ async function fetchInfo(resultStock: StockDocument) {
   const link = STOCK_API.replace("[symbol]", resultStock.stockname);
   const consult = await fetch(link) // Send a request to the API
     .then(response => response.json())
-    .then((data: StockAPI) => {
+    .then((data: StockAPI | string) => {
       /** Translate response to json and then we got the data,
        * in data we get the 2 parameters we need to display, return
        * it to the main function */
@@ -237,6 +237,8 @@ async function fetchInfo(resultStock: StockDocument) {
       console.error(err);
       return { error: ERROR_STOCK.FAIL_FETCH, category: "stock" };
     });
+  if (typeof consult === "string")
+    return { error: ERROR_STOCK.INVALID, category: "stock" };
   return consult;
 }
 
