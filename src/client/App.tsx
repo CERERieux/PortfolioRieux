@@ -19,6 +19,7 @@ import Quote from "./components/Quotes/Quotes";
 import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
 import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
 import Url from "./components/Url/Url";
+import StockViewer from "./components/Stocks/StockViewer";
 
 export default function App() {
 
@@ -63,7 +64,7 @@ export default function App() {
       <Route path="/cut-content/portfolio">
         <Route index element={<Home />}></Route>
         <Route path="request-information" element={<DataRequest />}></Route>
-        <Route path="stock-api-cert" element={<Home />}></Route>
+        <Route path="stock-api-cert" element={<StockViewer />}></Route>
       </Route>
       <Route path="/documentation" element={<Home />}></Route>
       <Route path="*" element={<NotFound />}></Route>
