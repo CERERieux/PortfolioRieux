@@ -8,6 +8,8 @@ import type {
   EmptyData,
   ReplyOperation,
   ResponseAction,
+  ResponseCreate,
+  SingleOperation,
   ThreadOperation,
 } from "../types";
 import type { IThread, IThreadFiltered } from "../../server/types/advancedMisc";
@@ -27,7 +29,7 @@ export function getThreads(board: string) {
 }
 
 export function createThread({ board, text, password }: CreateThreadService) {
-  return axios({
+  return axios<ResponseCreate>({
     url: `/cYSvQmg9kR/advanced-misc/threads/${board}`,
     method: "post",
     data: {
@@ -35,7 +37,7 @@ export function createThread({ board, text, password }: CreateThreadService) {
       text,
       delete_password: password,
     },
-  });
+  }).then(({ data }) => data);
 }
 
 export function reportThread({ board, idThread }: ThreadOperation) {
@@ -82,7 +84,7 @@ export function createReply({
       id_thread: idThread,
       text,
     },
-  });
+  }).then(({ data }) => data);
 }
 
 export function reportReply({ board, idReply }: ReplyOperation) {
@@ -99,5 +101,19 @@ export function deleteReply({ board, idReply, password }: DeleteReply) {
   return axios<ResponseAction>({
     url: `/cYSvQmg9kR/advanced-misc/replies/${board}?password=${password}&reply_id=${idReply}`,
     method: "delete",
-  }).then(({ data }) => data);
+  })
+    .then(({ data }) => data)
+    .catch(err => {
+      console.error(err);
+      const errorRequest = { error: err.response.data.error as string };
+      return errorRequest;
+    });
+}
+
+export function deleteBoard({ id, token }: SingleOperation) {
+  return axios<ResponseAction>({
+    url: `/cYSvQmg9kR/advanced-misc/board/${id}`,
+    method: "delete",
+    headers: { Authorization: `Bearer ${token}` },
+  });
 }
