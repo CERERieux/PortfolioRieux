@@ -9,6 +9,9 @@ advancedMiscRouter
   .get(extratorUser, AdvancedMiscController.consultStock);
 
 advancedMiscRouter.get("/boards", AdvancedMiscController.getAllBoards);
+advancedMiscRouter
+  .route("/board/:board")
+  .delete(extratorUser, AdvancedMiscController.deleteBoard);
 
 advancedMiscRouter
   .route("/threads/:board")

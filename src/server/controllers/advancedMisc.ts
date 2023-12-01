@@ -13,6 +13,7 @@ import type {
 } from "../types/advancedMisc";
 import { ERROR_STOCK, ERROR_BOARD } from "../schemas/advancedMisc";
 import { miscError } from "./error";
+import { ERROR_GUSER } from "../schemas/global";
 
 export async function consultStock(
   req: Request<{}, {}, {}, ReqStockQuery>,
@@ -43,6 +44,24 @@ export async function getAllBoards(req: Request, res: Response) {
     return res.status(status).json(resultQuery);
   }
   return res.status(200).json(resultQuery);
+}
+
+export async function deleteBoard(
+  req: Request<ReqParamBoard, {}, {}, {}>,
+  res: Response,
+) {
+  const { _id } = req;
+  if (_id !== process.env.ADMIN)
+    return res
+      .status(401)
+      .json({ error: ERROR_GUSER.NOT_ADMIN, category: "guser" });
+  const { board } = req.params;
+  const resultDelete = await AdvancedMiscModel.deleteBoard(board);
+  if ("error" in resultDelete && resultDelete.action === undefined) {
+    const status = miscError(resultDelete);
+    return res.status(status).json(resultDelete);
+  }
+  return res.status(200).json(resultDelete);
 }
 
 export async function getTopThreads(req: Request, res: Response) {
@@ -101,6 +120,7 @@ export async function deleteThread(
   req: Request<ReqParamBoard, {}, {}, ReqDeleteThread>,
   res: Response,
 ) {
+  const { board } = req.params;
   const deletePassword = req.query.password;
   const _id = req.query.thread_id;
   if (_id == null || deletePassword == null)
@@ -109,6 +129,7 @@ export async function deleteThread(
     return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultDelete = await AdvancedMiscModel.deleteThread({
+      board,
       _id,
       password: deletePassword,
     });
@@ -191,6 +212,7 @@ export async function deleteReply(
   req: Request<ReqParamBoard, {}, {}, ReqDeleteReply>,
   res: Response,
 ) {
+  const { board } = req.params;
   const deletePassword = req.query.password;
   const _id = req.query.reply_id;
   if (_id == null || deletePassword == null)
@@ -199,6 +221,7 @@ export async function deleteReply(
     return res.status(400).json({ error: ERROR_BOARD.INVALID_FORMAT });
   else {
     const resultDelete = await AdvancedMiscModel.deleteReply({
+      board,
       _id,
       password: deletePassword,
     });

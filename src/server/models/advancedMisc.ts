@@ -262,6 +262,62 @@ export async function getAllBoards() {
   return resultQuery;
 }
 
+export async function deleteBoard(board: string) {
+  // Find the board by ID
+  const deleteBoard = await Board.findById(board).catch(err => {
+    console.error(err);
+    return { error: ERROR_BOARD.COULD_NOT_FIND_BOARD, category: "board" };
+  });
+  // Return an error if it don't exist or there is an error at finding
+  if (deleteBoard === null)
+    return { error: ERROR_BOARD.EMPTY_BOARD, category: "board" };
+  if ("error" in deleteBoard) return deleteBoard;
+  // The we need to delete all the threads and replies
+  const threadNum = deleteBoard.threads.length;
+  for (let i = 0; i < threadNum; i++) {
+    // Get current thread and find it by its ID
+    const thread = deleteBoard.threads[i];
+    const deleteThread = await Thread.findById(thread._id).catch(err => {
+      console.error(err);
+      return { error: ERROR_BOARD.COULD_NOT_FIND_THREAD, category: "board" };
+    });
+    // Return error if it don't exist or had an error while finding
+    if (deleteThread === null)
+      return { error: ERROR_BOARD.COULD_NOT_FIND_ID_THREAD, category: "board" };
+    if ("error" in deleteThread) return deleteThread;
+    // If it have replies, delete them
+    if (deleteThread.replies.length > 0) {
+      const replyDeleted = await Reply.deleteMany({
+        thread_id: deleteThread._id,
+      }).catch(err => {
+        console.error(err);
+        return { error: ERROR_BOARD.COULD_NOT_DELETE_REPLY, category: "board" };
+      });
+      if ("error" in replyDeleted) return replyDeleted;
+    }
+    // Then delete the thread
+    const resultDeleteThread = await Thread.deleteOne({
+      _id: thread._id,
+    }).catch(err => {
+      console.error(err);
+      return {
+        error: ERROR_BOARD.COULD_NOT_DELETE_THREAD,
+        category: "board",
+      };
+    });
+    if ("error" in resultDeleteThread) return resultDeleteThread;
+    // Repeat until we finish
+  }
+  // If we didn't have any error, delete the board
+  const deleteResultBoard = await Board.deleteOne({ _id: board }).catch(err => {
+    console.error(err);
+    return { error: ERROR_BOARD.COULD_NOT_DELETE_BOARD, category: "board" };
+  });
+  if ("error" in deleteResultBoard) return deleteResultBoard;
+  // At the end return the action taken
+  return { action: "Board was deleted successfully!" };
+}
+
 /** Function that gets the top 10 most recent threads and their 3 most
  * recent replies, if nothing is found, return an empty array */
 export async function getTopThreads(_id: string) {
@@ -376,7 +432,11 @@ export async function reportThread(_id: string) {
   return resultAction;
 }
 
-export async function deleteThread({ _id, password }: DeleteElementBoard) {
+export async function deleteThread({
+  board,
+  _id,
+  password,
+}: DeleteElementBoard) {
   // First we get the thread by its ID to delete it
   const thread = await Thread.findById(_id).catch(err => {
     console.error(err);
@@ -401,6 +461,24 @@ export async function deleteThread({ _id, password }: DeleteElementBoard) {
       );
       if ("error" in deleteReplies) return deleteReplies;
     }
+    // Then we need to remove it from the board
+    const boardUser = await Board.findById(board).catch(err => {
+      console.error(err);
+      return { error: ERROR_BOARD.COULD_NOT_FIND_BOARD, category: "board" };
+    });
+    if (boardUser === null)
+      return { error: ERROR_BOARD.EMPTY_BOARD, category: "board" };
+    if ("error" in boardUser) return boardUser;
+    const boardThreads = boardUser.threads;
+    const newThreads = boardThreads.filter(
+      thread => thread._id.toString() !== _id,
+    );
+    boardUser.threads = newThreads;
+    const saveBoard = await boardUser.save().catch(err => {
+      console.error(err);
+      return { error: ERROR_BOARD.COULD_NOT_SAVE_BOARD, category: "board" };
+    });
+    if ("error" in saveBoard) return saveBoard;
     // Then we can delete the thread
     const deleteResult = await Thread.deleteOne({ _id }).catch(err => {
       console.error(err);
@@ -514,7 +592,11 @@ export async function reportReply(_id: string) {
   return resultAction; // Return the success message
 }
 
-export async function deleteReply({ _id, password }: DeleteElementBoard) {
+export async function deleteReply({
+  board,
+  _id,
+  password,
+}: DeleteElementBoard) {
   // First we need to find the user reply that they want to delete
   const userReply = await Reply.findById(_id).catch(err => {
     console.error(err);

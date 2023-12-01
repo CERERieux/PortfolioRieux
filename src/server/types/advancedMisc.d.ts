@@ -118,6 +118,7 @@ export interface UserDataCreate {
   deletePassword: string;
 }
 export interface DeleteElementBoard {
+  board: string;
   _id: string;
   password: string;
 }

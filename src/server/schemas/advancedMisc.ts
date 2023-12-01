@@ -24,6 +24,8 @@ export const ERROR_STOCK = {
 export const ERROR_BOARD = {
   COULD_NOT_GET_ALL_BOARDS:
     "We couldn't recover the boards from our database, please try again later",
+  COULD_NOT_DELETE_BOARD:
+    "We couldn't delete the board you wanted, please try again later",
   COULD_NOT_FIND_BOARD:
     "We couldn't find the board you needed to make the operation, please try again later",
   COULD_NOT_SAVE_BOARD:
