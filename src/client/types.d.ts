@@ -109,6 +109,9 @@ export interface EmptyData {
   error: string;
   category: string;
 }
+export interface ResponseCreate {
+  _id: Types.ObjectId;
+}
 export interface ResponseAction {
   action: string;
 }
