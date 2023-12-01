@@ -1,56 +1,86 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
-import type { CreateThread, ErrorQuery, ThreadQuery } from "../../types";
+import { type FormEvent, useEffect, useState } from "react";
+import { useAnonThread } from "../../hooks/useAnonThread";
+import NotFound from "../NotFound/NotFound";
+import { isAxiosError } from "axios";
 
-function getThreads(board: string) {
-    return fetch(`/cYSvQmg9kR/advanced-misc/threads/${board}`).then(async (data) => {
-        if (data.ok) return await data.json()
-        return { error: "Request failed" }
-    })
-}
-
-function createThread({ board, text, password }: CreateThread) {
-    return fetch(`/cYSvQmg9kR/advanced-misc/threads/${board}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            board,
-            text,
-            delete_password: password
-        })
-    })
-}
 
 export default function AnonThread() {
     const [text, setText] = useState("")
     const [password, setPassword] = useState("")
-    const [localError, setLocalError] = useState("")
+    const [passwordDelete, setPasswordDelete] = useState("")
+    const [isDeleting, setIsDeleting] = useState({ isDeleting: false, idThread: "" })
+    const [localError, setLocalError] = useState<null | string>(null)
+    const [action, setAction] = useState<null | string>(null)
     const { board } = useParams()
-    const queryClient = useQueryClient()
+    const boardId = board ?? ""
+    if (boardId === "") return <NotFound />
+    const { addThread, data, error, isLoading, removeThread, report } = useAnonThread(boardId)
 
-    if (board == null) return <h1>Error: There is no board in url</h1>
-
-    const threadQuery = useQuery<ThreadQuery[] | ErrorQuery, Error>({
-        queryKey: ["thread", board],
-        queryFn: () => getThreads(board),
-    })
-
-    const newThread = useMutation({
-        mutationFn: createThread,
-        onSuccess: () => {
+    useEffect(() => {
+        if (addThread.isSuccess) {
             setText("")
             setPassword("")
-            setLocalError("")
-            queryClient.invalidateQueries({ queryKey: ["thread", board] })
+            setLocalError(null)
+            setAction("Your thread was successfully created, redirecting you to its page...")
+            setTimeout(() => { setAction(null) }, 3000)
         }
-    })
+        else if (addThread.isError) {
+            const { error } = addThread
+            if (isAxiosError(error)) {
+                setLocalError(error.response?.data.error)
+            }
+            else {
+                setLocalError("Something went wrong at creating your thread...")
+            }
+            setTimeout(() => { setLocalError(null) }, 3000)
+        }
+    }, [addThread.isSuccess])
 
-    if (threadQuery.isLoading) return <h1>Loading...</h1>
-    if (threadQuery.error !== null) return <h1>Error: {threadQuery.error.message}</h1>
-    if (threadQuery.data != null && "error" in threadQuery.data) return <h2>Error: {threadQuery.data.error}</h2>
+    useEffect(() => {
+        if (report.isSuccess) {
+            setLocalError(null)
+            setAction(report.data.action)
+            setTimeout(() => { setAction(null) }, 2000)
+        }
+        else if (report.isError) {
+            const { error } = report
+            if (isAxiosError(error)) {
+                setLocalError(error.response?.data.error)
+            }
+            else {
+                setLocalError("We can't report this thread right now, please try again later.")
+            }
+            setTimeout(() => { setLocalError(null) }, 3000)
+        }
+    }, [report.isSuccess])
+
+    useEffect(() => {
+        setIsDeleting({ isDeleting: false, idThread: "" })
+        if (removeThread.isSuccess) {
+            setPasswordDelete("")
+            if (!("error" in removeThread.data)) {
+                setLocalError(null)
+                setAction(removeThread.data.action)
+                setTimeout(() => { setAction(null) }, 2000)
+
+            }
+            else {
+                setLocalError(removeThread.data.error)
+                setTimeout(() => { setLocalError(null) }, 4000)
+            }
+        }
+        else if (removeThread.isError) {
+            const { error } = removeThread
+            if (isAxiosError(error)) {
+                setLocalError(error.response?.data.error)
+            }
+            else {
+                setLocalError("We can't delete this thread right now, please try again later.")
+            }
+            setTimeout(() => { setLocalError(null) }, 3000)
+        }
+    }, [removeThread.isSuccess])
 
     const handleText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value)
@@ -58,44 +88,85 @@ export default function AnonThread() {
     const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value)
     }
+    const handlePasswordDelete = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPasswordDelete(e.target.value)
+    }
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (text !== "" && password !== "")
-            newThread.mutate({ board, text, password })
+            addThread.mutate({ board: boardId, text, password })
         else {
-            setLocalError(`Please fill the required fields to create a new thread in ${board}`)
+            setLocalError(`Please fill the required fields to create a new thread in ${boardId}`)
+        }
+    }
+    const handleReport = (idThread: string) => {
+        // Todo put a modal that confirm that user is sure to report this thread
+        report.mutate({ board: boardId, idThread })
+    }
+    const handleDeleteThread = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (passwordDelete === "") {
+            setLocalError("Please fill the password field")
+        } else {
+            removeThread.mutate({ board: boardId, idThread: isDeleting.idThread, password: passwordDelete })
         }
     }
 
-
     return (<div>
-        <h1>{board}</h1>
-        <div>
-            {newThread.isError && <p>{newThread.error.message}</p>}
-            {localError !== "" && <p>{localError}</p>}
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="">Thread text*: <input type="text"
-                    onChange={handleText} value={text} /></label>
-                <label htmlFor="">Delete password*: <input type="text"
-                    onChange={handlePassword} value={password} /></label>
-                <button disabled={newThread.isPending}>Send</button>
-            </form>
-        </div>
-        <div>
-            {threadQuery.data === undefined ? <p>There is no data in database</p> :
-                threadQuery.data.map(thread => {
-                    return (<div key={thread._id}>
-                        <h2>{thread.text}</h2>
-                        <p>Created on: {thread.created_on} Bumped on: {thread.bumped_on}</p>
-                        {thread.replies.map(reply => {
-                            return (<ul key={reply._id}>
-                                <li>{reply.text}</li>
-                                <li>Created on: {reply.created_on}</li>
-                            </ul>)
-                        })}
-                    </div>)
-                })}
-        </div>
+        <h1>{boardId}</h1>
+        {error !== null && isAxiosError(error) ? <h2>Error: {error.response?.data.error}</h2> :
+            <div>
+                {action !== null && <h2>{action}</h2>}
+                {localError !== "" && <h2>{localError}</h2>}
+                <div>
+                    {addThread.isError && isAxiosError(addThread.error) && <h2>{addThread.error.response?.data.error}</h2>}
+                    <form onSubmit={handleSubmit}>
+                        <label htmlFor="">Thread text*: <input type="text"
+                            onChange={handleText} value={text} /></label>
+                        <label htmlFor="">Delete password*: <input type="text"
+                            onChange={handlePassword} value={password} /></label>
+                        <button disabled={addThread.isPending || action !== null}>Create Thread</button>
+                    </form>
+                </div>
+                <div>
+                    {data === undefined ? isLoading ?
+                        <h2>Loading...</h2>
+                        : <p>There is no data in database</p> :
+                        data.map(thread => {
+                            const idThread = thread._id.toString()
+                            return (
+                                <div key={idThread}>
+                                    {!(isDeleting.isDeleting && isDeleting.idThread === idThread) ?
+                                        <>
+                                            <h2>{thread.text}</h2>
+                                            <p>Created on: {thread.created_on} Bumped on: {thread.bumped_on}</p>
+                                            {thread.replies.map(reply => {
+                                                const idReply = reply._id.toString()
+                                                return (<ul key={idReply}>
+                                                    <li>{reply.text}</li>
+                                                    <li>Created on: {reply.created_on}</li>
+                                                </ul>)
+                                            })}
+                                            <button onClick={() => { handleReport(idThread) }}>Report</button>
+                                            <button onClick={() => { setIsDeleting({ isDeleting: true, idThread }) }}>Delete</button>
+                                        </> :
+                                        <>
+                                            <form onSubmit={handleDeleteThread}>
+                                                <label htmlFor="">
+                                                    Password: <input type="text" name="" id="" value={passwordDelete} onChange={handlePasswordDelete} />
+                                                </label>
+                                                <button>Delete</button>
+                                            </form>
+                                            <button onClick={() => { setIsDeleting({ isDeleting: false, idThread: "" }) }}>Cancel</button>
+                                        </>
 
-    </div>)
+                                    }
+
+                                </div>
+                            )
+                        })}
+                </div>
+            </div>
+        }
+    </div >)
 }

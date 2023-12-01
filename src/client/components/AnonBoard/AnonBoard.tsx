@@ -1,29 +1,28 @@
-import { useQuery } from "@tanstack/react-query"
-import type { BoardQuery } from "../../types"
+import { Link } from "react-router-dom"
+import { useAnonBoard } from "../../hooks/useAnonBoard"
+import { isAxiosError } from "axios"
 
-function getBoards() {
-    return fetch("/cYSvQmg9kR/advanced-misc/boards").then(async (data) => {
-        if (data.ok) return await data.json()
-        return { error: "Error at connecting to database" }
-    })
-}
 
 export default function AnonBoard() {
-    const boardQuery = useQuery<BoardQuery[], Error>({
-        queryKey: ["boards"],
-        queryFn: getBoards,
-    })
+    const { data, error, isLoading } = useAnonBoard()
 
-    if (boardQuery.isLoading) return <p>Loading...</p>
-    if (boardQuery.error !== null) return <p>Error: {boardQuery.error.message}</p>
-    if (boardQuery.data == null) return <p>There is no data in db</p>
     return (
         <div>
             <h1>AnonBoard</h1>
-            {boardQuery.data.map(board => (<div key={board.id}>
-                <h2>Board name: {board.id}</h2>
-                <p>Thread posted: {board.thread_count}</p>
-            </div>))}
+            {isLoading && <p>Loading...</p>}
+            {error !== null && isAxiosError(error) && <p>Error: {error.response?.data.error}</p>}
+            {data !== undefined ?
+                !("error" in data) ?
+                    data.map(board => (
+                        <Link to={`/anon-board/thread/${board.id}`} key={board.id}>
+                            <section>
+                                <h2>Board name: {board.id}</h2>
+                                <p>Thread posted: {board.thread_count}</p>
+                            </section>
+                        </Link>
+                    ))
+                    : <h2>{data.error}</h2>
+                : !isLoading && <h2>There is an error with the aplication, try again later.</h2>}
         </div>
     )
 }
