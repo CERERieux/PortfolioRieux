@@ -55,6 +55,7 @@ export default function App() {
       <Route path="/anon-board">
         <Route index element={<AnonBoard />}></Route>
         <Route path="thread/:board" element={<AnonThread />}></Route>
+        <Route path="reply/:thread/:board" element={<AnonThread />}></Route>
         {/** Todo: finish the route of this part */}
       </Route>
       <Route path="/games">
