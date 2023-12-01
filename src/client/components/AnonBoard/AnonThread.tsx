@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { type FormEvent, useEffect, useState } from "react";
 import { useAnonThread } from "../../hooks/useAnonThread";
 import NotFound from "../NotFound/NotFound";
@@ -6,6 +6,7 @@ import { isAxiosError } from "axios";
 
 
 export default function AnonThread() {
+    const navigate = useNavigate()
     const [text, setText] = useState("")
     const [password, setPassword] = useState("")
     const [passwordDelete, setPasswordDelete] = useState("")
@@ -19,11 +20,16 @@ export default function AnonThread() {
 
     useEffect(() => {
         if (addThread.isSuccess) {
+            const { data } = addThread
+            const id = data._id.toString()
             setText("")
             setPassword("")
             setLocalError(null)
             setAction("Your thread was successfully created, redirecting you to its page...")
             setTimeout(() => { setAction(null) }, 3000)
+            setTimeout(() => {
+                navigate(`/anon-board/${boardId}/${id}/reply`)
+            }, 3000)
         }
         else if (addThread.isError) {
             const { error } = addThread
@@ -113,7 +119,7 @@ export default function AnonThread() {
     }
 
     return (<div>
-        <h1>{boardId}</h1>
+        <h1>{boardId}</h1> <Link to="/anon-board"><button>Return to boards</button></Link>
         {error !== null && isAxiosError(error) ? <h2>Error: {error.response?.data.error}</h2> :
             <div>
                 {action !== null && <h2>{action}</h2>}
@@ -125,46 +131,46 @@ export default function AnonThread() {
                             onChange={handleText} value={text} /></label>
                         <label htmlFor="">Delete password*: <input type="text"
                             onChange={handlePassword} value={password} /></label>
-                        <button disabled={addThread.isPending || action !== null}>Create Thread</button>
+                        <button disabled={addThread.isPending || action !== null || isLoading}>Create Thread</button>
                     </form>
                 </div>
                 <div>
-                    {data === undefined ? isLoading ?
-                        <h2>Loading...</h2>
-                        : <p>There is no data in database</p> :
-                        data.map(thread => {
-                            const idThread = thread._id.toString()
-                            return (
-                                <div key={idThread}>
-                                    {!(isDeleting.isDeleting && isDeleting.idThread === idThread) ?
-                                        <>
-                                            <h2>{thread.text}</h2>
-                                            <p>Created on: {thread.created_on} Bumped on: {thread.bumped_on}</p>
-                                            {thread.replies.map(reply => {
-                                                const idReply = reply._id.toString()
-                                                return (<ul key={idReply}>
-                                                    <li>{reply.text}</li>
-                                                    <li>Created on: {reply.created_on}</li>
-                                                </ul>)
-                                            })}
-                                            <button onClick={() => { handleReport(idThread) }}>Report</button>
-                                            <button onClick={() => { setIsDeleting({ isDeleting: true, idThread }) }}>Delete</button>
-                                        </> :
-                                        <>
-                                            <form onSubmit={handleDeleteThread}>
-                                                <label htmlFor="">
-                                                    Password: <input type="text" name="" id="" value={passwordDelete} onChange={handlePasswordDelete} />
-                                                </label>
-                                                <button>Delete</button>
-                                            </form>
-                                            <button onClick={() => { setIsDeleting({ isDeleting: false, idThread: "" }) }}>Cancel</button>
-                                        </>
-
-                                    }
-
-                                </div>
-                            )
-                        })}
+                    {data === undefined ? isLoading && <h2>Loading...</h2>
+                        :
+                        data.length === 0 ? <h2>Feel free to create a new thread! This board is empty...</h2> :
+                            data.map(thread => {
+                                const idThread = thread._id.toString()
+                                return (
+                                    <div key={idThread}>
+                                        {!(isDeleting.isDeleting && isDeleting.idThread === idThread) ?
+                                            <>
+                                                <Link to={`/anon-board/${boardId}/${idThread}/reply`}>
+                                                    <h2>{thread.text}</h2>
+                                                </Link>
+                                                <p>Created on: {thread.created_on} Bumped on: {thread.bumped_on}</p>
+                                                {thread.replies.map(reply => {
+                                                    const idReply = reply._id.toString()
+                                                    return (<ul key={idReply}>
+                                                        <li>{reply.text}</li>
+                                                        <li>Created on: {reply.created_on}</li>
+                                                    </ul>)
+                                                })}
+                                                <button onClick={() => { handleReport(idThread) }}>Report</button>
+                                                <button onClick={() => { setIsDeleting({ isDeleting: true, idThread }) }}>Delete</button>
+                                            </> :
+                                            <>
+                                                <form onSubmit={handleDeleteThread}>
+                                                    <label htmlFor="">
+                                                        Password: <input type="text" name="" id="" value={passwordDelete} onChange={handlePasswordDelete} />
+                                                    </label>
+                                                    <button>Delete</button>
+                                                </form>
+                                                <button onClick={() => { setIsDeleting({ isDeleting: false, idThread: "" }) }}>Cancel</button>
+                                            </>
+                                        }
+                                    </div>
+                                )
+                            })}
                 </div>
             </div>
         }

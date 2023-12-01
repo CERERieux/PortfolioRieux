@@ -22,6 +22,7 @@ import Url from "./components/Url/Url";
 import StockViewer from "./components/Stocks/StockViewer";
 import MyProfile from "./components/MyProfile/MyProfile";
 import ExternalProfile from "./components/MyProfile/ExternalProfile";
+import AnonReply from "./components/AnonBoard/AnonReply";
 
 export default function App() {
 
@@ -44,6 +45,7 @@ export default function App() {
         <Route index element={<ExternalProfile />}></Route>
       </Route>
       <Route path="/demo">
+        <Route index element={<Home />}></Route>
         <Route path="quote" element={<Quote />}></Route>
         <Route path="calculator" element={<Calculator />}></Route>
         <Route path="markdown" element={<Markdown />}></Route>
@@ -54,8 +56,8 @@ export default function App() {
       </Route>
       <Route path="/anon-board">
         <Route index element={<AnonBoard />}></Route>
-        <Route path="thread/:board" element={<AnonThread />}></Route>
-        <Route path="reply/:thread/:board" element={<AnonThread />}></Route>
+        <Route path=":board/thread" element={<AnonThread />}></Route>
+        <Route path=":board/:thread/reply" element={<AnonReply />}></Route>
       </Route>
       <Route path="/games">
         <Route index element={<Home />}></Route>
