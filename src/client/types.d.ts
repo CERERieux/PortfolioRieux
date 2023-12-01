@@ -224,3 +224,27 @@ export interface ViewStockData {
   stock: string | string[];
   like: boolean;
 }
+
+export interface BoardData {
+  id: string;
+  thread_count: number;
+}
+export interface CreateThreadService {
+  board: string;
+  text: string;
+  password: string;
+}
+export interface ThreadOperation {
+  idThread: string;
+  board: string;
+}
+export type DeleteThread = ThreadOperation &
+  Pick<CreateThreadService, "password">;
+export type CreateReplyService = CreateThreadService & ThreadOperation;
+export interface ReplyOperation {
+  board: string;
+  idReply: string;
+}
+export interface DeleteReply extends ReplyOperation {
+  password: string;
+}
