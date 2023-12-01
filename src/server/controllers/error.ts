@@ -102,6 +102,7 @@ export function miscError({ error, category }: ErrorStatus) {
   }
   if (category === "board") {
     if (
+      error === ERROR_BOARD.COULD_NOT_DELETE_BOARD ||
       error === ERROR_BOARD.COULD_NOT_DELETE_REPLY ||
       error === ERROR_BOARD.COULD_NOT_DELETE_THREAD ||
       error === ERROR_BOARD.COULD_NOT_FIND_BOARD ||
@@ -115,14 +116,6 @@ export function miscError({ error, category }: ErrorStatus) {
       error === ERROR_BOARD.COULD_NOT_UPDATE_THREAD
     )
       return 503;
-    if (
-      error === ERROR_BOARD.EMPTY_BOARD ||
-      error === ERROR_BOARD.COULD_NOT_FIND_ID_REPLY ||
-      error === ERROR_BOARD.COULD_NOT_FIND_ID_THREAD ||
-      error === ERROR_BOARD.INCORRECT_PASSWORD
-    )
-      return 400;
-    if (error === ERROR_BOARD.EMPTY_ALL_BOARDS) return 200;
   }
   if (category === "guser") {
     const statusGUser = gUserError({ error, category });
