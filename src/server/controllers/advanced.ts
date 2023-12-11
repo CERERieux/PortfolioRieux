@@ -1,6 +1,7 @@
 import * as AdvancedModel from "../models/advanced";
 import type { Request, Response } from "express";
 import type {
+  AdminData,
   ConverterQuery,
   CreateIssue,
   ReqBodyCreateBook,
@@ -24,6 +25,7 @@ import {
   BRIT_TO_AME,
 } from "../schemas/advanced";
 import { advancedError } from "./error";
+import { ERROR_GUSER } from "../schemas/global";
 
 const UPDATE_SUCCESS = (id: string) => `Successfully updated issue ${id}`;
 const translator = new AdvancedModel.Translator();
@@ -365,9 +367,15 @@ export async function createNewBook(
   return res.status(201).json(newBook);
 }
 
-export async function deleteAllBooks(req: Request, res: Response) {
+export async function deleteAllBooks(
+  req: Request<{}, {}, {}, AdminData>,
+  res: Response,
+) {
   // Delete all the books and show the result of the operation
-  const username = req._id;
+  const username =
+    req._id === (process.env.ADMIN as string) ? req.query.user_id : req._id;
+  if (username === undefined)
+    return res.status(400).json({ error: ERROR_GUSER.ADMIN_FORGOT_USER });
   const deletedBooks = await AdvancedModel.deleteAllBooks(username);
   if ("error" in deletedBooks) {
     const status = advancedError(deletedBooks);
@@ -437,7 +445,14 @@ export async function updateBook(
   return res.status(200).json(resultUpdate);
 }
 
-export async function deleteSingleBook(req: Request, res: Response) {
+export async function deleteSingleBook(
+  req: Request<ReqParamsBook, {}, {}, AdminData>,
+  res: Response,
+) {
+  const username =
+    req._id === (process.env.ADMIN as string) ? req.query.user_id : req._id;
+  if (username === undefined)
+    return res.status(400).json({ error: ERROR_GUSER.ADMIN_FORGOT_USER });
   // Get the ID of the book to delete, if there is an error with the ID, send an error
   const _id = req.params.id;
   if (_id == null) {
@@ -447,7 +462,7 @@ export async function deleteSingleBook(req: Request, res: Response) {
     return res.status(400).json({ error: ERROR_BOOKS.INVALID_ID });
   }
   // If valid, delete the book and show the result of the operation
-  const resultDelete = await AdvancedModel.deleteSingleBook(_id, req._id);
+  const resultDelete = await AdvancedModel.deleteSingleBook(_id, username);
   if ("error" in resultDelete) {
     const status = advancedError(resultDelete);
     return res.status(status).json(resultDelete);

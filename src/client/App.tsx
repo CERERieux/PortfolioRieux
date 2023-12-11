@@ -70,6 +70,12 @@ export default function App() {
         <Route path="stock-api-cert" element={<StockViewer />}></Route>
       </Route>
       <Route path="/documentation" element={<Home />}></Route>
+      <Route path={`/${process.env.ROUTE_ADMIN}/admin`}>
+        <Route index element={<Home />}></Route>
+        <Route path="anonboard" element={<Home />}></Route>
+        <Route path=":user/urls" element={<Home />}></Route>
+        <Route path=":user/issues" element={<Home />}></Route>
+      </Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
   );

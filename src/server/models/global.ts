@@ -201,3 +201,18 @@ export async function verifyToken(token: string) {
   // If there is time left, just return the old token
   return { newToken: token };
 }
+
+export async function getAllUsers() {
+  const users = await GUser.find({})
+    .select("_id issues books shortUrl")
+    .populate("issues books shortUrl")
+    .exec()
+    .catch(err => {
+      console.error(err);
+      return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
+    });
+  if ("error" in users) return users;
+  if (users.length === 0)
+    return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
+  return users;
+}

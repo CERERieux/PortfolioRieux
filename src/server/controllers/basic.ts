@@ -10,6 +10,8 @@ import type {
   ValidUrlReq,
 } from "../types/basic";
 import { ERROR_EXERCISE, ERROR_URL } from "../schemas/basic";
+import { ERROR_GUSER } from "../schemas/global";
+import type { AdminData } from "../types/advanced";
 
 /** --------------------------------------------------------------- */
 
@@ -95,13 +97,16 @@ export async function visitShortURL(req: Request, res: Response) {
 }
 
 export async function deleteShortURL(
-  req: Request<ReqParam, {}, {}, {}>,
+  req: Request<ReqParam, {}, {}, AdminData>,
   res: Response,
 ) {
   const { _id } = req.params;
   if (_id.length !== 24)
     return res.status(400).json({ error: ERROR_URL.INVALID_ID });
-  const username = req._id;
+  const username =
+    req._id === (process.env.ADMIN as string) ? req.query.user_id : req._id;
+  if (username === undefined)
+    return res.status(400).json({ error: ERROR_GUSER.ADMIN_FORGOT_USER });
   const resultDelete = await BasicModel.deleteShortURL(_id, username);
   if ("error" in resultDelete) {
     const status = basicError(resultDelete);

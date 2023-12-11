@@ -2,6 +2,8 @@ import { Schema, model } from "mongoose";
 import type { IGlobalUser } from "../types/global";
 
 export const ERROR_GUSER = {
+  ADMIN_FORGOT_USER:
+    "Please don't forget to add the user id in the query to do the action you need",
   COULD_NOT_CREATE: "Error at trying to create a new user, please try again",
   COULD_NOT_DELETE:
     "Could not delete the user you needed, please try again later",

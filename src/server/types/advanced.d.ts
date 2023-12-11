@@ -130,3 +130,6 @@ export interface ReqParamsBook {
 export interface UpdateNote extends ReqParamsBook {
   number: number;
 }
+export interface AdminData {
+  user_id?: string;
+}

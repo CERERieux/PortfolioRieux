@@ -113,3 +113,15 @@ export async function verifyToken(
   }
   return res.status(200).json(resultVerify);
 }
+
+export async function getAllUsers(req: Request, res: Response) {
+  const admin = req._id;
+  if (admin !== process.env.ADMIN)
+    return res.status(403).json({ error: ERROR_GUSER.NOT_ADMIN });
+  const users = await GlobalModel.getAllUsers();
+  if ("error" in users) {
+    const status = gUserError(users);
+    return res.status(status).json(users);
+  }
+  return res.status(200).json(users);
+}
