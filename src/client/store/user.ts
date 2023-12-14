@@ -122,11 +122,13 @@ export const useUser = create<UserState>((set, get) => ({
       return verifiedToken.error;
     } else {
       // If we have a verified token, we get the old one
-      const { token } = get();
+      const { token, username } = get();
       // If those are different, set the new one in the local storage
       if (verifiedToken.newToken !== token) {
         window.localStorage.setItem(TOKEN_NAME, verifiedToken.newToken);
       }
+      // Put the username each time we verify the token, in case user knows how to change localstorage in dev settings
+      window.localStorage.setItem(USER_NAME, username);
       // Return the result of it
       return "Your token was refreshed.";
     }

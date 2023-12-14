@@ -7,7 +7,16 @@ import type {
   UpdateUserService,
   BookService,
   EmptyData,
+  AllUsers,
 } from "../types";
+
+export function getAllUsers(token: string) {
+  return axios<AllUsers[]>({
+    url: `/cYSvQmg9kR/global/${process.env.ROUTE_ADMIN}/admin`,
+    method: "get",
+    headers: { Authorization: `Bearer ${token}` },
+  }).then(({ data }) => data);
+}
 
 export function getUserInfo(user: string) {
   return axios<UserInfo>({

@@ -1,9 +1,9 @@
 import axios from "axios";
 import type {
   CreateShortUrl,
+  DeleteOperation,
   EmptyData,
   ResponseAction,
-  SingleOperation,
   Token,
   UserUrls,
 } from "../types";
@@ -31,9 +31,10 @@ export function createUrl({ token, url }: CreateShortUrl) {
   });
 }
 
-export function deleteUrl({ token, id }: SingleOperation) {
+export function deleteUrl({ token, id, userId }: DeleteOperation) {
+  const adminData = userId !== undefined ? `?user_id=${userId}` : undefined;
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/basic/shorturl/${id}`,
+    url: `/cYSvQmg9kR/basic/shorturl/${id}${adminData}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
   }).then(({ data }) => {

@@ -3,7 +3,9 @@ import type {
   BookService,
   CreateBookService,
   CreateNoteService,
+  DeleteLibraryService,
   DeleteNoteService,
+  DeleteOperation,
   EmptyData,
   ResponseAction,
   ResultCreateBook,
@@ -27,9 +29,10 @@ export function getAllBooks({ token }: Token) {
   });
 }
 
-export function deleteLibrary({ token }: Token) {
+export function deleteLibrary({ token, userId }: DeleteLibraryService) {
+  const adminData = userId !== undefined ? `?user_id=${userId}` : undefined;
   return axios<ResponseAction>({
-    url: "/cYSvQmg9kR/advanced/books",
+    url: `/cYSvQmg9kR/advanced/books${adminData}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -72,9 +75,10 @@ export function updateBook({
   });
 }
 
-export function deleteBook({ id, token }: SingleOperation) {
+export function deleteBook({ id, token, userId }: DeleteOperation) {
+  const adminData = userId !== undefined ? `?user_id=${userId}` : undefined;
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/advanced/books/${id}`,
+    url: `/cYSvQmg9kR/advanced/books/${id}${adminData}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
   });

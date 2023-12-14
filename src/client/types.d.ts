@@ -4,6 +4,7 @@ import type {
   ReqQueryIssue,
 } from "../server/types/advanced";
 import type { IExTracker, IShortenerUrl } from "../server/types/basic";
+import { type IGlobalUser } from "../server/types/global";
 
 export interface Welcome {
   quotes: Quote[];
@@ -105,6 +106,10 @@ export interface ErrorAuth {
 }
 
 // Axios types
+export type AllUsers = Pick<
+  IGlobalUser,
+  "_id" | "books" | "issues" | "shortUrl"
+>;
 export interface EmptyData {
   error: string;
   category: string;
@@ -124,6 +129,11 @@ export interface SingleOperation {
   id: string;
   token: string;
 }
+export interface DeleteOperation extends SingleOperation {
+  userId?: string;
+}
+export type DeleteLibraryService = Omit<DeleteOperation, "id">;
+export type DeleteOperationHook = Omit<DeleteOperation, "token">;
 export interface UserInfo {
   username: string;
   bio: string;
