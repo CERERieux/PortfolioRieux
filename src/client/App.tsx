@@ -23,6 +23,8 @@ import StockViewer from "./components/Stocks/StockViewer";
 import MyProfile from "./components/MyProfile/MyProfile";
 import ExternalProfile from "./components/MyProfile/ExternalProfile";
 import AnonReply from "./components/AnonBoard/AnonReply";
+import AdminPanel from "./components/AdminPanel/AdminPanel";
+import UserDataAdmin from "./components/AdminPanel/UserDataAdmin";
 
 export default function App() {
 
@@ -73,8 +75,8 @@ export default function App() {
       <Route path={`/${process.env.ROUTE_ADMIN}/admin`}>
         <Route index element={<Home />}></Route>
         <Route path="anonboard" element={<Home />}></Route>
-        <Route path=":user/urls" element={<Home />}></Route>
-        <Route path=":user/issues" element={<Home />}></Route>
+        <Route path="users" element={<AdminPanel />}></Route>
+        <Route path=":user/data" element={<UserDataAdmin />}></Route>
       </Route>
       <Route path="*" element={<NotFound />}></Route>
     </Routes>
