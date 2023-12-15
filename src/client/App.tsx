@@ -25,9 +25,11 @@ import ExternalProfile from "./components/MyProfile/ExternalProfile";
 import AnonReply from "./components/AnonBoard/AnonReply";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
 import UserDataAdmin from "./components/AdminPanel/UserDataAdmin";
+import AdminLogin from "./components/AdminPanel/AdminLogin";
+import AdminMainMenu from "./components/AdminPanel/AdminMainMenu";
+import AdminBoards from "./components/AdminPanel/AdminBoards";
 
 export default function App() {
-
   return (
     <Routes>
       <Route path="/home" element={<Home />}></Route>
@@ -72,9 +74,10 @@ export default function App() {
         <Route path="stock-api-cert" element={<StockViewer />}></Route>
       </Route>
       <Route path="/documentation" element={<Home />}></Route>
-      <Route path={`/${process.env.ROUTE_ADMIN}/admin`}>
-        <Route index element={<Home />}></Route>
-        <Route path="anonboard" element={<Home />}></Route>
+      <Route path={`/${import.meta.env.VITE_ROUTE_ADMIN}/admin`}>
+        <Route index element={<AdminMainMenu />}></Route>
+        <Route path="login" element={<AdminLogin />}></Route>
+        <Route path="anonboard" element={<AdminBoards />}></Route>
         <Route path="users" element={<AdminPanel />}></Route>
         <Route path=":user/data" element={<UserDataAdmin />}></Route>
       </Route>
