@@ -115,5 +115,5 @@ export function deleteBoard({ id, token }: SingleOperation) {
     url: `/cYSvQmg9kR/advanced-misc/board/${id}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
-  });
+  }).then(({ data }) => data);
 }

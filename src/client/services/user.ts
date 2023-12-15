@@ -8,11 +8,12 @@ import type {
   BookService,
   EmptyData,
   AllUsers,
+  SingleOperation,
 } from "../types";
 
 export function getAllUsers(token: string) {
   return axios<AllUsers[]>({
-    url: `/cYSvQmg9kR/global/${process.env.ROUTE_ADMIN}/admin`,
+    url: `/cYSvQmg9kR/global/${import.meta.env.VITE_ROUTE_ADMIN}/admin`,
     method: "get",
     headers: { Authorization: `Bearer ${token}` },
   }).then(({ data }) => data);
@@ -118,5 +119,13 @@ export function getUserBooks(user: string) {
   return axios<BookService[] | EmptyData>({
     url: `/cYSvQmg9kR/advanced/books/external/${user}`,
     method: "get",
+  }).then(({ data }) => data);
+}
+
+export function getUserInfoAdmin({ id, token }: SingleOperation) {
+  return axios<AllUsers>({
+    url: `/cYSvQmg9kR/global/${import.meta.env.VITE_ROUTE_ADMIN}/admin/${id}`,
+    method: "get",
+    headers: { Authorization: `Bearer ${token}` },
   }).then(({ data }) => data);
 }
