@@ -4,16 +4,18 @@ interface PropsUrl {
     shortUrl: IShortenerUrl[]
     user: string
     removeUrl: ({ id, userId }: DeleteOperationHook) => void
+    actionDone: null | string
 }
 
-export default function AdminUrls({ shortUrl, user, removeUrl }: PropsUrl) {
+export default function AdminUrls({ shortUrl, user, removeUrl, actionDone }: PropsUrl) {
+
     const handleDeleteUrl = (id: string) => {
         removeUrl({ id, userId: user })
     }
-
     return (
         <section>
             <h3>Short URLs</h3>
+            {actionDone !== null && <h3>{actionDone}</h3>}
             <table>
                 <thead>
                     <tr>
@@ -23,7 +25,7 @@ export default function AdminUrls({ shortUrl, user, removeUrl }: PropsUrl) {
                     </tr>
                 </thead>
                 <tbody>
-                    {shortUrl.length > 0 ?
+                    {shortUrl !== undefined && shortUrl.length > 0 ?
                         shortUrl.map(url => {
                             const idUrl = url._id.toString()
                             return (

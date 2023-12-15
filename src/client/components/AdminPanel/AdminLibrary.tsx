@@ -6,9 +6,10 @@ interface PropsLibrary {
     user: string
     removeBook: ({ id, userId }: DeleteOperationHook) => void
     removeLibrary: (userId: string) => void
+    actionDone: string | null
 }
 
-export default function AdminLibrary({ books, user, removeBook, removeLibrary }: PropsLibrary) {
+export default function AdminLibrary({ books, user, removeBook, removeLibrary, actionDone }: PropsLibrary) {
 
     const handleRemoveBook = (id: string) => {
         removeBook({ id, userId: user })
@@ -20,9 +21,10 @@ export default function AdminLibrary({ books, user, removeBook, removeLibrary }:
     return (
         <section>
             <h3>Library</h3>
+            {actionDone !== null && <h3>{actionDone}</h3>}
             <button onClick={handleEmptyLibrary}>Empty User Library</button>
             <ul>
-                {books.length > 0 ? books.map(book => {
+                {books !== undefined && books.length > 0 ? books.map(book => {
                     const idBook = book._id.toString()
                     return (
                         <li key={idBook}>

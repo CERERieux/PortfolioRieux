@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom"
-import { useAdmin } from "../../hooks/useAdmin"
+import { useAdminListUser } from "../../hooks/useAdminListUser"
 import UnauthorizedAccess from "../NotFound/AuthError"
 import { isAxiosError } from "axios"
 
 export default function AdminPanel() {
-    const { data, error, errorAuth, isLoading } = useAdmin()
+    const { data, error, errorAuth, isLoading } = useAdminListUser()
+    const admin = import.meta.env.VITE_ADMIN
+    const routeAdmin = `/${import.meta.env.VITE_ROUTE_ADMIN}/admin`
 
     return (
         <div>
@@ -13,11 +15,12 @@ export default function AdminPanel() {
             {data !== undefined ?
                 <>
                     <h2>Admin Panel</h2>
+                    <Link to={routeAdmin}><button>Return</button></Link>
                     <ul>
                         {data.map(user => {
-                            const id = user._id
+                            const id = user._id !== admin ? user._id : "Anonymous"
                             return (
-                                <Link to={`/${process.env.ROUTE_ADMIN}/admin/${id}/data`} key={id} state={user}>
+                                <Link to={`/${import.meta.env.VITE_ROUTE_ADMIN}/admin/${id}/data`} key={id} state={id}>
                                     <li>{id}</li>
                                 </Link>
                             )
