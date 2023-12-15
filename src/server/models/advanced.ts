@@ -927,6 +927,11 @@ export async function deleteIssue(_id: string) {
     });
   if (issuesDeleted > 0) {
     // If we deleted something, we need to remove it from user
+    // Except if its anonymous
+    if (username === "Anonymous")
+      return {
+        action: `Issue ${_id} was deleted successfully!`,
+      };
     // Find user by Id, if not found, we send an error
     const user = await GUser.findById(username).catch(err => {
       console.error(err);
