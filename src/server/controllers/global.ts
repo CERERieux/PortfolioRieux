@@ -125,3 +125,16 @@ export async function getAllUsers(req: Request, res: Response) {
   }
   return res.status(200).json(users);
 }
+
+export async function getUserInfo(req: Request, res: Response) {
+  const admin = req._id;
+  const user = req.params.id;
+  if (admin !== process.env.ADMIN)
+    return res.status(403).json({ error: ERROR_GUSER.NOT_ADMIN });
+  const users = await GlobalModel.getUserInfo(user);
+  if ("error" in users) {
+    const status = gUserError(users);
+    return res.status(status).json(users);
+  }
+  return res.status(200).json(users);
+}

@@ -9,6 +9,7 @@ import {
   IssueTracker,
 } from "../schemas/advanced";
 import { ERROR_EXERCISE, ERROR_URL, ExTracker, Url } from "../schemas/basic";
+import { type IBook } from "../types/advanced";
 
 export async function getUserBasicInfo(_id: string) {
   const user = await GUser.findById(_id).catch(err => {
@@ -204,8 +205,7 @@ export async function verifyToken(token: string) {
 
 export async function getAllUsers() {
   const users = await GUser.find({})
-    .select("_id issues books shortUrl")
-    .populate("issues books shortUrl")
+    .select("_id")
     .exec()
     .catch(err => {
       console.error(err);
@@ -215,4 +215,48 @@ export async function getAllUsers() {
   if (users.length === 0)
     return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
   return users;
+}
+
+export async function getUserInfo(user: string) {
+  if (user === "Anonymous") {
+    const shortUrl = await Url.find({ username: process.env.DUMP_USER }).catch(
+      err => {
+        console.error(err);
+        return { error: ERROR_URL.COULD_NOT_FIND, category: "url" };
+      },
+    );
+    if ("error" in shortUrl) return shortUrl;
+    const issues = await IssueTracker.find({ created_by: user }).catch(err => {
+      console.error(err);
+      return { error: ERROR_ISSUES.FAIL_FIND, category: "issue" };
+    });
+    if ("error" in issues) return issues;
+    const books: IBook[] = [];
+    const data = {
+      _id: user,
+      books,
+      issues,
+      shortUrl,
+    };
+    return data;
+  } else {
+    const userInfo = await GUser.findById(user)
+      .select("_id issues books shortUrl")
+      .populate("issues books shortUrl")
+      .exec()
+      .catch(err => {
+        console.error(err);
+        return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
+      });
+    if (userInfo === null)
+      return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
+    if ("error" in userInfo) return userInfo;
+    const data = {
+      _id: userInfo._id,
+      books: userInfo.books,
+      issues: userInfo.issues,
+      shortUrl: userInfo.shortUrl,
+    };
+    return data;
+  }
 }

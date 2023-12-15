@@ -3,7 +3,6 @@ import * as GlobalController from "../controllers/global";
 import extratorUser from "../middlewares/extractorUser";
 
 export const globalRouter = Router();
-
 globalRouter
   .route("/user")
   .post(GlobalController.createUser)
@@ -14,5 +13,8 @@ globalRouter.route("/verify-user").post(GlobalController.verifyLogin);
 globalRouter.route("/verify-admin").post(GlobalController.verifyAdmin);
 globalRouter.route("/verify-token").post(GlobalController.verifyToken);
 globalRouter
-  .route(`/${process.env.ROUTE_ADMIN}/admin`)
+  .route(`/${process.env.VITE_ROUTE_ADMIN}/admin`)
   .get(extratorUser, GlobalController.getAllUsers);
+globalRouter
+  .route(`/${process.env.VITE_ROUTE_ADMIN}/admin/:id`)
+  .get(extratorUser, GlobalController.getUserInfo);
