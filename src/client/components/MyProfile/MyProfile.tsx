@@ -4,8 +4,10 @@ import UnauthorizedAccess from "../NotFound/AuthError"
 import { type ChangeEvent, useState, useEffect, type FormEvent } from "react"
 import type { UserInfo, ImgProfile } from "../../types"
 import { Link } from "react-router-dom"
+import { useUser } from "../../store/user"
 
 export default function MyProfile() {
+    const { logoffUser } = useUser()
     const { data, error, errorAuth, updateInfo } = useProfile({})
     const [aboutMe, setAboutMe] = useState("")
     const [imgProfile, setImgProfile] = useState<ImgProfile>("type-img-1")
@@ -60,6 +62,7 @@ export default function MyProfile() {
                         <div>
                             <h4>Later change to an img with {data.img}</h4>
                             <h2>Welcome {data.username}</h2>
+                            <button onClick={logoffUser}>Log off</button>
                             {data.bio !== "" ? <p>About me: <br />{data.bio}</p> : <p>Update your profile so you can tell us a bit about you!</p>}
                             <button onClick={() => {
                                 setIsUpdating(true)
