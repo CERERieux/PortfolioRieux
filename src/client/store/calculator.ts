@@ -7,6 +7,8 @@ export const TYPE_INPUT = {
   EQUAL: "equal",
   CLEAR: "clear",
   BACK: "back",
+  ANS: "ans",
+  POWER: "on",
 };
 
 export const OPERATOR_NO_START = "+*/";
