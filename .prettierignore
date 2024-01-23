@@ -3,3 +3,8 @@ package-lock.json
 pnpm-lock.yaml
 tsconfig.json
 vite.config.ts
+.eslintrc.js
+postcss.config.js
+tailwind.config.js
+src/server
+types.d.ts
