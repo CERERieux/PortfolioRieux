@@ -97,11 +97,9 @@ export default function Calculator() {
   }, [display, log]);
 
   return (
-    <div className="mx-auto flex max-w-screen-lg flex-col items-center">
-      <header>
-        <h2 className="pb-3 pt-6 font-logCalculator text-3xl">Calculator</h2>
-      </header>
-      <main className="mt-6 flex min-w-full flex-col items-center justify-between gap-12 md:flex-row md:px-7">
+    <main className="mx-auto flex max-w-screen-lg flex-col items-center">
+      <h2 className="pb-3 pt-6 font-logCalculator text-3xl">Calculator</h2>
+      <div className="mt-6 flex min-w-full flex-col items-center justify-between gap-12 md:flex-row md:px-7">
         <div className="grid w-[400px] grid-cols-4 gap-3 rounded-xl border-4 border-slate-800 bg-slate-700 px-5 pb-8 pt-6 shadow-2xl md:max-w-md">
           <div className="col-span-4 overflow-hidden rounded-md bg-lime-400 px-2 py-1 text-end font-digitalDisplay">
             <p className="text-3xl">{display}</p>
@@ -143,7 +141,7 @@ export default function Calculator() {
             ))}
           </ul>
         </section>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
