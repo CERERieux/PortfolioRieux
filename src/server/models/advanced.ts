@@ -559,7 +559,7 @@ export class Translator {
         // If word was a complete match, we replace the american word with the british one
         this.input = this.input.replace(
           regex,
-          `<span class="highlight">${AMERICAN_ONLY[word]}</span>`,
+          `<span class="highlight"><b>${AMERICAN_ONLY[word]}</b></span>`,
         );
       }
     }
@@ -571,7 +571,7 @@ export class Translator {
       while (regex.test(this.input)) {
         this.input = this.input.replace(
           regex,
-          `<span class="highlight">${AMER_TO_BRIT_SPELLING[spelling]}</span>`,
+          `<span class="highlight"><b>${AMER_TO_BRIT_SPELLING[spelling]}</b></span>`,
         );
       }
     }
@@ -585,10 +585,10 @@ export class Translator {
         wordsInput = wordsInput.map(word => {
           // If we found a title, replace it, if not just return the word
           if (word.toLowerCase() === titles) {
-            return `<span class="highlight">${word.slice(
+            return `<span class="highlight"><b>${word.slice(
               0,
               word.length - 1,
-            )}</span>`;
+            )}</b></span>`;
           }
           return word;
         });
@@ -602,7 +602,7 @@ export class Translator {
         // If it's the time
         if (word.includes(":") && word.length > 3) {
           word = word.replace(":", "."); // Repalce ":" with "." as the british format time
-          word = `<span class="highlight">${word}</span>`;
+          word = `<span class="highlight"><b>${word}</b></span>`;
         }
         return word;
       });
@@ -636,7 +636,7 @@ export class Translator {
           // If the word is valid then we replace the american word with the british one
           this.input = this.input.replace(
             regex,
-            `<span class="highlight">${BRITISH_ONLY[word]}</span>`,
+            `<span class="highlight"><b>${BRITISH_ONLY[word]}</b></span>`,
           );
         }
       } else if (regex.test(this.input)) {
@@ -648,11 +648,11 @@ export class Translator {
           if (wordInput.indexOf(".") === lastCharWord) {
             // Remove the dot to make the comparision, if it match, replace it by the british one
             if (wordInput.slice(0, lastCharWord).toLowerCase() === word) {
-              return `<span class="highlight">${BRITISH_ONLY[word]}</span>.`;
+              return `<span class="highlight"><b>${BRITISH_ONLY[word]}</b></span>.`;
             }
           } else if (wordInput.toLowerCase() === word) {
             // If it don't contain the dot, just check if it match the word to replace it
-            return `<span class="highlight">${BRITISH_ONLY[word]}</span>`;
+            return `<span class="highlight"><b>${BRITISH_ONLY[word]}</b></span>`;
           }
           return wordInput;
         });
@@ -668,7 +668,7 @@ export class Translator {
         // While we have words to modify, we replace the british word with the american one
         this.input = this.input.replace(
           regex,
-          `<span class="highlight">${spelling}</span>`,
+          `<span class="highlight"><b>${spelling}</b></span>`,
         );
       }
     }
@@ -688,9 +688,9 @@ export class Translator {
           let newWord = word;
           // If both sides are numbers, then we make the new time word
           if (!isNaN(num1) && !isNaN(num2)) {
-            newWord = `<span class="highlight">${numbers
+            newWord = `<span class="highlight"><b>${numbers
               .slice(0, 2)
-              .join(":")}</span>`;
+              .join(":")}</b></span>`;
           }
           // If the time has a dot at the end, we add it
           if (word.charAt(word.length - 1) === ".") {
@@ -713,7 +713,7 @@ export class Translator {
         wordsInput = wordsInput.map(word => {
           // If we have a match, just add a dot to the word
           if (word.toLowerCase() === AMER_TO_BRIT_TITLES[titles]) {
-            return `<span class="highlight">${word}.</span>`;
+            return `<span class="highlight"><b>${word}.</b></span>`;
           }
           return word;
         });
