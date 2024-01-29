@@ -78,6 +78,12 @@ export interface CreateThread {
   password: string;
 }
 
+type Mode = "american-to-british" | "british-to-american";
+export interface TranslateData {
+  locale: Mode
+  text: string
+}
+
 /** ----------------------------------------------------------------------- */
 
 export interface User {
