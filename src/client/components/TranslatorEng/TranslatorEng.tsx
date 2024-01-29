@@ -1,57 +1,14 @@
-import { type FormEvent, type ChangeEvent, useState } from "react";
-import type { TranslateResult } from "../../types";
 import { sanitizeInput } from "../../utils/sanitize";
-
-const AME_TO_BRIT = "american-to-british";
-const BRIT_TO_AME = "british-to-american";
-type mode = "american-to-british" | "british-to-american";
+import { useTranslator, AME_TO_BRIT } from "../../hooks/useTranslator";
 
 export default function TranslatorEng() {
-  const [mode, setMode] = useState<mode>(AME_TO_BRIT);
-  const [userInput, setUserInput] = useState("");
-  const [error, setError] = useState("");
-  const [translation, setTranslation] = useState("");
+  const { error, translation, handleInput, handleMode, mode, userInput } =
+    useTranslator();
+
   const stylesFrom = "h-1/3 w-full bg-contain bg-left transition-all";
   const stylesTo = "h-1/3 w-full bg-contain bg-right transition-all";
   const usaFlag = "bg-[url('/USAFlag.svg')]";
   const ukFlag = "bg-[url('/UKFlag.svg')]";
-
-  const handleForm = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const resultTranslation = await fetch("/cYSvQmg9kR/advanced/translate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        locale: mode,
-        text: userInput,
-      }),
-    }).then(async data => {
-      if (data.ok) {
-        const resultData: TranslateResult = await data.json();
-        return resultData;
-      }
-      return { error: "Can't translate your text right now" };
-    });
-
-    if ("error" in resultTranslation) {
-      setError(resultTranslation.error);
-      setTranslation("");
-    } else {
-      setError("");
-      setTranslation(resultTranslation.translation);
-    }
-  };
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserInput(e.target.value);
-  };
-
-  const handleMode = () => {
-    if (mode === AME_TO_BRIT) setMode(BRIT_TO_AME);
-    else setMode(AME_TO_BRIT);
-  };
 
   return (
     <main className="flex h-full w-full flex-col place-items-center gap-6 overflow-y-scroll bg-slate-50 py-6">
@@ -61,10 +18,11 @@ export default function TranslatorEng() {
         <input
           type="checkbox"
           className="peer sr-only"
+          name="toggleModeTranslator"
           checked={mode !== AME_TO_BRIT}
           onChange={handleMode}
         />
-        <div className="flex h-6 w-44 justify-between rounded-full bg-gray-200 pl-2.5 pr-[1.3rem] *:z-10 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-[5.4rem] after:rounded-full after:border after:border-gray-300 after:bg-slate-50 after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full [&:nth-child(1)]:[&_p]:opacity-100 peer-checked:[&:nth-child(1)]:[&_p]:opacity-60 [&:nth-child(2)]:[&_p]:opacity-60 peer-checked:[&:nth-child(2)]:[&_p]:opacity-100">
+        <div className="flex h-6 w-[11.05rem] justify-between rounded-full bg-gray-200 pl-2.5 pr-[1.3rem] *:z-10 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-[5.4rem] after:rounded-full after:border after:border-gray-300 after:bg-slate-50 after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full [&:nth-child(1)]:[&_p]:opacity-100 peer-checked:[&:nth-child(1)]:[&_p]:opacity-60 [&:nth-child(2)]:[&_p]:opacity-60 peer-checked:[&:nth-child(2)]:[&_p]:opacity-100">
           <p className="">American</p>
           <p className="">British</p>
         </div>
@@ -79,10 +37,7 @@ export default function TranslatorEng() {
             mode === AME_TO_BRIT ? usaFlag : ukFlag
           } shadow-sm lg:w-[49%]`}
         >
-          <form
-            onSubmit={handleForm}
-            className="h-full w-full bg-gradient-to-r from-transparent to-white to-30% px-4 pt-3"
-          >
+          <div className="h-full w-full bg-gradient-to-r from-transparent to-white to-30% px-4 pt-3">
             <label className="flex flex-col gap-4">
               <span className="ml-40 text-pretty px-2 py-1 lg:ml-48">
                 Introduce the {mode === AME_TO_BRIT ? "american " : "british "}
@@ -98,7 +53,7 @@ export default function TranslatorEng() {
                 autoComplete="off"
               />
             </label>
-          </form>
+          </div>
         </div>
         {error === "" && (
           <p className="order-1 w-full bg-red-100 px-4 py-2 text-center text-sm text-red-900 empty:hidden lg:h-10 lg:text-base">
@@ -114,11 +69,11 @@ export default function TranslatorEng() {
             <h3 className="text-lg">Translated text:</h3>
             {translation !== "" ? (
               <p
-                className="border border-gray-300 bg-gradient-to-l from-white/85 from-10% px-4 py-1 [-webkit-text-stroke:0.05px_white] lg:my-4 [&_span]:text-lime-600"
+                className="mx-3 border border-gray-300 bg-gradient-to-l from-white/85 from-10% px-4 py-1 [-webkit-text-stroke:0.05px_white] lg:my-4 [&_span]:text-lime-600"
                 dangerouslySetInnerHTML={{ __html: sanitizeInput(translation) }}
               ></p>
             ) : (
-              <p className="mx-3 border border-gray-300 bg-gradient-to-l from-white/85 from-10% px-4 py-1 [-webkit-text-stroke:0.05px_white] lg:my-5 ">
+              <p className="mx-3 border border-gray-300 bg-gradient-to-l from-white/85 from-10% px-4 py-1 text-slate-500 [-webkit-text-stroke:0.05px_white] lg:my-4 ">
                 Your result will be shown here!
               </p>
             )}

@@ -17,6 +17,7 @@
     "helmet": "7.0.0",
     "isomorphic-dompurify": "1.9.0",
     "jsonwebtoken": "9.0.2",
+    "just-debounce-it": "3.2.0",
     "marked": "8.0.1",
     "mongodb": "6.1.0",
     "mongoose": "7.6.3",
