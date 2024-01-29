@@ -1,4 +1,4 @@
 dist
 .eslintrc.js
-tailwind.congif.js
+tailwind.config.js
 postcss.config.js
