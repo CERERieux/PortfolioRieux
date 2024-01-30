@@ -13,6 +13,8 @@ module.exports = {
         logCalculator: ['Oxanium', ...defaultTheme.fontFamily.sans],
         digitalDisplay: ['"Chakra Petch"', ...defaultTheme.fontFamily.serif],
         buttonCalculator: ['Sriracha', ...defaultTheme.fontFamily.mono],
+        comic: ['Luckiest Guy', ...defaultTheme.fontFamily.sans],
+        elegant: ['Italianno', ...defaultTheme.fontFamily.serif]
       }
     },
   },

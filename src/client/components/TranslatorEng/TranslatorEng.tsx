@@ -12,7 +12,11 @@ export default function TranslatorEng() {
 
   return (
     <main className="flex h-full w-full flex-col place-items-center gap-6 overflow-y-scroll bg-slate-50 py-6">
-      <h2 className="text-2xl">Translator American - British</h2>
+      <h2 className="text-xl">
+        Translator{" "}
+        <span className="font-comic text-xl uppercase">American</span> -{" "}
+        <span className="font-elegant text-3xl">British</span>
+      </h2>
 
       <label className="relative inline-flex cursor-pointer items-center">
         <input
