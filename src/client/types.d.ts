@@ -267,3 +267,11 @@ export interface ReplyOperation {
 export interface DeleteReply extends ReplyOperation {
   password: string;
 }
+
+export interface ConverterResult {
+    initNum: number;
+    initUnit: string;
+    returnNum: number;
+    returnUnit: string;
+    string: string;
+}
