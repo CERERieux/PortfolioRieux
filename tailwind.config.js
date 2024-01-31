@@ -10,11 +10,12 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        logCalculator: ['Oxanium', ...defaultTheme.fontFamily.sans],
-        digitalDisplay: ['"Chakra Petch"', ...defaultTheme.fontFamily.serif],
         buttonCalculator: ['Sriracha', ...defaultTheme.fontFamily.mono],
         comic: ['Luckiest Guy', ...defaultTheme.fontFamily.sans],
-        elegant: ['Italianno', ...defaultTheme.fontFamily.serif]
+        digitalDisplay: ['"Chakra Petch"', ...defaultTheme.fontFamily.serif],
+        elegant: ['Italianno', ...defaultTheme.fontFamily.serif],
+        logCalculator: ['Oxanium', ...defaultTheme.fontFamily.sans],
+        sketch: ['Rubik Doodle Shadow', ...defaultTheme.fontFamily.sans],
       }
     },
   },
