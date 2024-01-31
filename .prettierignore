@@ -7,4 +7,3 @@ vite.config.ts
 postcss.config.js
 tailwind.config.js
 src/server
-types.d.ts

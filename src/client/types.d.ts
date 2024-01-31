@@ -80,8 +80,8 @@ export interface CreateThread {
 
 type Mode = "american-to-british" | "british-to-american";
 export interface TranslateData {
-  locale: Mode
-  text: string
+  locale: Mode;
+  text: string;
 }
 
 /** ----------------------------------------------------------------------- */
@@ -109,6 +109,10 @@ export type CauseError =
 export interface ErrorAuth {
   message: string;
   cause: null | CauseError;
+}
+
+export interface Styles {
+  styles?: string;
 }
 
 // Axios types
@@ -269,9 +273,9 @@ export interface DeleteReply extends ReplyOperation {
 }
 
 export interface ConverterResult {
-    initNum: number;
-    initUnit: string;
-    returnNum: number;
-    returnUnit: string;
-    string: string;
+  initNum: number;
+  initUnit: string;
+  returnNum: number;
+  returnUnit: string;
+  string: string;
 }
