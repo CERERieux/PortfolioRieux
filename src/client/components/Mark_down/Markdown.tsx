@@ -26,11 +26,12 @@ export default function Markdown() {
     size,
   } = useMarkdown();
   const hide = size === "max" ? "hidden" : "";
-  const previewHeight = hide === "hidden" ? "h-full" : "h-2/5 md:h-3/5";
+  const previewHeight =
+    hide === "hidden" ? "h-full shadow-none" : "h-2/5 md:h-3/5";
   return (
-    <div className="flex h-full w-full flex-col items-center justify-around gap-4 bg-slate-100">
+    <div className="flex h-full w-full flex-col items-center justify-around gap-4 bg-gradient-to-b from-lime-100 to-60%">
       <header
-        className={`flex h-3/5 w-full flex-col items-center justify-center gap-4 bg-slate-100 px-6 py-2 md:h-2/5 md:flex-row ${hide}`}
+        className={`flex h-3/5 w-full flex-col items-center justify-center gap-4 px-6 py-2 md:h-2/5 md:flex-row ${hide}`}
       >
         <section className="w-full bg-white px-4 py-2 shadow-md md:w-1/3">
           <h1 className="font-sketch text-2xl">Markdown parser</h1>

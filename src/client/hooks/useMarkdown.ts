@@ -6,7 +6,7 @@ import { sanitizeInput } from "../utils/sanitize";
 const PREVIEW_TEXT = `# Markdown Parser
 ## A preview of what you can do with Markdown!
 
-You can put a link that send you to a Youtube video [OMORI - Forest Frenzy](https://www.youtube.com/watch?v=r4XqG6nnvkY).
+You can put a link that send you to a Youtube video: [OMORI - Forest Frenzy](https://www.youtube.com/watch?v=r4XqG6nnvkY).
 (**Note:** This link will not open a new window...)  
 
 You can put a bit of code, look: \`let x = 9\`.
