@@ -35,6 +35,9 @@ export const useUser = create<UserState>((set, get) => ({
         error: createdUser.error,
         action: null,
       });
+      setTimeout(() => {
+        set({ error: null });
+      }, 4000);
       return false;
     } else {
       // If it went well, assign the action to the state and notify it later
@@ -42,6 +45,9 @@ export const useUser = create<UserState>((set, get) => ({
         action: createdUser.action,
         error: null,
       });
+      setTimeout(() => {
+        set({ action: null });
+      }, 4000);
       return true;
     }
   },
@@ -57,6 +63,9 @@ export const useUser = create<UserState>((set, get) => ({
         error: loggedUser.error,
         action: null,
       });
+      setTimeout(() => {
+        set({ error: null });
+      }, 4000);
       return false;
     } else {
       // If it went well, assign the action to the state and notify it later
@@ -66,6 +75,9 @@ export const useUser = create<UserState>((set, get) => ({
         action: `Successful login, ${loggedUser.username}.`,
         error: null,
       });
+      setTimeout(() => {
+        set({ action: null });
+      }, 4000);
       // And save the token and username in the local storage
       window.localStorage.setItem(TOKEN_NAME, loggedUser.token);
       window.localStorage.setItem(USER_NAME, loggedUser.username);
@@ -87,6 +99,9 @@ export const useUser = create<UserState>((set, get) => ({
         error: loggedAdmin.error,
         action: null,
       });
+      setTimeout(() => {
+        set({ error: null });
+      }, 4000);
       return false;
     } else {
       // If it went well, assign the action to the state and notify it later
@@ -96,6 +111,9 @@ export const useUser = create<UserState>((set, get) => ({
         action: `Successful login, ${loggedAdmin.username}.`,
         error: null,
       });
+      setTimeout(() => {
+        set({ action: null });
+      }, 4000);
       // And save the token and username in the local storage
       window.localStorage.setItem(TOKEN_NAME, loggedAdmin.token);
       window.localStorage.setItem(USER_NAME, loggedAdmin.username);
