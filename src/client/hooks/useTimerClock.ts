@@ -86,5 +86,6 @@ export function useTimerClock() {
   return {
     clockReset: handleClockReset,
     pausePlayClock: handleTimer,
+    clockRunning,
   };
 }
