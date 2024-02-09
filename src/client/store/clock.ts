@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import { create } from "zustand";
 
 export const CLOCKMODES = {
@@ -10,9 +11,19 @@ interface State {
   time: string;
   session: number;
   breakTime: number;
+  editingSession: boolean;
+  editingBreak: boolean;
+  valueSession: string;
+  valueBreak: string;
+  errorSession: string | null;
+  errorBreak: string | null;
   incrementTimer: (modeToIncrement: string) => void;
   decrementTimer: (modeToDecrement: string) => void;
   setTimer: (time: string) => void;
+  setEditingSession: () => void;
+  setEditingBreak: () => void;
+  setValueSession: (e: ChangeEvent<HTMLInputElement>) => void;
+  setValueBreak: (e: ChangeEvent<HTMLInputElement>) => void;
   resetClock: () => void;
 }
 
@@ -23,6 +34,13 @@ export const useClockStore = create<State>((set, get) => ({
   time: "25:00",
   session: 25,
   breakTime: 5,
+  editingSession: false,
+  editingBreak: false,
+  valueSession: "",
+  valueBreak: "",
+  errorSession: null,
+  errorBreak: null,
+
   // And handlers to update this state
   incrementTimer: modeToIncrement => {
     const { session, breakTime } = get();
@@ -73,6 +91,47 @@ export const useClockStore = create<State>((set, get) => ({
     } else set({ time: newTime });
   },
 
+  // Function to set manual editing of the periods
+  setEditingSession: () => {
+    const { editingSession, session, valueSession } = get();
+    if (!editingSession) {
+      set({ editingSession: !editingSession, valueSession: "" + session });
+    } else {
+      const timer = parseInt(valueSession);
+      const time = timer < 10 ? `0${timer}:00` : `${timer}:00`;
+      set({ editingSession: !editingSession, time, session: timer });
+    }
+  },
+  setEditingBreak: () => {
+    const { editingBreak, breakTime, valueBreak } = get();
+    if (!editingBreak) {
+      set({ editingBreak: !editingBreak, valueBreak: "" + breakTime });
+    } else {
+      const timer = parseInt(valueBreak);
+      set({ editingBreak: !editingBreak, breakTime: timer });
+    }
+  },
+
+  // Function to modify the clock with the value of the input element
+  setValueSession: (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (e.target.checkValidity()) {
+      set({ valueSession: newValue, errorSession: null });
+    } else {
+      const error = errorInput(e.target.validity);
+      set({ valueSession: newValue, errorSession: error });
+    }
+  },
+  setValueBreak: (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (e.target.checkValidity()) {
+      set({ valueBreak: newValue, errorBreak: null });
+    } else {
+      const error = errorInput(e.target.validity);
+      set({ valueBreak: newValue, errorBreak: error });
+    }
+  },
+
   resetClock: () => {
     // Reset the clock to the default state
     set({
@@ -80,6 +139,20 @@ export const useClockStore = create<State>((set, get) => ({
       time: "25:00",
       session: 25,
       breakTime: 5,
+      editingSession: false,
+      editingBreak: false,
+      errorBreak: null,
+      errorSession: null,
+      valueBreak: "",
+      valueSession: "",
     });
   },
 }));
+
+function errorInput(validity: ValidityState) {
+  if (validity.badInput) return "Only number inputs are allowed.";
+  else if (validity.rangeUnderflow) return "The lowest valid value is 1.";
+  else if (validity.rangeOverflow) return "The highest valid value is 60.";
+  else if (validity.stepMismatch) return "Only integer numbers are allowed.";
+  else if (validity.valueMissing) return "Don't leave the input field empty.";
+}
