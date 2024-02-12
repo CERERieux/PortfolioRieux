@@ -2,11 +2,12 @@ import { useState, type FormEvent, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../SystemDesign/Button";
 import LoginContainer from "../SystemDesign/LoginContainer";
-import LoginForm from "../SystemDesign/LoginForm";
+import Login from "../SystemDesign/Form";
 import LabelForm from "../SystemDesign/LabelForm";
 import TitleInput from "../SystemDesign/TitleInput";
 import TitleForm from "../SystemDesign/TitleForm";
 import type { User } from "../../types";
+import { TextInput } from "../SystemDesign/Input";
 
 interface Props {
   loginUser: ({ username, password }: User) => Promise<boolean>;
@@ -40,35 +41,41 @@ export default function LogInForm({ loginUser }: Props) {
       <TitleForm firstColor="first-letter:text-sky-600">
         Login to have access to our services!
       </TitleForm>
-      <LoginForm onSubmit={handleLogin}>
+      <Login onSubmit={handleLogin}>
         <LabelForm>
-          <TitleInput firstColor="first-letter:text-sky-600">
-            Username:{" "}
+          <TitleInput firstColor="first-letter:text-sky-600 after:content-['*'] after:text-red-400">
+            Username
           </TitleInput>
-          <input
+          <TextInput
             type="text"
             value={id}
             name="username"
             onChange={handleUsername}
             autoComplete="username"
+            placeHolder="Username"
+            lineStyle={false}
+            required={true}
           />
         </LabelForm>
         <LabelForm>
-          <TitleInput firstColor="first-letter:text-sky-600">
-            Password:{" "}
+          <TitleInput firstColor="first-letter:text-sky-600 after:content-['*'] after:text-red-400">
+            Password
           </TitleInput>
-          <input
+          <TextInput
             type="password"
             value={password}
             name="password"
             onChange={handlePassword}
             autoComplete="current-password"
+            placeHolder="Password"
+            lineStyle={false}
+            required={true}
           />
         </LabelForm>
         <Button color="border-sky-700 hover:bg-sky-700" mediaSize="md:w-1/3">
           Login
         </Button>
-      </LoginForm>
+      </Login>
     </LoginContainer>
   );
 }
