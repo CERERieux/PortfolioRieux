@@ -31,7 +31,6 @@ export default function useLogin() {
 
   const handleView = () => {
     setSignIn(state => !state);
-    console.log(signIn);
   };
 
   return {
