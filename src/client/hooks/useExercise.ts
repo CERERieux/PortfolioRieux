@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ExerciseService from "../services/exercises";
-import type { resGetExercise } from "../types";
+import type {
+  NewExerciseHook,
+  resGetExercise,
+  updateExerciseHook,
+} from "../types";
 import { useVerification } from "./useVerification";
 
 /** Custom hook where we do all the operations of exercises
@@ -44,10 +48,21 @@ export function useExercise() {
   return {
     data: getUserExercises.data,
     errorEx: getUserExercises.error,
-    createExercise,
-    updateExercise: updateUserExercise,
-    deleteExercise: deleteUserExercise,
     errorAuth,
-    token,
+    isCreating: createExercise.isPending,
+    isDeleting: deleteUserExercise.isPending,
+    isUpdating: updateUserExercise.isPending,
+    createExercise,
+    newExercise: ({ description, date, status }: NewExerciseHook) => {
+      createExercise.mutate({ description, status, token, date });
+    },
+    deleteExercise: (id: string) => {
+      deleteUserExercise.mutate({ id, token });
+    },
+    deleteUserExercise,
+    updateExercise: ({ description, id, status }: updateExerciseHook) => {
+      updateUserExercise.mutate({ description, id, status, token });
+    },
+    updateUserExercise,
   };
 }
