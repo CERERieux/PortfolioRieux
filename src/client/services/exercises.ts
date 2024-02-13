@@ -33,6 +33,9 @@ export function createNewExercise({
     method: "post",
     headers: { Authorization: `Bearer ${token}` },
     data: { description, status, date },
+  }).catch(err => {
+    console.error(err);
+    return { error: err.response.data.error as string };
   });
 }
 
@@ -47,6 +50,9 @@ export function updateExercise({
     method: "put",
     headers: { Authorization: `Bearer ${token}` },
     data: { status, description },
+  }).catch(err => {
+    console.error(err);
+    return { error: err.response.data.error as string };
   });
 }
 
@@ -55,5 +61,8 @@ export function deleteExercise({ id, token }: SingleOperation) {
     url: `/cYSvQmg9kR/basic/users/exercises/${id}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
+  }).catch(err => {
+    console.error(err);
+    return { error: err.response.data.error as string };
   });
 }
