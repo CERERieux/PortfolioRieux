@@ -179,12 +179,14 @@ export interface NewExercise {
   status: string;
   date?: Date;
 }
+export type NewExerciseHook = Omit<NewExercise, "token">;
 export interface updateExerciseService {
   token: string;
   id: string;
   description: string;
   status: string;
 }
+export type updateExerciseHook = Omit<updateExerciseService, "token">;
 export type ResultUpdate = Pick<IExTracker, "_id" | "description" | "status">;
 export type StatusEx = "Pending" | "Completed" | "Current";
 
