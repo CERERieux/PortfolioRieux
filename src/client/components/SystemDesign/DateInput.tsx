@@ -1,7 +1,6 @@
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 
 interface DateInputProps {
-  noDate?: boolean;
   autoComplete?: string;
   id?: string;
   max?: string;
@@ -26,7 +25,6 @@ export default function DateInput({
   min,
   required,
   step,
-  noDate = true, // Auxiliar to indicate it don't need a date due it will use today's date
   newCycle = false, // Auxiliar to indicate we are in a new cycle and input "modified" flag can be reseted
 }: DateInputProps) {
   const modified = useRef(false); // Flag to see if user already interact with the form
@@ -39,8 +37,6 @@ export default function DateInput({
   const styleLine = lineStyle
     ? "border-x-0 border-t-0 px-2 py-0 font-digitalDisplay uppercase bg-transparent pt-1 focus:ring-0"
     : ""; // Auxiliar to change the look of the input
-  // Auxiliar to give color to the little text below the date input
-  const legendColor = localError !== "" ? "text-red-500" : "text-slate-500";
 
   // Use effect to reset input component in case we keep using it after sending the form
   useEffect(() => {
@@ -56,7 +52,7 @@ export default function DateInput({
       const currentInput = localInput as HTMLInputElement;
       const validity = currentInput.validity;
       // If it's modified we change the flag to display error if is needed
-      if (value !== "" && !modified.current) {
+      if (!modified.current) {
         modified.current = true;
       }
       // Check for validity, if it have an error, display it
@@ -67,7 +63,7 @@ export default function DateInput({
         setLocalError("");
       }
     }
-  }, [value]);
+  }, [value, modified.current]);
 
   // Return a div with the input and the space for the error of the user info
   return (
@@ -86,11 +82,9 @@ export default function DateInput({
         className={`${invalidStyles} ${styleLine} peer invalid:mb-4`}
       />
       <p
-        className={`absolute text-sm italic peer-invalid:-bottom-4 ${legendColor} [font-size:11px] [line-height:1rem]`}
+        className={`absolute text-sm italic text-red-500 [font-size:11px] [line-height:1rem] peer-invalid:-bottom-4`}
       >
-        {localError === ""
-          ? noDate && !modified.current && "Today date is used as default"
-          : localError}
+        {localError}
       </p>
     </div>
   );
