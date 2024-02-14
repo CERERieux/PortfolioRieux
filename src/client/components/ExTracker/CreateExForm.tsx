@@ -1,9 +1,21 @@
-import { useState, type ChangeEvent, type FormEvent, useEffect } from "react";
+import {
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  useEffect,
+  useRef,
+} from "react";
 import type { NewExercise, NewExerciseHook, StatusEx } from "../../types";
 import { isAxiosError } from "axios";
 import type { AxiosResponse } from "axios";
 import type { IExTracker } from "../../../server/types/basic";
 import type { UseMutationResult } from "@tanstack/react-query";
+import Form from "../SystemDesign/Form";
+import LabelForm from "../SystemDesign/LabelForm";
+import { TextInput } from "../SystemDesign/Input";
+import TitleInput from "../SystemDesign/TitleInput";
+import Button from "../SystemDesign/Button";
+import DateInput from "../SystemDesign/DateInput";
 
 interface CreateExFormProps {
   createExercise: UseMutationResult<
@@ -30,6 +42,7 @@ export default function CreateExForm({
 }: CreateExFormProps) {
   useEffect(() => {
     if (createExercise.isSuccess) {
+      newCycle.current = true;
       setDescription("");
       setStatus("Pending");
       setDate(new Date(Date.now()));
@@ -54,6 +67,8 @@ export default function CreateExForm({
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<StatusEx>("Pending");
   const [date, setDate] = useState(new Date(Date.now()));
+  const valueDate = date.toJSON().slice(0, 10);
+  const newCycle = useRef(true);
 
   const handleNewExercise = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,38 +86,72 @@ export default function CreateExForm({
   };
   const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
     const newDate = new Date(e.target.value);
-    setDate(newDate);
+    const year = newDate.getFullYear();
+    if (year < 10000) setDate(newDate);
   };
 
   return (
-    <form onSubmit={handleNewExercise}>
-      <label>
-        Description:{" "}
-        <input
+    <Form
+      submitFn={handleNewExercise}
+      style="items-center gap-6 justify-start"
+      mdMedia="[&_span]:md:w-1/4"
+    >
+      <LabelForm style="justify-start items-center">
+        <TitleInput
+          firstColor="text-sm first-letter:text-sky-400"
+          required={true}
+        >
+          Description
+        </TitleInput>
+        <TextInput
           type="text"
           name="description"
-          id="description"
           value={description}
           onChange={handleDescription}
+          lineStyle={true}
+          autoComplete="off"
+          required={true}
+          newCycle={isCreating}
         />
-      </label>
-      <label>
-        Status:{" "}
+      </LabelForm>
+      <LabelForm style="justify-start items-center">
+        <TitleInput
+          firstColor="text-sm first-letter:text-sky-400"
+          required={true}
+        >
+          Status
+        </TitleInput>
         <select
           name="status"
-          id="status"
           onChange={handleStatus}
           value={status}
+          className=""
         >
           <option value="Pending">Pending</option>
           <option value="Current">Current</option>
           <option value="Completed">Completed</option>
         </select>
-      </label>
-      <label>
-        Date: <input type="date" name="" id="" onChange={handleDate} />
-      </label>
-      <button disabled={isCreating}>Create Exercise</button>
-    </form>
+      </LabelForm>
+      <LabelForm style="justify-start items-center">
+        <TitleInput firstColor="text-sm first-letter:text-sky-400">
+          Date
+        </TitleInput>
+        <DateInput
+          name="date"
+          onChange={handleDate}
+          value={valueDate}
+          lineStyle={true}
+          max={"2099-12-31"}
+          min={"1990-01-01"}
+        />
+      </LabelForm>
+      <Button
+        disabled={isCreating}
+        color="bg-sky-300 hover:bg-sky-700"
+        xSize="w-36"
+      >
+        Create Exercise
+      </Button>
+    </Form>
   );
 }
