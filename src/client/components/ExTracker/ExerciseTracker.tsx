@@ -54,24 +54,41 @@ export default function ExerciseTracker() {
     }
   }, [updateUserExercise.isSuccess]);
 
+  useEffect(() => {
+    if (deleteUserExercise.isSuccess) {
+      setLocalError(null);
+      setAction("Your exercise was deleted successfully!");
+      setTimeout(() => {
+        setAction(null);
+      }, 2000);
+    } else if (deleteUserExercise.isError) {
+      const { error } = deleteUserExercise;
+      if (isAxiosError(error)) {
+        setLocalError(error.response?.data.error);
+      } else {
+        setLocalError("Something went wrong at deleting your exercise...");
+      }
+      setTimeout(() => {
+        setLocalError(null);
+      }, 3000);
+    }
+  }, [deleteUserExercise.isSuccess]);
+
   return (
     <>
       {errorAuth.cause !== null ? (
         <UnauthorizedAccess errorAuth={errorAuth} />
       ) : (
-        <div className="grid h-full w-full grid-cols-4 grid-rows-4">
+        <div className="flex h-full w-full flex-col md:grid md:grid-cols-4 md:grid-rows-4">
           <Link to="/my-profile">
             <button>Return to My Profile</button>
           </Link>
-          <section>
-            {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
-
-            {errorEx !== null && isAxiosError(errorEx) && (
-              <h1>Error: {errorEx.response?.data.error}</h1>
-            )}
-            {action !== null && <ActionMessage>{action}</ActionMessage>}
-          </section>
-          <aside className="col-start-4 row-span-4 bg-amber-50">
+          {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
+          {errorEx !== null && isAxiosError(errorEx) && (
+            <ErrorMessage>Error: {errorEx.response?.data.error}</ErrorMessage>
+          )}
+          {action !== null && <ActionMessage>{action}</ActionMessage>}
+          <aside className="col-start-4 row-span-2 px-4 py-6">
             <CreateExForm
               changeAction={setAction}
               changeLocalError={setLocalError}
@@ -96,10 +113,7 @@ export default function ExerciseTracker() {
                           <p>Status: {ex.status}</p>
                           <p>Date of creation: {date}</p>
                           <DeleteButton
-                            changeAction={setAction}
-                            changeLocalError={setLocalError}
                             deleteExercise={deleteExercise}
-                            deleteUserExercise={deleteUserExercise}
                             id={id}
                             isDeleting={isDeleting}
                           />
