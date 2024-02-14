@@ -7,7 +7,7 @@ import LabelForm from "../SystemDesign/LabelForm";
 import TitleInput from "../SystemDesign/TitleInput";
 import TitleForm from "../SystemDesign/TitleForm";
 import type { User } from "../../types";
-import { TextInput } from "../SystemDesign/Input";
+import Input from "../SystemDesign/Input";
 
 interface Props {
   loginUser: ({ username, password }: User) => Promise<boolean>;
@@ -46,7 +46,7 @@ export default function LogInForm({ loginUser }: Props) {
           <TitleInput firstColor="first-letter:text-sky-600" required>
             Username
           </TitleInput>
-          <TextInput
+          <Input
             type="text"
             value={id}
             name="username"
@@ -61,7 +61,7 @@ export default function LogInForm({ loginUser }: Props) {
           <TitleInput firstColor="first-letter:text-sky-600" required>
             Password
           </TitleInput>
-          <TextInput
+          <Input
             type="password"
             value={password}
             name="password"

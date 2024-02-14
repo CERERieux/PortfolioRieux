@@ -15,7 +15,7 @@ interface TextInputProps {
   newCycle?: boolean;
 }
 
-export function TextInput({
+export default function Input({
   autoComplete,
   id,
   max,
