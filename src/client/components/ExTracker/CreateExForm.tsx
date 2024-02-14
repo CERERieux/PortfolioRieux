@@ -5,17 +5,18 @@ import {
   useEffect,
   useRef,
 } from "react";
-import type { NewExercise, NewExerciseHook, StatusEx } from "../../types";
 import { isAxiosError } from "axios";
+import type { NewExercise, NewExerciseHook, StatusEx } from "../../types";
 import type { AxiosResponse } from "axios";
 import type { IExTracker } from "../../../server/types/basic";
 import type { UseMutationResult } from "@tanstack/react-query";
 import Form from "../SystemDesign/Form";
 import LabelForm from "../SystemDesign/LabelForm";
-import { TextInput } from "../SystemDesign/Input";
+import Input from "../SystemDesign/Input";
 import TitleInput from "../SystemDesign/TitleInput";
 import Button from "../SystemDesign/Button";
 import DateInput from "../SystemDesign/DateInput";
+import SelectInput from "../SystemDesign/SelectInput";
 
 interface CreateExFormProps {
   createExercise: UseMutationResult<
@@ -40,44 +41,59 @@ export default function CreateExForm({
   isCreating,
   newExercise,
 }: CreateExFormProps) {
+  // 3 states to manage the input from user
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState<StatusEx>("Pending");
+  const [date, setDate] = useState(
+    new Date(Date.now()).toISOString().slice(0, 10),
+  );
+  const newCycle = useRef(true); // Flag to help the inputs to detect the start of a new execise data
+
+  // Effect that activates each time we create a new exercise
   useEffect(() => {
+    // If was successful
     if (createExercise.isSuccess) {
-      newCycle.current = true;
-      setDescription("");
-      setStatus("Pending");
-      setDate(new Date(Date.now()));
-      changeLocalError(null);
-      changeAction("Your new exercise was created!");
+      newCycle.current = true; // Indicate we start a new exercise
+      setDescription(""); // Reset the description
+      setStatus("Pending"); // The status
+      setDate(new Date(Date.now()).toISOString().slice(0, 10)); // And date from the form
+      changeLocalError(null); // The error is null since its successful
+      changeAction("Your new exercise was created!"); // Let user know that it was good
+      // And remove it after 2 seconds
       setTimeout(() => {
         changeAction(null);
       }, 2000);
     } else if (createExercise.isError) {
+      // If it was an error, get the error
       const { error } = createExercise;
+      // If it's an error from axios give the error
       if (isAxiosError(error)) {
         changeLocalError(error.response?.data.error);
       } else {
+        // If for some reason isn't axios error, give a generic message
         changeLocalError("Something went wrong at creating your exercise...");
       }
+      // Remove the error after 3 seconds
       setTimeout(() => {
         changeLocalError(null);
       }, 3000);
     }
   }, [createExercise.isSuccess]);
 
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<StatusEx>("Pending");
-  const [date, setDate] = useState(new Date(Date.now()));
-  const valueDate = date.toJSON().slice(0, 10);
-  const newCycle = useRef(true);
-
+  // Function that handle the form, create a new exercise
   const handleNewExercise = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const newDate = new Date(date);
     if (description !== "") {
-      newExercise({ description, date, status });
+      newExercise({ description, date: newDate, status });
     } else {
       changeLocalError("Please fill the description of your exercise");
+      setTimeout(() => {
+        changeLocalError(null);
+      }, 3000);
     }
   };
+  // Handlers for the inputs
   const handleDescription = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription(e.target.value);
   };
@@ -85,11 +101,10 @@ export default function CreateExForm({
     setStatus(e.target.value as StatusEx);
   };
   const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
-    const newDate = new Date(e.target.value);
-    const year = newDate.getFullYear();
-    if (year < 10000) setDate(newDate);
+    setDate(e.target.value);
   };
 
+  // The form that we return
   return (
     <Form
       submitFn={handleNewExercise}
@@ -103,7 +118,7 @@ export default function CreateExForm({
         >
           Description
         </TitleInput>
-        <TextInput
+        <Input
           type="text"
           name="description"
           value={description}
@@ -121,34 +136,35 @@ export default function CreateExForm({
         >
           Status
         </TitleInput>
-        <select
+        <SelectInput
           name="status"
           onChange={handleStatus}
           value={status}
-          className=""
+          lineStyle={true}
         >
           <option value="Pending">Pending</option>
           <option value="Current">Current</option>
           <option value="Completed">Completed</option>
-        </select>
+        </SelectInput>
       </LabelForm>
       <LabelForm style="justify-start items-center">
-        <TitleInput firstColor="text-sm first-letter:text-sky-400">
+        <TitleInput firstColor="text-sm first-letter:text-sky-400" required>
           Date
         </TitleInput>
         <DateInput
           name="date"
           onChange={handleDate}
-          value={valueDate}
+          value={date}
           lineStyle={true}
           max={"2099-12-31"}
           min={"1990-01-01"}
           newCycle={isCreating}
+          required={true}
         />
       </LabelForm>
       <Button
         disabled={isCreating}
-        color="bg-sky-300 hover:bg-sky-700"
+        color="bg-sky-200 hover:bg-sky-700 border-sky-500 hover:border-sky-900 text-sky-700 shadow-sm shadow-black/10 active:scale-90 active:shadow-none transition-all"
         xSize="w-36"
       >
         Create Exercise
