@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
-import Login from "../SystemDesign/Form";
+import Form from "../SystemDesign/Form";
 import TitleInput from "../SystemDesign/TitleInput";
 import LoginContainer from "../SystemDesign/LoginContainer";
 import TitleForm from "../SystemDesign/TitleForm";
@@ -37,9 +37,9 @@ export default function SignInForm({ createUser, setSignIn }: Props) {
       <TitleForm firstColor="first-letter:text-lime-600">
         Create a new user to have access to our services!
       </TitleForm>
-      <Login onSubmit={handleCreateUser}>
+      <Form submitAsync={handleCreateUser}>
         <LabelForm>
-          <TitleInput firstColor="first-letter:text-lime-600 after:content-['*'] after:text-red-400">
+          <TitleInput firstColor="first-letter:text-lime-600" required>
             Username
           </TitleInput>
           <TextInput
@@ -54,7 +54,7 @@ export default function SignInForm({ createUser, setSignIn }: Props) {
           />
         </LabelForm>
         <LabelForm>
-          <TitleInput firstColor="first-letter:text-lime-600 after:content-['*'] after:text-red-400">
+          <TitleInput firstColor="first-letter:text-lime-600" required>
             Password
           </TitleInput>
           <TextInput
@@ -71,7 +71,7 @@ export default function SignInForm({ createUser, setSignIn }: Props) {
         <Button color="border-lime-700 hover:bg-lime-700" mediaSize="md:w-1/3">
           Create
         </Button>
-      </Login>
+      </Form>
     </LoginContainer>
   );
 }

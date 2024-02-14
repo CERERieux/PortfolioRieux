@@ -2,7 +2,7 @@ import { useState, type FormEvent, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../SystemDesign/Button";
 import LoginContainer from "../SystemDesign/LoginContainer";
-import Login from "../SystemDesign/Form";
+import Form from "../SystemDesign/Form";
 import LabelForm from "../SystemDesign/LabelForm";
 import TitleInput from "../SystemDesign/TitleInput";
 import TitleForm from "../SystemDesign/TitleForm";
@@ -41,9 +41,9 @@ export default function LogInForm({ loginUser }: Props) {
       <TitleForm firstColor="first-letter:text-sky-600">
         Login to have access to our services!
       </TitleForm>
-      <Login onSubmit={handleLogin}>
+      <Form submitAsync={handleLogin}>
         <LabelForm>
-          <TitleInput firstColor="first-letter:text-sky-600 after:content-['*'] after:text-red-400">
+          <TitleInput firstColor="first-letter:text-sky-600" required>
             Username
           </TitleInput>
           <TextInput
@@ -58,7 +58,7 @@ export default function LogInForm({ loginUser }: Props) {
           />
         </LabelForm>
         <LabelForm>
-          <TitleInput firstColor="first-letter:text-sky-600 after:content-['*'] after:text-red-400">
+          <TitleInput firstColor="first-letter:text-sky-600" required>
             Password
           </TitleInput>
           <TextInput
@@ -75,7 +75,7 @@ export default function LogInForm({ loginUser }: Props) {
         <Button color="border-sky-700 hover:bg-sky-700" mediaSize="md:w-1/3">
           Login
         </Button>
-      </Login>
+      </Form>
     </LoginContainer>
   );
 }
