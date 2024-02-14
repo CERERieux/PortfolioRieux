@@ -143,6 +143,7 @@ export default function CreateExForm({
           lineStyle={true}
           max={"2099-12-31"}
           min={"1990-01-01"}
+          newCycle={isCreating}
         />
       </LabelForm>
       <Button
