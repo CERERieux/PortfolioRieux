@@ -1,4 +1,5 @@
-import Button from "../SystemDesign/Button";
+import TrashCan from "../Icons/TrashCan";
+import ActionButton from "../SystemDesign/ActionButton";
 
 interface DeleteButtonProps {
   id: string;
@@ -11,19 +12,21 @@ export default function DeleteButton({
   deleteExercise,
   isDeleting,
 }: DeleteButtonProps) {
-  const handleDelete = (id: string) => {
+  const handleDelete = () => {
     deleteExercise(id);
   };
   return (
-    <Button
-      onClick={() => {
-        handleDelete(id);
-      }}
+    <ActionButton
+      onClick={handleDelete}
       disabled={isDeleting}
-      color="bg-red-300 hover:bg-red-800"
-      xSize="w-20"
+      coverColor="bg-slate-200 shadow-slate-100"
+      hoverColor="hover:bg-red-100 hover:shadow-red-400/30 hover:text-red-500"
+      groupName={["group/delete", "group-hover/delete:block"]}
+      position="top-0 right-8"
+      tooltipText="Delete"
+      tooltipPos="-bottom-5 -left-0"
     >
-      Delete
-    </Button>
+      <TrashCan size="24" />
+    </ActionButton>
   );
 }
