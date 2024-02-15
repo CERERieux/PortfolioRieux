@@ -17,6 +17,7 @@ import TitleInput from "../SystemDesign/TitleInput";
 import Button from "../SystemDesign/Button";
 import DateInput from "../SystemDesign/DateInput";
 import SelectInput from "../SystemDesign/SelectInput";
+import convertTodayDate from "../../utils/convertTodayDate";
 
 interface CreateExFormProps {
   createExercise: UseMutationResult<
@@ -45,7 +46,7 @@ export default function CreateExForm({
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<StatusEx>("Pending");
   const [date, setDate] = useState(
-    new Date(Date.now()).toISOString().slice(0, 10),
+    convertTodayDate(new Date(Date.now()).toDateString()),
   );
   const newCycle = useRef(true); // Flag to help the inputs to detect the start of a new execise data
 
@@ -56,7 +57,7 @@ export default function CreateExForm({
       newCycle.current = true; // Indicate we start a new exercise
       setDescription(""); // Reset the description
       setStatus("Pending"); // The status
-      setDate(new Date(Date.now()).toISOString().slice(0, 10)); // And date from the form
+      setDate(convertTodayDate(new Date(Date.now()).toDateString())); // And date from the form
       changeLocalError(null); // The error is null since its successful
       changeAction("Your new exercise was created!"); // Let user know that it was good
       // And remove it after 2 seconds
@@ -149,7 +150,7 @@ export default function CreateExForm({
       </LabelForm>
       <LabelForm style="justify-start items-center">
         <TitleInput firstColor="text-sm first-letter:text-sky-400" required>
-          Date
+          End Date
         </TitleInput>
         <DateInput
           name="date"
