@@ -113,6 +113,7 @@ export interface ErrorAuth {
 
 export interface Styles {
   styles?: string;
+  size?: string;
 }
 
 // Axios types
