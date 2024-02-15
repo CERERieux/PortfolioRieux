@@ -8,21 +8,25 @@ interface TextInputProps {
   name: string;
   placeHolder?: string;
   required?: boolean;
+  size?: number;
   type: string;
   value: string;
   lineStyle: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   newCycle?: boolean;
+  extraStyles?: string;
 }
 
 export default function Input({
   autoComplete,
+  extraStyles,
   id,
   max,
   min,
   name,
   placeHolder,
   required,
+  size,
   type,
   value,
   lineStyle,
@@ -81,7 +85,8 @@ export default function Input({
         type={type}
         value={value}
         onChange={onChange}
-        className={`${invalidStyles} ${styleLine} placeholder:text-sm placeholder:text-gray-300`}
+        className={`${invalidStyles} ${styleLine} ${extraStyles} placeholder:text-sm placeholder:text-gray-300`}
+        size={size}
       />
       <p className="absolute text-sm italic text-red-500 [font-size:11px] [line-height:1rem]">
         {localError}
