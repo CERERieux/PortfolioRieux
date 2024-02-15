@@ -9,6 +9,8 @@ import ActionMessage from "../SystemDesign/ActionMessage";
 import UpdateExForm from "./UpdateExForm";
 import DeleteButton from "./DeleteButton";
 import UnauthorizedAccess from "../NotFound/AuthError";
+import ActionButton from "../SystemDesign/ActionButton";
+import Edit from "../Icons/Edit";
 
 export default function ExerciseTracker() {
   const {
@@ -98,34 +100,44 @@ export default function ExerciseTracker() {
             />
           </aside>
           {data !== undefined ? (
-            <main className="col-span-3 col-start-1 row-span-3 row-start-2 bg-green-50">
+            <main className="col-span-3 col-start-1 row-span-3 row-start-2 ">
               <h2>{data.username}</h2>
               <h3>Number of exercises: {data.count}</h3>
               <ul>
                 {data.log.map(ex => {
-                  const date = new Date(ex.date).toDateString();
+                  const date = new Date(ex.date).toISOString().slice(0, 10);
                   const id = ex._id.toString();
+                  const handleUpdateChange = () => {
+                    setIsUpdate({ id, isUpdate: true });
+                    setDescriptionUpdate(ex.description);
+                    setStatusUpdate(ex.status as StatusEx);
+                  };
                   return (
                     <li key={id}>
                       {!(isUpdate.isUpdate && id === isUpdate.id) ? (
-                        <article>
+                        <article className="relative">
                           <p>Description: {ex.description}</p>
                           <p>Status: {ex.status}</p>
-                          <p>Date of creation: {date}</p>
+                          <p>Finish before of: {date}</p>
                           <DeleteButton
                             deleteExercise={deleteExercise}
                             id={id}
                             isDeleting={isDeleting}
                           />
-                          <button
-                            onClick={() => {
-                              setIsUpdate({ id, isUpdate: true });
-                              setDescriptionUpdate(ex.description);
-                              setStatusUpdate(ex.status as StatusEx);
-                            }}
+                          <ActionButton
+                            onClick={handleUpdateChange}
+                            coverColor="bg-slate-200 shadow-slate-100"
+                            hoverColor="hover:bg-blue-200 hover:shadow-blue-400/30 hover:text-blue-600"
+                            groupName={[
+                              "group/update",
+                              "group-hover/update:block",
+                            ]}
+                            position="right-20 top-0"
+                            tooltipText="Edit"
+                            tooltipPos="left-1 -bottom-5"
                           >
-                            Update
-                          </button>
+                            <Edit size="24" />
+                          </ActionButton>
                         </article>
                       ) : (
                         <div>
