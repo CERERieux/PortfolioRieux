@@ -15,6 +15,7 @@ interface TextInputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   newCycle?: boolean;
   extraStyles?: string;
+  canBeTooLong?: boolean;
 }
 
 export default function Input({
@@ -32,6 +33,7 @@ export default function Input({
   lineStyle,
   onChange,
   newCycle = false, // Auxiliar to indicate we are in a new cycle and input "modified" flag can be reseted
+  canBeTooLong = false, // Auxiliar to activate styles in case text overflow input text
 }: TextInputProps) {
   const modified = useRef(false); // Flag to see if user already interact with the form
   const [localError, setLocalError] = useState(""); // State to save the error that info can have
@@ -43,7 +45,10 @@ export default function Input({
   const styleLine = lineStyle
     ? "border-x-0 border-t-0 bg-transparent py-0 pt-1 focus:ring-0"
     : ""; // Auxiliar to change the look of the input
-
+  const longText =
+    canBeTooLong && size != null && value.length > size - 3
+      ? "bg-gradient-to-l from-sky-200 from-5% to-30%"
+      : "";
   // Use effect to reset input component in case we keep using it after sending the form
   useEffect(() => {
     if (newCycle) {
@@ -74,20 +79,27 @@ export default function Input({
   // Return a div with the input and the space for the error of the user info
   return (
     <div className="relative h-full">
-      <input
-        autoComplete={autoComplete}
-        id={id}
-        maxLength={max}
-        minLength={min}
-        name={name}
-        placeholder={placeHolder}
-        required={required}
-        type={type}
-        value={value}
-        onChange={onChange}
-        className={`${invalidStyles} ${styleLine} ${extraStyles} placeholder:text-sm placeholder:text-gray-300`}
-        size={size}
-      />
+      <div className="relative">
+        {canBeTooLong && (
+          <div
+            className={`absolute right-0 top-0 z-10 h-[95%] w-[10%] ${longText}`}
+          ></div>
+        )}
+        <input
+          autoComplete={autoComplete}
+          id={id}
+          maxLength={max}
+          minLength={min}
+          name={name}
+          placeholder={placeHolder}
+          required={required}
+          type={type}
+          value={value}
+          onChange={onChange}
+          className={`${invalidStyles} ${styleLine} ${extraStyles} placeholder:text-sm placeholder:text-gray-300`}
+          size={size}
+        />
+      </div>
       <p className="absolute text-sm italic text-red-500 [font-size:11px] [line-height:1rem]">
         {localError}
       </p>

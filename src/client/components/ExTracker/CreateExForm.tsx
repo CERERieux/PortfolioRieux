@@ -58,12 +58,22 @@ export default function CreateExForm({
       setDescription(""); // Reset the description
       setStatus("Pending"); // The status
       setDate(convertTodayDate(new Date(Date.now()).toDateString())); // And date from the form
-      changeLocalError(null); // The error is null since its successful
-      changeAction("Your new exercise was created!"); // Let user know that it was good
-      // And remove it after 2 seconds
-      setTimeout(() => {
-        changeAction(null);
-      }, 2000);
+      // We check if data is a good response or an error, if isn't an error
+      if (!("error" in createExercise.data)) {
+        changeLocalError(null); // The error is null since its successful
+        changeAction("Your new exercise was created!"); // Let user know that it was good
+        // And remove it after 2 seconds
+        setTimeout(() => {
+          changeAction(null);
+        }, 2000);
+      } else {
+        changeLocalError(createExercise.data.error); // Else, it's an error and display it
+        changeAction(null); // And keep the action empty
+        // And remove it after 3 seconds
+        setTimeout(() => {
+          changeLocalError(null);
+        }, 3000);
+      }
     } else if (createExercise.isError) {
       // If it was an error, get the error
       const { error } = createExercise;
@@ -128,6 +138,8 @@ export default function CreateExForm({
           autoComplete="off"
           required={true}
           newCycle={isCreating}
+          canBeTooLong
+          size={22}
         />
       </LabelForm>
       <LabelForm style="justify-start items-center">

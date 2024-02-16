@@ -95,7 +95,8 @@ export default function UpdateExForm({
             lineStyle={true}
             name="Desc Update"
             required
-            size={40}
+            size={35}
+            canBeTooLong
           />
         </LabelForm>
         <LabelForm style="justify-start lg:justify-center">
