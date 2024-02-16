@@ -1,6 +1,6 @@
 import { CLOCKMODES, useClockStore } from "../../store/clock";
 import MiniButton from "../SystemDesign/MiniButton";
-import NumericInput from "../SystemDesign/NumericInput";
+import NumericInput from "./InputTime";
 
 interface SessionBoxProps {
   mode: string;
@@ -64,6 +64,7 @@ export default function SessionBox({
                 stepNum={1}
                 value={valueInput}
                 onChange={setValue}
+                required
                 styles="h-6 w-16 border-slate-50/70 bg-gray-600 font-digitalDisplay text-sm text-white shadow-md shadow-black/50"
               />
               minutes
