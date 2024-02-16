@@ -25,26 +25,6 @@ export function useExercise() {
     to: undefined,
   });
 
-  /** Functions to get user exercises */
-  const getUserExercises = useQuery<resGetExercise, Error>({
-    queryKey: ["exercises"],
-    queryFn: () => ExerciseService.getExercises({ token, ...options }),
-    enabled: validFetch && enableSearch,
-  });
-
-  // Effect to reset the state of the search and be able to fetch data again if needed
-  useEffect(() => {
-    // If the fetch was successful, reset the search
-    if (getUserExercises.isSuccess) {
-      setEnabledSearch(false);
-    }
-  }, [getUserExercises.isFetching]);
-
-  // Effect to invalidate the list so we can update it with the new data in case user filter the result
-  useEffect(() => {
-    client.invalidateQueries({ queryKey: ["exercises"] });
-  }, [options]);
-
   /** Functions to create user exercises */
   const createExercise = useMutation({
     mutationFn: ExerciseService.createNewExercise,
@@ -66,6 +46,31 @@ export function useExercise() {
       client.invalidateQueries({ queryKey: ["exercises"], exact: true });
     },
   });
+
+  /** Functions to get user exercises */
+  const getUserExercises = useQuery<resGetExercise, Error>({
+    queryKey: ["exercises"],
+    queryFn: () => ExerciseService.getExercises({ token, ...options }),
+    enabled:
+      validFetch &&
+      (enableSearch ||
+        createExercise.isSuccess ||
+        updateUserExercise.isSuccess ||
+        deleteUserExercise.isSuccess),
+  });
+
+  // Effect to reset the state of the search and be able to fetch data again if needed
+  useEffect(() => {
+    // If the fetch was successful, reset the search
+    if (getUserExercises.isSuccess) {
+      setEnabledSearch(false);
+    }
+  }, [getUserExercises.isFetching]);
+
+  // Effect to invalidate the list so we can update it with the new data in case user filter the result
+  useEffect(() => {
+    client.invalidateQueries({ queryKey: ["exercises"] });
+  }, [options]);
 
   return {
     data: getUserExercises.data,
