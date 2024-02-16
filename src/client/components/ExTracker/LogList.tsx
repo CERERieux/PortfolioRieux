@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { isAxiosError, type AxiosResponse } from "axios";
 import DeleteButton from "./DeleteButton";
 import Edit from "../Icons/Edit";
@@ -14,6 +14,8 @@ import type {
   updateExerciseHook,
   updateExerciseService,
 } from "../../types";
+import { type IExTracker } from "../../../server/types/basic";
+import debounce from "just-debounce-it";
 
 const COLOR_LIST = {
   Pending: "first-letter:text-red-700",
@@ -56,10 +58,21 @@ interface LogListProps {
   isUpdating: boolean;
   setAction: React.Dispatch<React.SetStateAction<string | null>>;
   setLocalError: React.Dispatch<React.SetStateAction<string | null>>;
+  textFilter: string;
+  statusFilter: StatusEx | "All";
+}
+
+interface DebounceFnFilter {
+  data: resGetExercise;
+  setFilteredData: React.Dispatch<React.SetStateAction<IExTracker[]>>;
+  textFilter: string;
+  statusFilter: StatusEx | "All";
 }
 
 export default function LogList({
   data,
+  statusFilter,
+  textFilter,
   deleteUserExercise,
   updateUserExercise,
   isDeleting,
@@ -73,6 +86,45 @@ export default function LogList({
   const [isUpdate, setIsUpdate] = useState({ id: "", isUpdate: false });
   const [descriptionUpdate, setDescriptionUpdate] = useState("");
   const [statusUpdate, setStatusUpdate] = useState<StatusEx>("Pending");
+  const [filteredData, setFilteredData] = useState<IExTracker[]>(data.log);
+  // Function that filter the exercises depending on user data
+  const filterData = useCallback(
+    // It will debouce it to only do this after 300ms from user stop interacting
+    debounce(
+      ({
+        statusFilter,
+        textFilter,
+        setFilteredData,
+        data,
+      }: DebounceFnFilter) => {
+        // If the filters aren't active, just send the data
+        if (statusFilter === "All" && textFilter === "") {
+          setFilteredData(data.log);
+        } else {
+          // If those are active will filter by
+          let exFiltered: IExTracker[] = data.log;
+          // The status if needed
+          if (statusFilter !== "All") {
+            exFiltered = data.log.filter(ex => ex.status === statusFilter);
+          }
+          // And by text
+          if (textFilter !== "" && exFiltered.length > 0) {
+            exFiltered = exFiltered.filter(ex =>
+              ex.description.toLowerCase().includes(textFilter.toLowerCase()),
+            );
+          }
+          setFilteredData(exFiltered); // At the end put the filtered data in the state
+        }
+      },
+      300,
+    ),
+    [],
+  );
+
+  // Effect that activates each time data or filters are modified
+  useEffect(() => {
+    filterData({ data, setFilteredData, statusFilter, textFilter });
+  }, [textFilter, statusFilter, data]);
 
   // Effect that activates each time we update an exercise
   useEffect(() => {
@@ -152,78 +204,88 @@ export default function LogList({
 
   // Component return an unordered list where the content will be each exercise
   return (
-    <ul className="flex flex-col gap-4 overflow-y-auto px-2 py-4">
-      {data.log.map(ex => {
-        // Map over each exercise of the user to get
-        const date = new Date(ex.date).toISOString().slice(0, 10); // The date of end
-        const id = ex._id.toString(); // The ID to use it as key
-        // Auxiliars to give a color to each element of the list depending on its state
-        const color = COLOR_LIST[`${ex.status}Bg` as keyof typeof COLOR_LIST];
-        const border =
-          COLOR_LIST[`${ex.status}Border` as keyof typeof COLOR_LIST];
-        const text = `${
-          COLOR_LIST[ex.status as keyof typeof COLOR_LIST]
-        }  first-letter:text-lg`;
+    <ul className="flex flex-col gap-4 px-2 py-4">
+      {filteredData.length > 0 ? (
+        filteredData.map(ex => {
+          // Map over each exercise of the user to get
+          const date = new Date(ex.date).toISOString().slice(0, 10); // The date of end
+          const id = ex._id.toString(); // The ID to use it as key
+          // Auxiliars to give a color to each element of the list depending on its state
+          const color = COLOR_LIST[`${ex.status}Bg` as keyof typeof COLOR_LIST];
+          const border =
+            COLOR_LIST[`${ex.status}Border` as keyof typeof COLOR_LIST];
+          const text = `${
+            COLOR_LIST[ex.status as keyof typeof COLOR_LIST]
+          }  first-letter:text-lg`;
 
-        const handleUpdateChange = () => {
-          setIsUpdate({ id, isUpdate: true });
-          setDescriptionUpdate(ex.description);
-          setStatusUpdate(ex.status as StatusEx);
-        };
-        // For each element of the list, show the data we need, or show the update form if needed
-        return (
-          <li
-            key={id}
-            className={`${color} ${border} rounded-md px-4 py-2 shadow-lg`}
-          >
-            {!(isUpdate.isUpdate && id === isUpdate.id) ? (
-              <article className="relative">
-                <p className={`${text}`}>
-                  Description: <span className="text-sm">{ex.description}</span>
-                </p>
-                <p className={`${text}`}>
-                  Status: <span className="text-sm">{ex.status}</span>
-                </p>
-                <p className={`${text}`}>
-                  Finish Date: <span className="text-sm underline">{date}</span>
-                </p>
-                <DeleteButton
-                  deleteExercise={deleteExercise}
-                  id={id}
-                  isDeleting={isDeleting}
-                />
-                <ActionButton
-                  onClick={handleUpdateChange}
-                  coverColor="bg-slate-200 shadow-slate-100"
-                  hoverColor="hover:bg-blue-200 hover:shadow-blue-400/30 hover:text-blue-600"
-                  groupName={["group/update", "group-hover/update:block"]}
-                  position="right-12 bottom-2"
-                  tooltipText="Edit"
-                  tooltipPos="left-1 -bottom-5"
-                >
-                  <Edit size="24" />
-                </ActionButton>
-              </article>
-            ) : (
-              <div>
-                <UpdateExForm
-                  changeAction={setAction}
-                  changeLocalError={setLocalError}
-                  changeDescription={setDescriptionUpdate}
-                  changeStatus={setStatusUpdate}
-                  description={descriptionUpdate}
-                  isUpdate={isUpdate}
-                  isUpdating={isUpdating}
-                  setIsUpdate={setIsUpdate}
-                  status={statusUpdate}
-                  updateExercise={updateExercise}
-                  updateUserExercise={updateUserExercise}
-                />
-              </div>
-            )}
-          </li>
-        );
-      })}
+          const handleUpdateChange = () => {
+            setIsUpdate({ id, isUpdate: true });
+            setDescriptionUpdate(ex.description);
+            setStatusUpdate(ex.status as StatusEx);
+          };
+          // For each element of the list, show the data we need, or show the update form if needed
+          return (
+            <li
+              key={id}
+              className={`${color} ${border} rounded-md px-4 py-2 shadow-lg`}
+            >
+              {!(isUpdate.isUpdate && id === isUpdate.id) ? (
+                <article className="relative">
+                  <p className={`${text}`}>
+                    Description:{" "}
+                    <span className="text-sm">{ex.description}</span>
+                  </p>
+                  <p className={`${text}`}>
+                    Status: <span className="text-sm">{ex.status}</span>
+                  </p>
+                  <p className={`${text}`}>
+                    Finish Date:{" "}
+                    <span className="text-sm underline">{date}</span>
+                  </p>
+                  <DeleteButton
+                    deleteExercise={deleteExercise}
+                    id={id}
+                    isDeleting={isDeleting}
+                  />
+                  <ActionButton
+                    onClick={handleUpdateChange}
+                    coverColor="bg-slate-200 shadow-slate-100"
+                    hoverColor="hover:bg-blue-200 hover:shadow-blue-400/30 hover:text-blue-600"
+                    groupName={["group/update", "group-hover/update:block"]}
+                    position="right-12 bottom-2"
+                    tooltipText="Edit"
+                    tooltipPos="left-1 -bottom-5"
+                  >
+                    <Edit size="24" />
+                  </ActionButton>
+                </article>
+              ) : (
+                <div>
+                  <UpdateExForm
+                    changeAction={setAction}
+                    changeLocalError={setLocalError}
+                    changeDescription={setDescriptionUpdate}
+                    changeStatus={setStatusUpdate}
+                    description={descriptionUpdate}
+                    isUpdate={isUpdate}
+                    isUpdating={isUpdating}
+                    setIsUpdate={setIsUpdate}
+                    status={statusUpdate}
+                    updateExercise={updateExercise}
+                    updateUserExercise={updateUserExercise}
+                  />
+                </div>
+              )}
+            </li>
+          );
+        })
+      ) : (
+        <li
+          className={`rounded-md border border-slate-500 px-4 py-2 text-center text-red-700 shadow-md shadow-slate-800/40 [background:_linear-gradient(192deg,rgb(217_217_217)_10%,#f8fafc_80%)]`}
+        >
+          There is no data that match the filter
+        </li>
+      )}
     </ul>
   );
 }

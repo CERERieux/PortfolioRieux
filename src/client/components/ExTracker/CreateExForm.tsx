@@ -119,7 +119,7 @@ export default function CreateExForm({
   return (
     <Form
       submitFn={handleNewExercise}
-      style="items-center gap-6 justify-start"
+      style="items-center gap-6 justify-start bg-slate-50 pb-6 h-full md:h-[80%] pl-24 md:pl-5 pt-6 rounded-md shadow-lg shadow-black/10"
       mdMedia="[&_span]:md:w-1/4"
     >
       <LabelForm style="justify-start items-center">
@@ -139,7 +139,7 @@ export default function CreateExForm({
           required={true}
           newCycle={isCreating}
           canBeTooLong
-          size={22}
+          size={18}
         />
       </LabelForm>
       <LabelForm style="justify-start items-center">
@@ -177,7 +177,7 @@ export default function CreateExForm({
       </LabelForm>
       <Button
         disabled={isCreating}
-        color="bg-sky-200 hover:bg-sky-700 border-sky-500 hover:border-sky-900 text-sky-700 shadow-sm shadow-black/10 active:scale-90 active:shadow-none transition-all"
+        color="bg-sky-200 hover:bg-sky-700 border-sky-500 hover:border-sky-900 text-sky-700 shadow-sm shadow-black/10 active:scale-90 active:shadow-none transition-all -ml-16 md:ml-0"
         xSize="w-36"
       >
         Create Exercise
