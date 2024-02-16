@@ -76,6 +76,7 @@ export default function SelectInput({
         size={size}
         onChange={onChange}
         className={`${invalidStyles} ${styleLine}`}
+        value={value}
       >
         {children}
       </select>
