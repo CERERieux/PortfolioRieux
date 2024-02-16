@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ExerciseService from "../services/exercises";
 import type {
+  ExerciseDataOptions,
   NewExerciseHook,
   resGetExercise,
   updateExerciseHook,
 } from "../types";
 import { useVerification } from "./useVerification";
+import { useEffect, useState } from "react";
 
 /** Custom hook where we do all the operations of exercises
  * from getting those, deleting, updating and creating it.
@@ -16,13 +18,33 @@ import { useVerification } from "./useVerification";
 export function useExercise() {
   const client = useQueryClient();
   const { token, validFetch, errorAuth } = useVerification();
+  const [enableSearch, setEnabledSearch] = useState(true);
+  const [options, setOptions] = useState<ExerciseDataOptions>({
+    from: undefined,
+    limit: undefined,
+    to: undefined,
+  });
 
   /** Functions to get user exercises */
   const getUserExercises = useQuery<resGetExercise, Error>({
     queryKey: ["exercises"],
-    queryFn: () => ExerciseService.getExercises({ token }),
-    enabled: validFetch,
+    queryFn: () => ExerciseService.getExercises({ token, ...options }),
+    enabled: validFetch && enableSearch,
   });
+
+  // Effect to reset the state of the search and be able to fetch data again if needed
+  useEffect(() => {
+    // If the fetch was successful, reset the search
+    if (getUserExercises.isSuccess) {
+      setEnabledSearch(false);
+    }
+  }, [getUserExercises.isFetching]);
+
+  // Effect to invalidate the list so we can update it with the new data in case user filter the result
+  useEffect(() => {
+    client.invalidateQueries({ queryKey: ["exercises"] });
+  }, [options]);
+
   /** Functions to create user exercises */
   const createExercise = useMutation({
     mutationFn: ExerciseService.createNewExercise,
@@ -64,5 +86,7 @@ export function useExercise() {
       updateUserExercise.mutate({ description, id, status, token });
     },
     updateUserExercise,
+    searchOptions: setOptions,
+    getNewList: setEnabledSearch,
   };
 }

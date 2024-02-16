@@ -169,6 +169,7 @@ export interface ExerciseData {
   to?: string;
   limit?: string;
 }
+export type ExerciseDataOptions = Omit<ExerciseData, "token">;
 export interface resGetExercise {
   username: string;
   count: number;
