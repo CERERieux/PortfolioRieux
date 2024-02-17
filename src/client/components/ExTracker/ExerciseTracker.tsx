@@ -3,6 +3,7 @@ import { isAxiosError } from "axios";
 import { useExercise } from "../../hooks/useExercise";
 import { Link, useSearchParams } from "react-router-dom";
 import type { StatusEx } from "../../types";
+import type { IExTracker } from "../../../server/types/basic";
 import CreateExForm from "./CreateExForm";
 import ErrorMessage from "../SystemDesign/ErrorMessage";
 import ActionMessage from "../SystemDesign/ActionMessage";
@@ -35,22 +36,30 @@ export default function ExerciseTracker() {
   const [textFilter, setTextFilter] = useState("");
   const [limitEx, setLimitEx] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusEx | "All">("All");
+  // State to save filtered data of user
+  const [filteredData, setFilteredData] = useState<IExTracker[]>([]);
   // "State" for the search params and the 3 we are interested in
   const [searchParams, setSearchParams] = useSearchParams();
   const limit = searchParams.get("limit");
   const to = searchParams.get("to");
   const from = searchParams.get("from");
+  const desc = searchParams.get("desc");
+  const status = searchParams.get("status");
 
   // Effect that will activate at the start and have the options in case user use a link with query params
   useEffect(() => {
     if (limit != null) setLimitEx(limit);
+    if (desc != null) setTextFilter(desc);
+    if (status != null) setStatusFilter(status as StatusEx | "All");
     searchOptions({
       from: from ?? undefined,
       to: to ?? undefined,
-      limit: limit ?? undefined,
     });
     getNewList(true);
   }, []);
+  useEffect(() => {
+    if (data !== undefined) setFilteredData(data.log);
+  }, [data]);
 
   // Structure for the main component of exercises
   return (
@@ -113,8 +122,11 @@ export default function ExerciseTracker() {
           </aside>
           {data !== undefined ? (
             <main className="relative col-span-3 col-start-1 row-span-3 row-start-2 mt-2 flex flex-col gap-4 rounded-lg bg-slate-50 shadow-inner shadow-black/30 md:overflow-y-auto">
-              <h2 className="sticky top-0 z-10 pt-2 text-center font-digitalDisplay text-xl backdrop-blur-sm first-letter:text-2xl first-letter:text-sky-400">
-                Note{data.count > 1 && "s"}
+              <h2 className="sticky top-0 z-10 pt-2 text-center font-digitalDisplay text-xl backdrop-blur-sm">
+                <span className="text-2xl text-sky-400">
+                  {filteredData.length} N
+                </span>
+                ote{filteredData.length > 1 && "s"}
               </h2>
               <LogList
                 getNewList={getNewList}
@@ -122,12 +134,14 @@ export default function ExerciseTracker() {
                 statusFilter={statusFilter}
                 textFilter={textFilter}
                 limit={limitEx}
+                filteredData={filteredData}
                 deleteExercise={deleteExercise}
                 deleteUserExercise={deleteUserExercise}
                 isDeleting={isDeleting}
                 isUpdating={isUpdating}
                 setAction={setAction}
                 setLocalError={setLocalError}
+                setFilteredData={setFilteredData}
                 updateExercise={updateExercise}
                 updateUserExercise={updateUserExercise}
               />

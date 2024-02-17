@@ -62,6 +62,8 @@ interface LogListProps {
   statusFilter: StatusEx | "All";
   limit: string;
   getNewList: React.Dispatch<React.SetStateAction<boolean>>;
+  filteredData: IExTracker[];
+  setFilteredData: React.Dispatch<React.SetStateAction<IExTracker[]>>;
 }
 
 interface DebounceFnFilter {
@@ -86,12 +88,13 @@ export default function LogList({
   setAction,
   setLocalError,
   getNewList,
+  filteredData,
+  setFilteredData,
 }: LogListProps) {
   // 3 states to manage the update form, 1 for the view, 2 for the inputs
   const [isUpdate, setIsUpdate] = useState({ id: "", isUpdate: false });
   const [descriptionUpdate, setDescriptionUpdate] = useState("");
   const [statusUpdate, setStatusUpdate] = useState<StatusEx>("Pending");
-  const [filteredData, setFilteredData] = useState<IExTracker[]>(data.log);
   // Function that filter the exercises depending on user data
   const filterData = useCallback(
     // It will debouce it to only do this after 300ms from user stop interacting

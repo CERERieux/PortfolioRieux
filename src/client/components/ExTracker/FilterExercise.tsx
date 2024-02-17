@@ -12,7 +12,6 @@ import debounce from "just-debounce-it";
 interface DebounceFilter {
   toDate: string;
   fromDate: string;
-  limitEx: string;
 }
 
 interface FilterExerciseProps {
@@ -63,7 +62,7 @@ export default function FilterExercise({
     else searchParams.set("limit", limitValue);
     setSearchParams(searchParams);
   };
-  // Same for the other 2
+  // Same for the other 4
   const handleToDate = (e: ChangeEvent<HTMLInputElement>) => {
     const toValue = e.target.value;
     setToDate(toValue);
@@ -78,14 +77,27 @@ export default function FilterExercise({
     else searchParams.set("from", fromValue);
     setSearchParams(searchParams);
   };
+  const handleTextFilter = (e: ChangeEvent<HTMLInputElement>) => {
+    const descValue = e.target.value;
+    setTextFilter(descValue);
+    if (descValue === "") searchParams.delete("desc");
+    else searchParams.set("desc", descValue);
+    setSearchParams(searchParams);
+  };
+  const handleStatusFilter = (e: ChangeEvent<HTMLSelectElement>) => {
+    const statusValue = e.target.value as StatusEx | "All";
+    setStatusFilter(statusValue);
+    if (statusValue === "All") searchParams.delete("status");
+    else searchParams.set("status", statusValue);
+    setSearchParams(searchParams);
+  };
 
   // Function to debounce the user input, each 100ms will do it
   const getList = useCallback(
-    debounce(({ fromDate, toDate, limitEx }: DebounceFilter) => {
+    debounce(({ fromDate, toDate }: DebounceFilter) => {
       searchOptions({
         from: fromDate === "" ? undefined : fromDate,
         to: toDate === "" ? undefined : toDate,
-        limit: limitEx === "" ? undefined : limitEx,
       });
       getNewList(true);
     }, 300),
@@ -94,16 +106,8 @@ export default function FilterExercise({
 
   // Each time user interact with 1 filter, get a new list
   useEffect(() => {
-    getList({ fromDate, limitEx, toDate });
-  }, [fromDate, toDate, limitEx]);
-
-  // Handlers for the inputs that are from the parent component
-  const handleTextFilter = (e: ChangeEvent<HTMLInputElement>) => {
-    setTextFilter(e.target.value);
-  };
-  const handleStatusFilter = (e: ChangeEvent<HTMLSelectElement>) => {
-    setStatusFilter(e.target.value as StatusEx);
-  };
+    getList({ fromDate, toDate });
+  }, [fromDate, toDate]);
 
   // Return a section which will contain the 5 filters
   return (
