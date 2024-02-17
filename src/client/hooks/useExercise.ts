@@ -21,7 +21,6 @@ export function useExercise() {
   const [enableSearch, setEnabledSearch] = useState(true);
   const [options, setOptions] = useState<ExerciseDataOptions>({
     from: undefined,
-    limit: undefined,
     to: undefined,
   });
 
