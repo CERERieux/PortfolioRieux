@@ -322,7 +322,8 @@ export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
   // Filter the number of activities in log
   if (limit !== undefined) {
     const limitNum = parseInt(limit);
-    orderLog = orderLog.slice(0, limitNum);
+    if(limitNum<=orderLog.length)
+      orderLog = orderLog.slice(0, limitNum);
   }
 
   // Create the result in order
