@@ -51,12 +51,7 @@ export function useExercise() {
   const getUserExercises = useQuery<resGetExercise, Error>({
     queryKey: ["exercises"],
     queryFn: () => ExerciseService.getExercises({ token, ...options }),
-    enabled:
-      validFetch &&
-      (enableSearch ||
-        createExercise.isSuccess ||
-        updateUserExercise.isSuccess ||
-        deleteUserExercise.isSuccess),
+    enabled: validFetch && enableSearch,
   });
 
   // Effect to reset the state of the search and be able to fetch data again if needed

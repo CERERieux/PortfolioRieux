@@ -33,6 +33,7 @@ interface CreateExFormProps {
   changeAction: React.Dispatch<React.SetStateAction<string | null>>;
   isCreating: boolean;
   newExercise: ({ description, date, status }: NewExerciseHook) => void;
+  getNewList: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function CreateExForm({
@@ -41,6 +42,7 @@ export default function CreateExForm({
   changeLocalError,
   isCreating,
   newExercise,
+  getNewList,
 }: CreateExFormProps) {
   // 3 states to manage the input from user
   const [description, setDescription] = useState("");
@@ -60,6 +62,7 @@ export default function CreateExForm({
       setDate(convertTodayDate(new Date(Date.now()).toDateString())); // And date from the form
       // We check if data is a good response or an error, if isn't an error
       if (!("error" in createExercise.data)) {
+        getNewList(true);
         changeLocalError(null); // The error is null since its successful
         changeAction("Your new exercise was created!"); // Let user know that it was good
         // And remove it after 2 seconds

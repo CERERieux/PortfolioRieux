@@ -31,8 +31,9 @@ export default function ExerciseTracker() {
   // States for the local info updates
   const [localError, setLocalError] = useState<string | null>(null);
   const [action, setAction] = useState<string | null>(null);
-  // States for 2 of the filters
+  // States for 3 of the filters
   const [textFilter, setTextFilter] = useState("");
+  const [limitEx, setLimitEx] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusEx | "All">("All");
   // "State" for the search params and the 3 we are interested in
   const [searchParams, setSearchParams] = useSearchParams();
@@ -42,6 +43,7 @@ export default function ExerciseTracker() {
 
   // Effect that will activate at the start and have the options in case user use a link with query params
   useEffect(() => {
+    if (limit != null) setLimitEx(limit);
     searchOptions({
       from: from ?? undefined,
       to: to ?? undefined,
@@ -94,12 +96,15 @@ export default function ExerciseTracker() {
               to={to}
               statusFilter={statusFilter}
               textFilter={textFilter}
+              limitEx={limitEx}
               setStatusFilter={setStatusFilter}
               setTextFilter={setTextFilter}
+              setLimitEx={setLimitEx}
             />
           </header>
           <aside className="-order-1 col-start-4 row-span-2 row-start-2 px-4 py-3">
             <CreateExForm
+              getNewList={getNewList}
               changeAction={setAction}
               changeLocalError={setLocalError}
               createExercise={createExercise}
@@ -113,9 +118,11 @@ export default function ExerciseTracker() {
                 Note{data.count > 1 && "s"}
               </h2>
               <LogList
+                getNewList={getNewList}
                 data={data}
                 statusFilter={statusFilter}
                 textFilter={textFilter}
+                limit={limitEx}
                 deleteExercise={deleteExercise}
                 deleteUserExercise={deleteUserExercise}
                 isDeleting={isDeleting}
