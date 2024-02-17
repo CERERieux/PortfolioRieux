@@ -20,12 +20,13 @@ interface FilterExerciseProps {
   searchOptions: React.Dispatch<React.SetStateAction<ExerciseDataOptions>>;
   setSearchParams: SetURLSearchParams;
   searchParams: URLSearchParams;
-  limit: string | null;
   to: string | null;
   from: string | null;
   setTextFilter: React.Dispatch<React.SetStateAction<string>>;
   setStatusFilter: React.Dispatch<React.SetStateAction<StatusEx | "All">>;
+  setLimitEx: React.Dispatch<React.SetStateAction<string>>;
   textFilter: string;
+  limitEx: string;
   statusFilter: StatusEx | "All";
 }
 
@@ -34,22 +35,21 @@ export default function FilterExercise({
   searchOptions,
   searchParams,
   setSearchParams,
-  limit,
   to,
   from,
   setStatusFilter,
   setTextFilter,
+  setLimitEx,
   statusFilter,
   textFilter,
+  limitEx,
 }: FilterExerciseProps) {
-  // 3 states to filter the number of exercise and end dates
-  const [limitEx, setLimitEx] = useState("");
+  // 2 states to filter the number of exercise and end dates
   const [toDate, setToDate] = useState("");
   const [fromDate, setFromDate] = useState("");
 
   // Effect that activates at the start to modify the inputs in case user enter query params
   useEffect(() => {
-    if (limit != null) setLimitEx(limit);
     if (to != null) setToDate(to);
     if (from != null) setFromDate(from);
   }, []);
@@ -88,7 +88,7 @@ export default function FilterExercise({
         limit: limitEx === "" ? undefined : limitEx,
       });
       getNewList(true);
-    }, 100),
+    }, 300),
     [],
   );
 
@@ -136,7 +136,7 @@ export default function FilterExercise({
         </LabelForm>
         <LabelForm style="items-center">
           <TitleInput firstColor="text-sm first-letter:text-sky-400 w-20 text-right">
-            Limit{" "}
+            Notes{" "}
           </TitleInput>
           <NumericInput
             min={0}

@@ -60,12 +60,15 @@ interface LogListProps {
   setLocalError: React.Dispatch<React.SetStateAction<string | null>>;
   textFilter: string;
   statusFilter: StatusEx | "All";
+  limit: string;
+  getNewList: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface DebounceFnFilter {
   data: resGetExercise;
   setFilteredData: React.Dispatch<React.SetStateAction<IExTracker[]>>;
   textFilter: string;
+  limit: string;
   statusFilter: StatusEx | "All";
 }
 
@@ -73,6 +76,7 @@ export default function LogList({
   data,
   statusFilter,
   textFilter,
+  limit,
   deleteUserExercise,
   updateUserExercise,
   isDeleting,
@@ -81,6 +85,7 @@ export default function LogList({
   updateExercise,
   setAction,
   setLocalError,
+  getNewList,
 }: LogListProps) {
   // 3 states to manage the update form, 1 for the view, 2 for the inputs
   const [isUpdate, setIsUpdate] = useState({ id: "", isUpdate: false });
@@ -96,22 +101,31 @@ export default function LogList({
         textFilter,
         setFilteredData,
         data,
+        limit,
       }: DebounceFnFilter) => {
         // If the filters aren't active, just send the data
-        if (statusFilter === "All" && textFilter === "") {
+        if (statusFilter === "All" && textFilter === "" && limit === "") {
           setFilteredData(data.log);
         } else {
           // If those are active will filter by
           let exFiltered: IExTracker[] = data.log;
           // The status if needed
           if (statusFilter !== "All") {
-            exFiltered = data.log.filter(ex => ex.status === statusFilter);
+            exFiltered = data.log.filter(ex => {
+              return ex.status === statusFilter;
+            });
           }
-          // And by text
+          // By text
           if (textFilter !== "" && exFiltered.length > 0) {
             exFiltered = exFiltered.filter(ex =>
               ex.description.toLowerCase().includes(textFilter.toLowerCase()),
             );
+          }
+          // And amount of exercises
+          if (limit !== "") {
+            const limitEx = parseInt(limit);
+            if (limitEx <= exFiltered.length)
+              exFiltered = exFiltered.slice(0, limitEx);
           }
           setFilteredData(exFiltered); // At the end put the filtered data in the state
         }
@@ -123,8 +137,8 @@ export default function LogList({
 
   // Effect that activates each time data or filters are modified
   useEffect(() => {
-    filterData({ data, setFilteredData, statusFilter, textFilter });
-  }, [textFilter, statusFilter, data]);
+    filterData({ data, setFilteredData, statusFilter, textFilter, limit });
+  }, [textFilter, statusFilter, data, limit]);
 
   // Effect that activates each time we update an exercise
   useEffect(() => {
@@ -133,6 +147,7 @@ export default function LogList({
       // We need to verify if there wasn't an error
       if (!("error" in updateUserExercise.data)) {
         // If it was successful, reset the 2 states of the form and change the view
+        getNewList(true);
         setIsUpdate({ id: "", isUpdate: false });
         setDescriptionUpdate("");
         setStatusUpdate("Pending");
@@ -173,6 +188,7 @@ export default function LogList({
       // If an error didn't happen while deleting
       if (!("error" in deleteUserExercise.data)) {
         // Show to user the action for 2 seconds
+        getNewList(true);
         setLocalError(null);
         setAction("Your exercise was deleted successfully!");
         setTimeout(() => {

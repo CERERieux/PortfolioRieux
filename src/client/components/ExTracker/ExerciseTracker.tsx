@@ -91,7 +91,6 @@ export default function ExerciseTracker() {
               searchOptions={searchOptions}
               setSearchParams={setSearchParams}
               searchParams={searchParams}
-              limit={limit}
               from={from}
               to={to}
               statusFilter={statusFilter}
