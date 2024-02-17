@@ -276,7 +276,7 @@ export async function createNewExercise({
   return result;
 }
 
-export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
+export async function displayUserLog({ from, to, _id }: LogOptions) {
   // Find user by it's ID and populate the user's log, if doesn't exist, send an error
   const user = await GUser.findById(_id)
     .populate({ path: "exercises", select: "description status date _id", options:{sort:{_id:"desc"}}})
@@ -317,13 +317,6 @@ export async function displayUserLog({ from, to, limit, _id }: LogOptions) {
         return false;
       });
     }
-  }
-
-  // Filter the number of activities in log
-  if (limit !== undefined) {
-    const limitNum = parseInt(limit);
-    if(limitNum<=orderLog.length)
-      orderLog = orderLog.slice(0, limitNum);
   }
 
   // Create the result in order

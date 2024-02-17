@@ -11,12 +11,12 @@ import type {
 import { type IExTracker } from "../../server/types/basic";
 // Here belongs all the fetches needed to do operations with exercises in db
 
-export function getExercises({ token, from, to, limit }: ExerciseData) {
+export function getExercises({ token, from, to }: ExerciseData) {
   return axios<resGetExercise>({
     url: "/cYSvQmg9kR/basic/users/exercises",
     method: "get",
     headers: { Authorization: `Bearer ${token}` },
-    params: { from, to, limit },
+    params: { from, to },
   }).then(({ data }) => {
     return data;
   });

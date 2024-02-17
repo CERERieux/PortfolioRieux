@@ -148,12 +148,11 @@ export async function displayUserLog(
   res: Response,
 ) {
   // We get all the queries we want from user even if those are undefined
-  const { from, to, limit } = req.query;
+  const { from, to } = req.query;
   // Create an object with the options to display the user's log activity
   const options: LogOptions = {
     from,
     to,
-    limit,
     _id: req._id,
   };
   const logs = await BasicModel.displayUserLog(options);
