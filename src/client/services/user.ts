@@ -54,7 +54,12 @@ export function updateInfoUser({ token, bio, img }: UpdateUserService) {
       bio,
       img,
     },
-  }).then(({ data }) => data);
+  })
+    .then(({ data }) => data)
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
 }
 
 export async function loginUser({ username, password }: User) {
