@@ -3,6 +3,10 @@ import { useVerification } from "./useVerification";
 import { getUserInfo, updateInfoUser } from "../services/user";
 import type { UpdateUserHook, UserProfileHook } from "../types";
 
+/** Custom hook to manage profile from user, validate if token is good.
+ * It gets the profile info and return the data and a function to
+ * update user profile
+ */
 export function useProfile({ externalUser }: UserProfileHook) {
   const { errorAuth, validFetch, token, username } = useVerification();
   const currentUser = externalUser ?? username;
