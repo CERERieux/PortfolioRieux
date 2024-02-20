@@ -78,13 +78,13 @@ export default function ProfileUpdateForm({
             onClick={() => {
               handleViewUpdateProfile(data);
             }}
-            color="bg-yellow-300 border-yellow-500 hover:bg-yellow-600 hover:border-yellow-300 shadow-md shadow-black/20 active:shadow-none"
+            color="bg-yellow-300 border-yellow-500 hover:bg-yellow-600 hover:border-yellow-300 shadow-md shadow-black/20 active:shadow-none transition-all"
             xSize="w-40"
           >
             Cancel
           </Button>
           <Button
-            color="bg-blue-300 border-blue-500 hover:bg-blue-600 hover:border-blue-300 shadow-md shadow-black/20 active:shadow-none"
+            color="bg-blue-300 border-blue-500 hover:bg-blue-600 hover:border-blue-300 shadow-md shadow-black/20 active:shadow-none transition-all"
             xSize="w-40"
           >
             Update profile!
