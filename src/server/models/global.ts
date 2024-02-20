@@ -96,7 +96,7 @@ export async function updateUser({ _id, img, bio }: UpdateUserData) {
     return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
   if ("error" in user) return user;
   // If we found a user, put the new image and the new bio
-  if (img !== "-1" && img !== user.img) user.img = `type-img-${img}`;
+  if (img !== "-1" && img !== user.img) user.img = `${img}`;
   if (bio !== undefined && bio !== user.bio) user.bio = bio;
   // Save user and return an error if needed
   const resultUpdate = await user.save().catch(err => {
