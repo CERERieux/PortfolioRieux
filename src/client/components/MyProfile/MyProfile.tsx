@@ -1,125 +1,152 @@
-import { isAxiosError } from "axios"
-import { useProfile } from "../../hooks/useProfile"
-import UnauthorizedAccess from "../NotFound/AuthError"
-import { type ChangeEvent, useState, useEffect, type FormEvent } from "react"
-import type { UserInfo, ImgProfile } from "../../types"
-import { Link } from "react-router-dom"
-import { useUser } from "../../store/user"
+import { isAxiosError } from "axios";
+import { useProfile } from "../../hooks/useProfile";
+import UnauthorizedAccess from "../NotFound/AuthError";
+import { useState, useEffect, type FormEvent } from "react";
+import type { UserInfo, ImgProfile } from "../../types";
+import { useUser } from "../../store/user";
+import ErrorMessage from "../SystemDesign/ErrorMessage";
+import ActionMessage from "../SystemDesign/ActionMessage";
+import ProfileMenu from "./ProfileMenu";
+import CustomBackground from "../SystemDesign/CustomBackground";
+import HeaderProfile from "./HeaderProfile";
+import ProfileUpdateForm from "./ProfileUpdateForm";
+import FooterAttribution from "../SystemDesign/FooterAttribution";
 
 export default function MyProfile() {
-    const { logoffUser } = useUser()
-    const { data, error, errorAuth, updateInfo } = useProfile({})
-    const [aboutMe, setAboutMe] = useState("")
-    const [imgProfile, setImgProfile] = useState<ImgProfile>("type-img-1")
-    const [isUpdating, setIsUpdating] = useState(false)
-    const [action, setAction] = useState<null | string>(null)
-    const [localError, setLocalError] = useState<null | string>(null)
+  const { logoffUser } = useUser(); // <-- TODO move this and make navmenu
+  const { data, error, errorAuth, updateInfo } = useProfile({}); // Auxiliars to ensure its used only by users
+  const [isUpdating, setIsUpdating] = useState(false); // State to handle view between profile info and update form
+  // 2 States for the update form and handle user data
+  const [aboutMe, setAboutMe] = useState("");
+  const [imgProfile, setImgProfile] = useState<ImgProfile>("type-img-1");
+  // 2 states to display local successful actions and errors
+  const [action, setAction] = useState<null | string>(null);
+  const [localError, setLocalError] = useState<null | string>(null);
 
-    useEffect(() => {
-        if (updateInfo.isSuccess) {
-            setIsUpdating(false)
-            setLocalError(null)
-            setImgProfile("type-img-1")
-            setAboutMe("")
-            setAction(updateInfo.data.action)
-            setTimeout(() => { setAction(null) }, 2000)
-        }
-        else if (updateInfo.isError) {
-            const { error } = updateInfo
-            if (isAxiosError(error)) {
-                setLocalError(error.response?.data.error)
-            }
-            else {
-                setLocalError("Something went wrong at updating your profile...")
-            }
-            setTimeout(() => { setLocalError(null) }, 3000)
-        }
-    }, [updateInfo.isSuccess])
+  // Effect that activates each time update is done
+  useEffect(() => {
+    // If update is completed
+    if (updateInfo.isSuccess) {
+      // We need to check if a error happened
+      if (!("error" in updateInfo.data)) {
+        // If not, reset the view and the 2 states for the form
+        setIsUpdating(false);
+        setImgProfile("type-img-1");
+        setAboutMe("");
+        setLocalError(null); // Remove local error
+        setAction(updateInfo.data.action); // Indicate that update was good
+        // And remove message after 2 seconds
+        setTimeout(() => {
+          setAction(null);
+        }, 2000);
+      } else {
+        // If there was an error, indicate it to user
+        setLocalError(updateInfo.data.error);
+        setAction(null); // Remove action
+        // Display message for 3 seconds
+        setTimeout(() => {
+          setLocalError(null);
+        }, 3000);
+      }
+    } else if (updateInfo.isError) {
+      // If there was an error that interrupt the update
+      const { error } = updateInfo; // Get the error and display it
+      if (isAxiosError(error)) {
+        setLocalError(error.response?.data.error);
+      } else {
+        // If the error is something that axios can't cover, return an empty message
+        setLocalError("Something went wrong at updating your profile...");
+      }
+      // Display error for 3 seconds
+      setTimeout(() => {
+        setLocalError(null);
+      }, 3000);
+    }
+  }, [updateInfo.isSuccess]);
 
-    const handleAboutMe = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        setAboutMe(e.target.value)
+  // Function that handles update of the form, in case duplicated info, don't update that field
+  const handleUpdate = (e: FormEvent<HTMLFormElement>, data: UserInfo) => {
+    e.preventDefault();
+    let newBio;
+    let newImg;
+    if (aboutMe !== data.bio) newBio = aboutMe;
+    if (imgProfile !== data.img) newImg = imgProfile;
+    updateInfo.mutate({ img: newImg, bio: newBio });
+  };
+  // Function that display 1 view or another depending if user is updating or not
+  const handleViewUpdateProfile = (data: UserInfo) => {
+    if (!isUpdating) {
+      setIsUpdating(true);
+      setAboutMe(data.bio);
+      setImgProfile(data.img as ImgProfile);
+    } else {
+      setIsUpdating(false);
+      setAboutMe("");
+      setImgProfile("type-img-1");
     }
-    const handleProfileImg = (e: ChangeEvent<HTMLSelectElement>) => {
-        setImgProfile(e.target.value as ImgProfile)
-    }
-    const handleUpdate = (e: FormEvent<HTMLFormElement>, data: UserInfo) => {
-        e.preventDefault()
-        let newBio
-        let newImg
-        if (aboutMe !== data.bio) newBio = aboutMe
-        if (imgProfile !== data.img) newImg = imgProfile
-        updateInfo.mutate({ img: newImg, bio: newBio })
-    }
-    return (
-        <div>
-            {errorAuth.cause !== null && <UnauthorizedAccess errorAuth={errorAuth} />}
-            {error !== null && isAxiosError(error) && <h2>{error.response?.data.error}</h2>}
-            {localError !== null && <h2>{localError}</h2>}
-            {action !== null && <h2>{action}</h2>}
-            {data !== undefined ?
-                <div>
-                    {!isUpdating ?
-                        <div>
-                            <h4>Later change to an img with {data.img}</h4>
-                            <h2>Welcome {data.username}</h2>
-                            <button onClick={logoffUser}>Log off</button>
-                            {data.bio !== "" ? <p>About me: <br />{data.bio}</p> : <p>Update your profile so you can tell us a bit about you!</p>}
-                            <button onClick={() => {
-                                setIsUpdating(true)
-                                setAboutMe(data.bio)
-                                setImgProfile(data.img as ImgProfile)
-                            }}>Update user</button>
-                        </div> :
-                        <div>
-                            <form onSubmit={(e) => { handleUpdate(e, data); }}>
-                                <label htmlFor="">
-                                    About me: <textarea name="" id="" cols={30} rows={10} value={aboutMe} onChange={handleAboutMe}></textarea>
-                                </label>
-                                <label htmlFor="">
-                                    Select your profile image: <select name="" id="" value={imgProfile} onChange={handleProfileImg}>
-                                        <option value="type-img-1">Image 1</option>
-                                        <option value="type-img-2">Image 2</option>
-                                        <option value="type-img-3">Image 3</option>
-                                        <option value="type-img-4">Image 4</option>
-                                        <option value="type-img-5">Image 5</option>
-                                        <option value="type-img-6">Image 6</option>
-                                    </select>
-                                </label>
-                                <button>Update profile!</button>
-                            </form>
-                            <button onClick={() => {
-                                setIsUpdating(false)
-                                setAboutMe("")
-                                setImgProfile("type-img-1")
-                            }}>Cancel</button>
-                        </div>}
-                    <Link to="/my-profile/library">
-                        <section>
-                            <h2>My Library</h2>
-                            <p>Image later here</p>
-                        </section>
-                    </Link>
-                    <Link to="/my-profile/exercises">
-                        <section>
-                            <h2>Exercise Tracker (My ToDo List)</h2>
-                            <p>Image later here</p>
-                        </section>
-                    </Link>
-                    <Link to="/my-profile/urls">
-                        <section>
-                            <h2>My Short URLs</h2>
-                            <p>Image later here</p>
-                        </section>
-                    </Link>
-                    <Link to="/my-profile/issues">
-                        <section>
-                            <h2>Issues</h2>
-                            <p>Image later here</p>
-                        </section>
-                    </Link>
-                </div>
-                : <h3>Loading...</h3>}
+  };
 
-        </div>
-    )
+  // Display "My Profile" only if user is logged, if not, display UnauthorizedAccess
+  return (
+    <>
+      {errorAuth.cause !== null ? (
+        <UnauthorizedAccess errorAuth={errorAuth} />
+      ) : (
+        <CustomBackground
+          styles="flex h-full w-full flex-col items-center justify-center gap-10 md:gap-0"
+          bgImg="before:bg-[url('./profileBG.jpg')] before:opacity-5"
+        >
+          {error !== null && isAxiosError(error) && (
+            <ErrorMessage extraStyles="z-10">
+              {error.response?.data.error}
+            </ErrorMessage>
+          )}
+          {localError !== null && (
+            <ErrorMessage extraStyles="z-10">{localError}</ErrorMessage>
+          )}
+          {action !== null && (
+            <ActionMessage extraStyles="z-10">{action}</ActionMessage>
+          )}
+          {data !== undefined ? (
+            <>
+              <button
+                onClick={logoffUser}
+                className="absolute bottom-0 left-0 w-20 border bg-slate-200"
+              >
+                Log off
+              </button>
+              <header className="flex h-2/5 w-full gap-6 shadow-md shadow-black/20 lg:h-2/5">
+                {!isUpdating ? (
+                  <HeaderProfile
+                    data={data}
+                    handleViewUpdateProfile={handleViewUpdateProfile}
+                    isUpdating={isUpdating}
+                  />
+                ) : (
+                  <ProfileUpdateForm
+                    aboutMe={aboutMe}
+                    data={data}
+                    handleUpdate={handleUpdate}
+                    handleViewUpdateProfile={handleViewUpdateProfile}
+                    imgProfile={imgProfile}
+                    setAboutMe={setAboutMe}
+                    setImgProfile={setImgProfile}
+                  />
+                )}
+              </header>
+              <ProfileMenu />
+              <FooterAttribution
+                whatIs="Background Image by"
+                placeRef="NACreative"
+                extra=" on Freepik"
+                urlRef="https://www.freepik.com/free-vector/halftone-background-abstract-black-white-dots-shape_25976232.htm#query=dot%20pattern&position=3&from_view=search&track=ais&uuid=587b59f3-6554-41ba-8e64-dd0cab7d17ae"
+              />
+            </>
+          ) : (
+            <h3>Loading...</h3>
+          )}
+        </CustomBackground>
+      )}
+    </>
+  );
 }
