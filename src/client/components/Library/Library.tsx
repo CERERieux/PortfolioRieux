@@ -1,158 +1,163 @@
-import { type ChangeEvent, useEffect, useState, type FormEvent } from "react"
-import { useBooks } from "../../hooks/useBooks"
-import { isAxiosError } from "axios"
-import { type BookStatus } from "../../types"
-import { ERROR_BOOKS } from "../../../server/schemas/advanced"
-import { useNavigate, Link } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { useBooks } from "../../hooks/useBooks";
+import { isAxiosError } from "axios";
+import { ERROR_BOOKS } from "../../../server/schemas/advanced";
+import { Link } from "react-router-dom";
+import UnauthorizedAccess from "../NotFound/AuthError";
+import ErrorMessage from "../SystemDesign/ErrorMessage";
+import ActionMessage from "../SystemDesign/ActionMessage";
+import Button from "../SystemDesign/Button";
+import LibraryForm from "./LibraryForm";
 
 export default function Library() {
-    const { data, errorAuth, errorBook, createNewBook, deleteLibrary, removeBook, token } = useBooks({})
-    const [title, setTitle] = useState("")
-    const [status, setStatus] = useState<BookStatus>("Plan to Read")
-    const [errorLocal, setErrorLocal] = useState<string | null>(null)
-    const [action, setAction] = useState<string | null>(null)
-    const navigate = useNavigate()
+  const {
+    data,
+    errorAuth,
+    errorBook,
+    createBook,
+    createNewBook,
+    deleteLibrary,
+    removeBook,
+    removeOneBook,
+    removeAllBooks,
+  } = useBooks({});
+  const [errorLocal, setErrorLocal] = useState<string | null>(null);
+  const [action, setAction] = useState<string | null>(null);
+  const idOpen = "openLibraryDialog";
 
-
-    useEffect(() => {
-        // If the creation of a book was a success, put the form inputs to its default state
-        if (createNewBook.isSuccess) {
-            const bookID = createNewBook.data._id.toString()
-            setTitle("")
-            setStatus("Plan to Read")
-            setErrorLocal(null)
-            setAction("New book added! Redirecting you to your new book added...")// Later change this to redirect to new book
-            setTimeout(() => { setAction(null) }, 2000)
-            setTimeout(() => { navigate(`/my-profile/library/${bookID}`) }, 2000)
-        }
-        else if (createNewBook.isError) {
-            // If it wasn't a success, maybe was an error, if that is the case
-            // Show an error about it
-            const { error } = createNewBook
-            if (isAxiosError(error)) {
-                setErrorLocal(error.response?.data.error)
-            }
-            else {
-                setErrorLocal("Something went wrong at creating your book")
-            }
-        }
-    }, [createNewBook.isSuccess])
-
-    useEffect(() => {
-        // If library was emptied successfully, show the action
-        if (deleteLibrary.isSuccess) {
-            setAction("You emptied all your Library!")
-            setTimeout(() => { setAction(null) }, 5000)
-        }
-        else if (deleteLibrary.isError) {
-            /* If it wasn't a success, then maybe is an error,
+  useEffect(() => {
+    // If library was emptied successfully, show the action
+    if (deleteLibrary.isSuccess) {
+      setAction("You emptied all your Library!");
+      setTimeout(() => {
+        setAction(null);
+      }, 5000);
+    } else if (deleteLibrary.isError) {
+      /* If it wasn't a success, then maybe is an error,
             Show it in case it is, ex: User maybe wants to delete
             An empty library and that can't be done */
-            const { error } = deleteLibrary
-            if (isAxiosError(error)) {
-                setErrorLocal(error.response?.data.error)
-            }
-            else {
-                setErrorLocal("Something went wrong at emptying your Library")
-            }
-        }
-    }, [deleteLibrary.isSuccess])
+      const { error } = deleteLibrary;
+      if (isAxiosError(error)) {
+        setErrorLocal(error.response?.data.error);
+      } else {
+        setErrorLocal("Something went wrong at emptying your Library");
+      }
+    }
+  }, [deleteLibrary.isSuccess]);
 
-    useEffect(() => {
-        // If book was removed successfully, show the action
-        if (removeBook.isSuccess) {
-            setAction("Book removed!")
-            setTimeout(() => { setAction(null) }, 2000)
-        }
-        else if (removeBook.isError) {
-            /* If it wasn't a success, then maybe is an error,
+  useEffect(() => {
+    // If book was removed successfully, show the action
+    if (removeBook.isSuccess) {
+      setAction("Book removed!");
+      setTimeout(() => {
+        setAction(null);
+      }, 2000);
+    } else if (removeBook.isError) {
+      /* If it wasn't a success, then maybe is an error,
             Show it in case it was one */
-            const { error } = deleteLibrary
-            if (isAxiosError(error)) {
-                setErrorLocal(error.response?.data.error)
-            }
-            else {
-                setErrorLocal("Something went wrong at emptying your Library")
-            }
-        }
-    }, [removeBook.isSuccess])
+      const { error } = deleteLibrary;
+      if (isAxiosError(error)) {
+        setErrorLocal(error.response?.data.error);
+      } else {
+        setErrorLocal("Something went wrong at emptying your Library");
+      }
+    }
+  }, [removeBook.isSuccess]);
 
-    const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value)
+  const handleDeleteLibrary = () => {
+    if (data !== undefined && !("error" in data)) removeAllBooks();
+    else {
+      setErrorLocal(ERROR_BOOKS.DELETE_EMPTY_LIBRARY);
     }
-    const handleStatus = (e: ChangeEvent<HTMLSelectElement>) => {
-        setStatus(e.target.value as BookStatus)
-    }
-    const handleBookSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (title !== "") {
-            createNewBook.mutate({ title, status, token })
-        }
-        else {
-            setErrorLocal("Please introduce a title if you want to add a book")
-        }
+  };
+  const handleRemove = (id: string) => {
+    removeOneBook(id);
+  };
 
-    }
-    const handleDeleteLibrary = () => {
-        if (data !== undefined && !("error" in data))
-            deleteLibrary.mutate({ token })
-        else {
-            setErrorLocal(ERROR_BOOKS.DELETE_EMPTY_LIBRARY)
+  return errorAuth.cause !== null ? (
+    <UnauthorizedAccess errorAuth={errorAuth} />
+  ) : (
+    <main>
+      <nav className="right-0 -order-2 md:absolute">
+        <Link to="/my-profile">
+          <Button
+            color="bg-lime-300 border-lime-500 hover:bg-sky-600 hover:border-sky-500"
+            xSize="w-full"
+          >
+            Return to My Profile
+          </Button>
+        </Link>
+      </nav>
+      {errorBook !== null && isAxiosError(errorBook) && (
+        <ErrorMessage extraStyles="md:left-1/4 z-10">
+          Error: {errorBook.response?.data.error}
+        </ErrorMessage>
+      )}
+      {errorLocal !== null && (
+        <ErrorMessage extraStyles="md:left-1/4 z-20">
+          Error: {errorLocal}
+        </ErrorMessage>
+      )}
+      {action !== null && (
+        <ActionMessage extraStyles="md:left-1/4 z-10">{action}</ActionMessage>
+      )}
+      <h2>Add books to your library!</h2>
+      <Button
+        color="bg-lime-300 border-lime-500 hover:bg-lime-600 hover:border-lime-500"
+        id={idOpen}
+      >
+        Add Books
+      </Button>
+      <LibraryForm
+        idOpen={idOpen}
+        createBook={createBook}
+        createNewBook={createNewBook}
+        setAction={setAction}
+        setErrorLocal={setErrorLocal}
+      />
+      <button
+        onClick={handleDeleteLibrary}
+        disabled={
+          (data !== undefined && "error" in data) || deleteLibrary.isPending
         }
-    }
-    const handleRemove = (id: string) => {
-        removeBook.mutate({ id, token })
-    }
-
-    return (
-        <div>
-            <Link to="/my-profile"><button>Return to My Profile</button></Link>
-            <div>
-                {errorAuth.cause !== null && <h1>Error: You are not logged in to use this service </h1>}
-                {errorBook !== null && isAxiosError(errorBook) && <h1>Error: {errorBook.response?.data.error}</h1>}
-                {errorLocal !== null && <h2>Error: {errorLocal}</h2>}
-                {action !== null && <h2>{action}</h2>}
-            </div>
-            <h2>Add books to your library!</h2>
-            <form onSubmit={handleBookSubmit}>
-                <label htmlFor="">
-                    Title: <input type="text" name="title" value={title} onChange={handleTitle} />
-                </label>
-                <label htmlFor="">
-                    Status: <select name="" id="" value={status} onChange={handleStatus}>
-                        <option value="Plan to Read">Plan to Read</option>
-                        <option value="Current Reading">Current Reading</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Dropped/Unfinish">Dropped/Unfinish</option>
-                    </select>
-                </label>
-                <button disabled={createNewBook.isPending}>Put it in the Library!</button>
-            </form>
-            <button onClick={handleDeleteLibrary} disabled={(data !== undefined && ("error" in data))
-                || deleteLibrary.isPending}>Delete all your books!!!</button>
-            {data !== undefined ?
-                <div>
-                    {!("error" in data) ?
-                        <ul>
-                            {data.map(book => {
-                                const id = book._id.toString()
-                                return <li key={id}>
-                                    <div>
-                                        <Link to={`/my-profile/library/${id}`}><h2>{book.title}</h2></Link>
-                                        <p>{book.status}</p>
-                                        <p>{book.review}</p>
-                                        <p>{book.recommend}</p>
-                                        <button onClick={() => { handleRemove(id) }}
-                                            disabled={removeBook.isPending}>Remove from my Library</button>
-                                    </div>
-                                </li>
-                            })}
-                        </ul>
-                        : <h2>{data.error}</h2>
-                    }
-                </div>
-                : <p>Loading...</p>}
-
-        </div>
-    )
+      >
+        Delete all your books!!!
+      </button>
+      {data !== undefined ? (
+        <article>
+          {!("error" in data) ? (
+            <ul>
+              {data.map(book => {
+                const id = book._id.toString();
+                return (
+                  <li key={id}>
+                    <div>
+                      <Link to={`/my-profile/library/${id}`}>
+                        <h2>{book.title}</h2>
+                      </Link>
+                      <p>{book.status}</p>
+                      <p>{book.review}</p>
+                      <p>{book.recommend}</p>
+                      <button
+                        onClick={() => {
+                          handleRemove(id);
+                        }}
+                        disabled={removeBook.isPending}
+                      >
+                        Remove from my Library
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <h2>{data.error}</h2>
+          )}
+        </article>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </main>
+  );
 }
