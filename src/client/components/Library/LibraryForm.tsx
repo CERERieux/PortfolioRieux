@@ -23,7 +23,10 @@ interface LibraryFormProps {
   setErrorLocal: React.Dispatch<React.SetStateAction<string | null>>;
   createNewBook: ({ status, title }: CreateBookHook) => void;
   createBook: UseMutationResult<
-    ResultCreateBook,
+    | ResultCreateBook
+    | {
+        error: string;
+      },
     Error,
     CreateBookService,
     unknown
@@ -37,60 +40,76 @@ export default function LibraryForm({
   setAction,
   setErrorLocal,
 }: LibraryFormProps) {
+  // 3 states to handle the form in the dialog
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState<BookStatus>("Plan to Read");
   const [isBtnClosed, setIsBtnClosed] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Auxiliar to redirect the user to the new book
+  // 2 auxiliars for IDs that Dialog needs
   const idClose = "closeLibraryDialog";
   const idDialog = "LibraryDialog";
 
+  // Effect that activates each time user create a book
   useEffect(() => {
-    // If the creation of a book was a success, put the form inputs to its default state
+    // If the creation of a book was a complete, we check if it was an error or not
     if (createBook.isSuccess) {
-      const bookID = createBook.data._id.toString();
-      const dialog = document.getElementById(idDialog) as HTMLDialogElement;
-      dialog.close();
-      setTitle("");
-      setStatus("Plan to Read");
-      setErrorLocal(null);
-      setAction("New book added! Redirecting you to your new book added..."); // Later change this to redirect to new book
-      setTimeout(() => {
-        setAction(null);
-      }, 2000);
-      setTimeout(() => {
-        navigate(`/my-profile/library/${bookID}`);
-      }, 2000);
+      // If it was successful, put the form inputs to its default state
+      if (!("error" in createBook.data)) {
+        // Get the ID of the book to redirect user to it
+        const bookID = createBook.data._id.toString();
+        // Get dialog to close it
+        const dialog = document.getElementById(idDialog) as HTMLDialogElement;
+        dialog.close();
+        setTitle(""); // Reset title
+        setStatus("Plan to Read"); // And status
+        setErrorLocal(null); // The error to null since it was a success
+        setAction("New book added! Redirecting you to your new book...");
+        // Show action for 2 seconds and redirect user to the new book
+        setTimeout(() => {
+          setAction(null);
+        }, 2000);
+        setTimeout(() => {
+          navigate(`/my-profile/library/${bookID}`);
+        }, 2000);
+      }
     } else if (createBook.isError) {
-      // If it wasn't a success, maybe was an error, if that is the case
-      // Show an error about it
+      // If it wasn't a success, maybe was an error, if that is the case, show an error about it
       const { error } = createBook;
       if (isAxiosError(error)) {
         setErrorLocal(error.response?.data.error);
       } else {
+        // Display a generic message if axios can't cover the error
         setErrorLocal("Something went wrong at creating your book");
       }
     }
   }, [createBook.isSuccess]);
+
+  // 2 function to handle the user inputs
   const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
   const handleStatus = (e: ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.target.value as BookStatus);
   };
+  // function to handle the submit of the new book
   const handleBookSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (title !== "") {
-      createNewBook({ title, status });
+    e.preventDefault(); // Prevent the default behaviour
+    // If the title isn't empty and it wasn't closed by the Cancel button
+    if (title !== "" && !isBtnClosed) {
+      createNewBook({ title, status }); // Create the book
     } else if (!isBtnClosed) {
+      // If the title is empty, show an error for 3 seconds
       setErrorLocal("Please introduce a title if you want to add a book");
       setTimeout(() => {
         setErrorLocal(null);
       }, 3000);
     } else {
+      // If the dialog was closed with the button, just reset the button
       setIsBtnClosed(false);
     }
   };
 
+  // Return a Dialog with a Form element
   return (
     <Dialog
       idDialog={idDialog}
