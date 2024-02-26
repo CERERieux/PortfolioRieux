@@ -35,7 +35,14 @@ export function deleteLibrary({ token, userId }: DeleteLibraryService) {
     url: `/cYSvQmg9kR/advanced/books${adminData}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
 }
 
 export function singleBook({ id, token }: SingleOperation) {
@@ -54,9 +61,14 @@ export function createBook({ token, title, status }: CreateBookService) {
     method: "post",
     data: { title, status },
     headers: { Authorization: `Bearer ${token}` },
-  }).then(({ data }) => {
-    return data;
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
 }
 
 export function updateBook({
@@ -72,7 +84,14 @@ export function updateBook({
     method: "put",
     data: { title, status, review, recommend },
     headers: { Authorization: `Bearer ${token}` },
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
 }
 
 export function deleteBook({ id, token, userId }: DeleteOperation) {
@@ -90,7 +109,14 @@ export function createNote({ id, token, note }: CreateNoteService) {
     method: "post",
     data: { note },
     headers: { Authorization: `Bearer ${token}` },
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
 }
 
 export function deleteNote({ id, token, number }: DeleteNoteService) {
@@ -101,5 +127,12 @@ export function deleteNote({ id, token, number }: DeleteNoteService) {
       note_number: number,
     },
     headers: { Authorization: `Bearer ${token}` },
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
 }
