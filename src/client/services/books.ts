@@ -30,7 +30,7 @@ export function getAllBooks({ token }: Token) {
 }
 
 export function deleteLibrary({ token, userId }: DeleteLibraryService) {
-  const adminData = userId !== undefined ? `?user_id=${userId}` : undefined;
+  const adminData = userId !== undefined ? `?user_id=${userId}` : "";
   return axios<ResponseAction>({
     url: `/cYSvQmg9kR/advanced/books${adminData}`,
     method: "delete",
@@ -76,7 +76,7 @@ export function updateBook({
 }
 
 export function deleteBook({ id, token, userId }: DeleteOperation) {
-  const adminData = userId !== undefined ? `?user_id=${userId}` : undefined;
+  const adminData = userId !== undefined ? `?user_id=${userId}` : "";
   return axios<ResponseAction>({
     url: `/cYSvQmg9kR/advanced/books/${id}${adminData}`,
     method: "delete",
