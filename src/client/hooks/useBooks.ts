@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useVerification } from "./useVerification";
 import * as BookService from "../services/books";
 import { getUserBooks } from "../services/user";
-import type { UserProfileHook } from "../types";
+import type { CreateBookHook, UserProfileHook } from "../types";
 
 /** Custom hook that manages the operations of the library, from getting all the
  * user books, add a new one or deleting all the library.
@@ -13,7 +13,7 @@ import type { UserProfileHook } from "../types";
 export function useBooks({ externalUser }: UserProfileHook) {
   const client = useQueryClient();
   const currentUser = externalUser ?? "";
-  console.log(externalUser);
+  // console.log(externalUser);
   const { errorAuth, token, validFetch } = useVerification();
 
   /** Function that brings all the user books from database */
@@ -55,10 +55,18 @@ export function useBooks({ externalUser }: UserProfileHook) {
     data: getBooks.data,
     errorBook: getBooks.error,
     errorAuth,
-    token,
-    createNewBook: createBook,
+    createBook,
+    createNewBook: ({ status, title }: CreateBookHook) => {
+      createBook.mutate({ status, title, token });
+    },
     removeBook: deleteBook,
+    removeOneBook: (id: string) => {
+      deleteBook.mutate({ id, token });
+    },
     deleteLibrary: deleteBooks,
+    removeAllBooks: () => {
+      deleteBooks.mutate({ token });
+    },
     getExternalUserBooks,
   };
 }

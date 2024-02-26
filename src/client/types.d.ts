@@ -198,6 +198,7 @@ export interface CreateBookService {
   title: string;
   status: string;
 }
+export type CreateBookHook = Omit<CreateBookService, "token">;
 export type ResultCreateBook = Pick<BookService, "_id" | "title">;
 export type SingleBook = Omit<IBook, "username">;
 export interface UpdateBookService extends SingleOperation {
