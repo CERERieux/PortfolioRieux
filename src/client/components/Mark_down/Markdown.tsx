@@ -1,6 +1,8 @@
 import { useMarkdown } from "../../hooks/useMarkdown"; // Our custom hook that manages the users input and translate it
 import Expand from "../Icons/Expand";
 import Minimize from "../Icons/Minimize";
+import Button from "../SystemDesign/Button";
+import Dialog from "../SystemDesign/Dialog";
 const STYLES = {
   BASE: "w-full overflow-y-auto p-4 bg-white shadow-inner shadow-gray-300",
   A: "[&_a]:border-b-[1px] [&_a]:border-blue-400 [&_a]:text-blue-400",
@@ -28,11 +30,47 @@ export default function Markdown() {
   const hide = size === "max" ? "hidden" : "";
   const previewHeight =
     hide === "hidden" ? "h-full shadow-none" : "h-2/5 md:h-3/5";
+  const idBtnOpen = "DeleteContentBtn";
+  const idBtnClose = "CancelDeleteBtn";
+  const idDialog = "MarkdonwDialog";
+
+  const closeDialogDelete = () => {
+    const dialogMarkdown = document.getElementById(
+      idDialog,
+    ) as HTMLDialogElement;
+    dialogMarkdown.close();
+    deleteContent();
+  };
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-around gap-4 bg-gradient-to-b from-lime-100 to-60%">
       <header
         className={`flex h-3/5 w-full flex-col items-center justify-center gap-4 px-6 py-2 md:h-2/5 md:flex-row ${hide}`}
       >
+        <Dialog
+          colorBg="redBlack"
+          idDialog={idDialog}
+          idOpen={idBtnOpen}
+          idClose={idBtnClose}
+        >
+          <article>
+            <p>Are you sure do you want to delete the content?</p>
+            <div className="mt-2 flex w-full items-center justify-center gap-2">
+              <Button
+                color="border-amber-600 bg-amber-200 hover:border-amber-300 hover:bg-amber-500"
+                id={idBtnClose}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="border-red-600 bg-red-300 hover:border-red-300 hover:bg-red-500"
+                onClick={closeDialogDelete}
+              >
+                Delete
+              </Button>
+            </div>
+          </article>
+        </Dialog>
         <section className="w-full bg-white px-4 py-2 shadow-md md:w-1/3">
           <h1 className="font-sketch text-2xl">Markdown parser</h1>
           <p className="text-pretty">
@@ -40,8 +78,8 @@ export default function Markdown() {
           </p>
           <div className="flex w-full items-center justify-center">
             <button
-              onClick={deleteContent}
               className="my-1 rounded-full border border-amber-600 bg-amber-200 px-4 py-1 hover:bg-red-400 hover:text-slate-50"
+              id={idBtnOpen}
             >
               Delete Content
             </button>
