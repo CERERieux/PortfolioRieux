@@ -8,6 +8,8 @@ import ErrorMessage from "../SystemDesign/ErrorMessage";
 import ActionMessage from "../SystemDesign/ActionMessage";
 import Button from "../SystemDesign/Button";
 import LibraryForm from "./LibraryForm";
+import BookList from "./BookList";
+import HeaderLibrary from "./HeaderLibrary";
 
 export default function Library() {
   const {
@@ -24,10 +26,15 @@ export default function Library() {
   const [errorLocal, setErrorLocal] = useState<string | null>(null);
   const [action, setAction] = useState<string | null>(null);
   const idOpen = "openLibraryDialog";
+  const idDialogDelete = "DeleteLibraryDialog";
 
   useEffect(() => {
     // If library was emptied successfully, show the action
     if (deleteLibrary.isSuccess) {
+      const dialogDelete = document.getElementById(
+        idDialogDelete,
+      ) as HTMLDialogElement;
+      dialogDelete.close();
       setAction("You emptied all your Library!");
       setTimeout(() => {
         setAction(null);
@@ -74,10 +81,11 @@ export default function Library() {
     removeOneBook(id);
   };
 
+  // Component of the Library, if there is an error with user, return Unauthorized Access
   return errorAuth.cause !== null ? (
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
-    <main>
+    <main className="flex h-full w-full flex-col gap-4 bg-gray-100 px-6 py-4">
       <nav className="right-0 -order-2 md:absolute">
         <Link to="/my-profile">
           <Button
@@ -101,13 +109,13 @@ export default function Library() {
       {action !== null && (
         <ActionMessage extraStyles="md:left-1/4 z-10">{action}</ActionMessage>
       )}
-      <h2>Add books to your library!</h2>
-      <Button
-        color="bg-lime-300 border-lime-500 hover:bg-lime-600 hover:border-lime-500"
-        id={idOpen}
-      >
-        Add Books
-      </Button>
+      <HeaderLibrary
+        disabled={
+          (data !== undefined && "error" in data) || deleteLibrary.isPending
+        }
+        handleDeleteLibrary={handleDeleteLibrary}
+        idOpen={idOpen}
+      />
       <LibraryForm
         idOpen={idOpen}
         createBook={createBook}
@@ -115,46 +123,12 @@ export default function Library() {
         setAction={setAction}
         setErrorLocal={setErrorLocal}
       />
-      <button
-        onClick={handleDeleteLibrary}
-        disabled={
-          (data !== undefined && "error" in data) || deleteLibrary.isPending
-        }
-      >
-        Delete all your books!!!
-      </button>
       {data !== undefined ? (
-        <article>
-          {!("error" in data) ? (
-            <ul>
-              {data.map(book => {
-                const id = book._id.toString();
-                return (
-                  <li key={id}>
-                    <div>
-                      <Link to={`/my-profile/library/${id}`}>
-                        <h2>{book.title}</h2>
-                      </Link>
-                      <p>{book.status}</p>
-                      <p>{book.review}</p>
-                      <p>{book.recommend}</p>
-                      <button
-                        onClick={() => {
-                          handleRemove(id);
-                        }}
-                        disabled={removeBook.isPending}
-                      >
-                        Remove from my Library
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <h2>{data.error}</h2>
-          )}
-        </article>
+        <BookList
+          data={data}
+          handleRemove={handleRemove}
+          isPending={removeBook.isPending}
+        />
       ) : (
         <p>Loading...</p>
       )}
