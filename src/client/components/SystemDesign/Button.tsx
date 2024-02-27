@@ -25,7 +25,7 @@ export default function Button({
   const size = xSize ?? "w-1/2";
   return (
     <button
-      className={`rounded-xl border px-2 py-1 hover:border-black hover:text-white ${color} ${size} ${mediaSize}`}
+      className={`rounded-xl border px-2 py-1 hover:border-black hover:text-white ${color} ${size} ${mediaSize} disabled:border-gray-500 disabled:bg-gray-300 disabled:text-black/40 hover:disabled:text-black/40`}
       id={id}
       name={name}
       onClick={onClick}
