@@ -221,7 +221,7 @@ export type BookStatus =
   | "Current Reading"
   | "Completed"
   | "Dropped/Unfinish";
-
+export type BookRecommend = "Yes" | "No" | "I can't say";
 export interface GetIssuesService extends ReqQueryIssue {
   token?: string;
 }

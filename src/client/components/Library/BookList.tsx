@@ -1,7 +1,14 @@
 import { Link } from "react-router-dom";
-import type { BookService, BookStatus, EmptyData } from "../../types";
+import type {
+  BookRecommend,
+  BookService,
+  BookStatus,
+  EmptyData,
+} from "../../types";
 import ActionButton from "../SystemDesign/ActionButton";
 import BookOff from "../Icons/BookOff";
+import { useCallback, useEffect } from "react";
+import debounce from "just-debounce-it";
 
 // Auxiliar to give color to each element in the list, depending if its recommended and the status
 const COLOR_LIST_BOOK = {
@@ -44,20 +51,86 @@ const COLOR_LIST_BOOK = {
 interface BookListProps {
   isPending: boolean;
   data: EmptyData | BookService[];
+  dataFiltered: EmptyData | BookService[];
   handleRemove: (id: string) => void;
+  title: string;
+  status: BookStatus | "All";
+  recommend: BookRecommend | "All";
+  setFilteredData: React.Dispatch<
+    React.SetStateAction<EmptyData | BookService[]>
+  >;
 }
+type FilterUserData = Pick<
+  BookListProps,
+  "data" | "recommend" | "status" | "title"
+>;
 
 export default function BookList({
   data,
   isPending,
   handleRemove,
+  recommend,
+  status,
+  title,
+  dataFiltered,
+  setFilteredData,
 }: BookListProps) {
+  /** Auxiliar function to debounce each 300ms the user inputs in the filter.
+   * It needs the data, and the recommend, status and title info from the filter
+   */
+  const filterData = useCallback(
+    debounce(({ data, recommend, status, title }: FilterUserData) => {
+      // If the filter info is empty ana there is no books, just set the data
+      if (
+        (title === "" && status === "All" && recommend === "All") ||
+        "error" in data
+      )
+        setFilteredData(data);
+      else {
+        // If there is books and the filter isn't empty
+        let newListBook: EmptyData | BookService[] = data;
+        // Check if the title isn't empty, get the books that match with the info
+        if (title !== "") {
+          newListBook = newListBook.filter(book =>
+            book.title.toLowerCase().includes(title.toLowerCase()),
+          );
+        } else if (status !== "All" && newListBook.length > 0) {
+          // Same for the status of the book
+          newListBook = newListBook.filter(book => book.status === status);
+        } else if (recommend !== "All" && newListBook.length > 0) {
+          // And if its recommended
+          const recomBool =
+            recommend === "I can't say" ? undefined : recommend === "Yes";
+          newListBook = newListBook.filter(
+            book => book.recommend === recomBool,
+          );
+        }
+        // If we got 0 matches, display the "error"
+        if (newListBook.length === 0) {
+          setFilteredData({
+            category: "book",
+            error: "There is no books that match your search",
+          });
+        } else {
+          // Otherwise, display books filtered by user
+          setFilteredData(newListBook);
+        }
+      }
+    }, 300),
+    [],
+  );
+
+  // Activate the filter each time the data or info from the filter changes
+  useEffect(() => {
+    filterData({ data, recommend, status, title });
+  }, [data, recommend, status, title]);
+
   // A component that returns the list of books
   return (
     <article className="flex h-full w-full items-center justify-center overflow-y-auto rounded-md bg-white shadow-inner shadow-black/40 md:w-2/3">
-      {!("error" in data) ? (
+      {!("error" in dataFiltered) ? (
         <ul className="flex h-full w-full flex-col gap-2 px-6 py-4">
-          {data.map(book => {
+          {dataFiltered.map(book => {
             // For each book we need
             const id = book._id.toString(); // the ID for the list
             const status = book.status as BookStatus; // The status
@@ -112,7 +185,7 @@ export default function BookList({
         </ul>
       ) : (
         <h2 className="rounded-sm px-4 py-1 text-center font-elegant text-4xl first-letter:text-5xl first-letter:text-red-500">
-          {data.error}
+          {dataFiltered.error}
         </h2>
       )}
     </article>
