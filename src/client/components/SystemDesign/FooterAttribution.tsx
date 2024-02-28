@@ -5,6 +5,8 @@ interface FooterAttributionProps {
   urlRef: string;
   placeRef: string;
   extra?: string;
+  size?: string;
+  mx?: string;
 }
 
 /** Component that display a footer in case I need to give attribution for
@@ -15,9 +17,13 @@ export default function FooterAttribution({
   urlRef,
   placeRef,
   extra,
+  size = "md:left-1/3 md:w-1/3",
+  mx = "md:mx-auto",
 }: FooterAttributionProps) {
   return (
-    <footer className="absolute bottom-0 w-full bg-black/60 py-1 text-center text-xs text-white/70 md:left-1/3 md:mx-auto md:w-1/3 md:rounded-lg">
+    <footer
+      className={`absolute bottom-0 w-full bg-black/60 py-1 text-center text-xs text-white/70 ${size} ${mx} md:rounded-lg`}
+    >
       <p>
         {whatIs}{" "}
         <Anchor href={urlRef} isBgBlack={true}>
