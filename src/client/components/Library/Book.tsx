@@ -1,208 +1,156 @@
-import { type ChangeEvent, useEffect, useState, type FormEvent } from "react"
-import { isAxiosError } from "axios"
-import { useSingleBook } from "../../hooks/useSingleBook"
-import { Link, useParams } from "react-router-dom"
-import type { SingleBook, BookStatus } from "../../types"
-
-function isEmptyNotes(data: SingleBook) {
-    const isEmpty = data.notes.map(note => {
-        if (note !== "") return true
-        return false
-    })
-    console.log(isEmpty)
-    if (isEmpty.find(note => note) !== undefined) {
-        return false
-    } else
-        return true
-}
+import { useEffect, useState, useCallback } from "react";
+import { isAxiosError } from "axios";
+import { useSingleBook } from "../../hooks/useSingleBook";
+import { Link, useParams } from "react-router-dom";
+import type { SingleBook } from "../../types";
+import UnauthorizedAccess from "../NotFound/AuthError";
+import ErrorMessage from "../SystemDesign/ErrorMessage";
+import Button from "../SystemDesign/Button";
+import CustomBackground from "../SystemDesign/CustomBackground";
+import BookAside from "./BookAside";
+import BookData from "./BookData";
+import FooterAttribution from "../SystemDesign/FooterAttribution";
+import ActionMessage from "../SystemDesign/ActionMessage";
 
 export default function Book() {
-    const { id } = useParams()
-    const idBook = id ?? ""
-    const { data, errorAuth, errorBook, updateBook, addNote, removeNote, token } = useSingleBook(idBook)
-    const [title, setTitle] = useState("")
-    const [review, setReview] = useState("")
-    const [status, setStatus] = useState<BookStatus>("Plan to Read")
-    const [recommend, setRecommend] = useState<boolean | undefined>(undefined)
-    const [localError, setLocalError] = useState<string | null>(null)
-    const [note, setNote] = useState("")
-    const [emptyNotes, setEmptyNotes] = useState(true)
+  const { id } = useParams(); // Get the id of the book from the params of the page
+  const idBook = id ?? ""; // Get the id as string for the custom hook
+  const {
+    data,
+    errorAuth,
+    errorBook,
+    updateBook,
+    updateDataBook,
+    addNote,
+    createNote,
+    removeNote,
+    deleteNote,
+  } = useSingleBook(idBook); // Get the info of the book
+  // 2 states to manage the result of the user actions
+  const [action, setAction] = useState<string | null>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
+  const [emptyNotes, setEmptyNotes] = useState(true); // state to see if we have have notes or not
 
-    useEffect(() => {
+  // Auxiliar to know if the notes are empty or not
+  const isEmptyNotes = useCallback((data: SingleBook) => {
+    // Go through the notes, if those don't have text, then don't "exist"
+    const isEmpty = data.notes.map(note => {
+      if (note !== "") return true;
+      return false;
+    });
+    // Find if a note with text exist, return the result of this
+    if (isEmpty.find(note => note) !== undefined) {
+      return false;
+    } else return true;
+  }, []);
+
+  // Effect that activates each time user deletes a note
+  useEffect(() => {
+    // If the petition was completed, we need to see if it's success or an error
+    if (deleteNote.isSuccess) {
+      // If it was a success then
+      if (!("error" in deleteNote.data)) {
+        // Check if notes is empty or not
         if (data !== undefined) {
-            setTitle(data.title)
-            setReview(data.review)
-            setStatus(data.status as BookStatus)
-            setRecommend(data.recommend)
-            setEmptyNotes(isEmptyNotes(data))
+          setEmptyNotes(isEmptyNotes(data));
         }
-    }, [data])
-
-    useEffect(() => {
-        if (updateBook.isSuccess) {
-            setLocalError("")
-        }
-        else if (updateBook.isError) {
-            const { error } = updateBook
-            if (isAxiosError(error)) {
-                setLocalError(error.response?.data.error)
-            }
-            else {
-                setLocalError("Something went wrong at emptying your Library")
-            }
-        }
-    }, [updateBook.isSuccess])
-
-    useEffect(() => {
-        if (addNote.isSuccess) {
-            if (data !== undefined) {
-                setEmptyNotes(isEmptyNotes(data))
-            }
-            setNote("")
-            setLocalError("")
-        }
-        else if (addNote.isError) {
-            const { error } = addNote
-            if (isAxiosError(error)) {
-                setLocalError(error.response?.data.error)
-            }
-            else {
-                setLocalError("Something went wrong at emptying your Library")
-            }
-        }
-    }, [addNote.isSuccess])
-
-    useEffect(() => {
-        if (removeNote.isSuccess) {
-            if (data !== undefined) {
-                setEmptyNotes(isEmptyNotes(data))
-            }
-            setLocalError("")
-        }
-        else if (removeNote.isError) {
-            const { error } = removeNote
-            if (isAxiosError(error)) {
-                setLocalError(error.response?.data.error)
-            }
-            else {
-                setLocalError("Something went wrong at emptying your Library")
-            }
-        }
-    }, [removeNote.isSuccess])
-
-    const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value)
+        // and show the action for 2 seconds
+        setLocalError(null);
+        setAction("Your note was removed from the book.");
+        setTimeout(() => {
+          setAction(null);
+        }, 2000);
+      } else {
+        // It was completed but there was an error at remove the note so show error for 3s
+        setAction(null);
+        setLocalError(deleteNote.data.error);
+        setTimeout(() => {
+          setLocalError(null);
+        }, 3000);
+      }
+    } else if (deleteNote.isError) {
+      // If petition was incomplete due an error, show it for 3 seconds
+      const { error } = deleteNote;
+      if (isAxiosError(error)) {
+        setLocalError(error.response?.data.error);
+      } else {
+        // Show a generic error if axios can't cover it
+        setLocalError("Something went wrong at emptying your Library");
+      }
+      setTimeout(() => {
+        setLocalError(null);
+      }, 3000);
     }
-    const handleStatus = (e: ChangeEvent<HTMLSelectElement>) => {
-        setStatus(e.target.value as BookStatus)
-    }
-    const handleRecommend = (e: ChangeEvent<HTMLSelectElement>) => {
-        let recom: (boolean | undefined)
-        if (e.target.value === "Yes") recom = true
-        if (e.target.value === "No") recom = false
-        setRecommend(recom)
-    }
-    const handleReview = (e: ChangeEvent<HTMLInputElement>) => {
-        setReview(e.target.value)
-    }
+  }, [deleteNote.isSuccess]);
 
-    const handleUpdate = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        let recommendString = "I can't say"
-        if (recommend === true) recommendString = "Yes"
-        if (recommend === false) recommendString = "No"
-        if (title !== "") {
-            updateBook.mutate({ id: idBook, token, title, review, status, recommend: recommendString })
-        }
-        else {
-            setLocalError("Please don't leave the title field empty")
-        }
+  // Auxiliar function to remove a note from the book based on the 1 of the book and note
+  const handleDeleteNote = (number: string) => {
+    removeNote({ id: idBook, number });
+  };
 
-    }
+  // Component that show the book, return Unauthorized Access if user isn't logged in
+  return errorAuth.cause !== null ? (
+    <UnauthorizedAccess errorAuth={errorAuth} />
+  ) : (
+    <CustomBackground
+      bgImg="before:bg-[url('/bookBG.jpg')] before:opacity-50"
+      styles="w-full h-full flex flex-col md:items-center md:justify-center gap-2 md:flex-row overflow-y-auto"
+    >
+      {errorBook !== null && isAxiosError(errorBook) && (
+        <ErrorMessage extraStyles="md:left-1/4 z-10">
+          Error: {errorBook.response?.data.error}
+        </ErrorMessage>
+      )}
+      {localError !== null && (
+        <ErrorMessage extraStyles="md:left-1/4 z-10">{localError}</ErrorMessage>
+      )}
+      {action !== null && (
+        <ActionMessage extraStyles="md:left-1/4 z-10">{action}</ActionMessage>
+      )}
+      <nav className="right-6 top-2 -order-2 md:absolute">
+        <Link to="/my-profile/library">
+          <Button
+            color="bg-lime-300 border-lime-500 hover:bg-sky-600 hover:border-sky-500"
+            xSize="w-full"
+          >
+            Return to Library
+          </Button>
+        </Link>
+      </nav>
+      <BookAside
+        data={data}
+        idBook={idBook}
+        addNote={addNote}
+        createNote={createNote}
+        updateBook={updateBook}
+        updateDataBook={updateDataBook}
+        isCreatePending={createNote.isPending}
+        isUpdatePending={updateDataBook.isPending}
+        isEmptyNotes={isEmptyNotes}
+        setEmptyNotes={setEmptyNotes}
+        setAction={setAction}
+        setLocalError={setLocalError}
+      />
+      <main className="mt-2 flex flex-col gap-2 rounded-xl bg-slate-50/85 px-4 py-2 md:mt-0 md:h-full md:w-1/2 md:rounded-none md:bg-transparent">
+        {data !== undefined ? (
+          <BookData
+            data={data}
+            emptyNotes={emptyNotes}
+            handleDeleteNote={handleDeleteNote}
+            isDeletePending={deleteNote.isPending}
+          />
+        ) : (
+          <p>Loading...</p>
+        )}
+      </main>
 
-
-    const handleNote = (e: ChangeEvent<HTMLInputElement>) => {
-        setNote(e.target.value)
-    }
-    const handleNoteSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (note !== "")
-            addNote.mutate({ id: idBook, token, note })
-        else {
-            setLocalError("Please don't leave the note field empty")
-        }
-    }
-    const handleDeleteNote = (number: string) => {
-        removeNote.mutate({ id: idBook, token, number })
-    }
-
-    return (
-        <div>
-            <div>
-                {errorAuth.cause !== null && <h1>Error: You are not logged in to use this service </h1>}
-                {errorBook !== null && isAxiosError(errorBook) && <h1>Error: {errorBook.response?.data.error}</h1>}
-                {localError !== null && <h2>{localError}</h2>}
-            </div>
-            <Link to="/my-profile/library"><button>Return to Library</button></Link>
-            <h2>Update your book!</h2>
-            <form onSubmit={handleUpdate}>
-                <label htmlFor="">
-                    Title: <input type="text" value={title} onChange={handleTitle} />
-                </label>
-                <label htmlFor="">
-                    Review: <input type="text" value={review} onChange={handleReview} />
-                </label>
-                <label htmlFor="">
-                    Status: <select name="" id="" value={status} onChange={handleStatus}>
-                        <option value="Plan to Read">Plan to Read</option>
-                        <option value="Current Reading">Current Reading</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Dropped/Unfinish">Dropped/Unfinish</option>
-                    </select>
-                </label>
-                <label htmlFor="">
-                    Do you recommend it? <select
-                        value={recommend === undefined ? "I can't say" : recommend ? "Yes" : "No"}
-                        onChange={handleRecommend}>
-                        <option value="I can't say">I can&apos;t say</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </label>
-                <button disabled={updateBook.isPending}>Update book!</button>
-            </form>
-            <h2>Add a note to your book</h2>
-
-            <form onSubmit={handleNoteSubmit}>
-                <label htmlFor="">
-                    Note: <input type="text" value={note} onChange={handleNote} />
-                </label>
-                <button disabled={addNote.isPending}>Add Note!</button>
-            </form>
-            <div>
-                {data !== undefined ?
-                    <div>
-                        <h2>Title: {data.title}</h2>
-                        <p>Status: {data.status}</p>
-                        <p>Review: {data.review !== "" ? data.review : "You haven't review this book."}</p>
-                        <p>Do you recommend it? {data.recommend === undefined ? "I can't say" : data.recommend ? "Yes" : "No"}</p>
-                        <p>Notes: {emptyNotes && "Here will appear the notes you add to your book!"}</p>
-                        <ul>
-                            {data.notes.map((note, i) => {
-                                if (note !== "")
-                                    return (
-                                        <li key={i}>
-                                            {note}
-                                            <button onClick={() => { handleDeleteNote(`${i}`) }}
-                                                disabled={removeNote.isPending}>Remove note</button>
-                                        </li>
-                                    )
-                                return null
-                            })}
-                        </ul>
-                    </div>
-                    : <p>Loading...</p>}
-            </div>
-        </div>
-    )
+      <FooterAttribution
+        placeRef="freepik"
+        urlRef="https://www.freepik.com/free-photo/top-view-books-with-copy-space_12151841.htm#fromView=search&page=1&position=7&uuid=0437f0c6-99a6-4acf-805c-fdfc26ddba3b"
+        whatIs="Image by"
+        size="md:w-1/6 md:left-0"
+        mx=""
+      />
+    </CustomBackground>
+  );
 }
