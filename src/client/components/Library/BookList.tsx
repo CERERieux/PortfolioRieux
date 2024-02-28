@@ -94,10 +94,12 @@ export default function BookList({
           newListBook = newListBook.filter(book =>
             book.title.toLowerCase().includes(title.toLowerCase()),
           );
-        } else if (status !== "All" && newListBook.length > 0) {
+        }
+        if (status !== "All" && newListBook.length > 0) {
           // Same for the status of the book
           newListBook = newListBook.filter(book => book.status === status);
-        } else if (recommend !== "All" && newListBook.length > 0) {
+        }
+        if (recommend !== "All" && newListBook.length > 0) {
           // And if its recommended
           const recomBool =
             recommend === "I can't say" ? undefined : recommend === "Yes";
@@ -127,7 +129,7 @@ export default function BookList({
 
   // A component that returns the list of books
   return (
-    <article className="flex h-full w-full items-center justify-center overflow-y-auto rounded-md bg-white shadow-inner shadow-black/40 md:w-2/3">
+    <article className="flex w-full items-center justify-center rounded-md bg-white shadow-inner shadow-black/40 md:h-full md:w-2/3 md:overflow-y-auto">
       {!("error" in dataFiltered) ? (
         <ul className="flex h-full w-full flex-col gap-2 px-6 py-4">
           {dataFiltered.map(book => {
@@ -155,7 +157,7 @@ export default function BookList({
                   <p className="pl-4 italic first-letter:text-lg first-letter:text-red-400">
                     Review:{" "}
                   </p>
-                  <p className="-mt-1 mb-2 text-pretty pl-6 text-sm">
+                  <p className="-mt-1 mb-2 whitespace-pre-wrap text-pretty pl-6 text-sm">
                     {book.review === ""
                       ? "Review for this book is empty."
                       : `${book.review}`}

@@ -153,7 +153,7 @@ export default function Library() {
   return errorAuth.cause !== null ? (
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
-    <main className="relative flex h-full w-full flex-col gap-4 bg-gray-100 px-6 py-4">
+    <main className="relative flex h-full w-full flex-col gap-4 overflow-y-auto bg-gray-50 px-6 py-4">
       <nav className="right-0 -order-2 md:absolute">
         <Link to="/my-profile">
           <Button
