@@ -100,7 +100,14 @@ export function deleteBook({ id, token, userId }: DeleteOperation) {
     url: `/cYSvQmg9kR/advanced/books/${id}${adminData}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error as string };
+    });
 }
 
 export function createNote({ id, token, note }: CreateNoteService) {
