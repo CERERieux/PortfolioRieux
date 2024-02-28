@@ -207,14 +207,17 @@ export interface UpdateBookService extends SingleOperation {
   review?: string;
   recommend: string;
 }
+export type UpdateBookHook = Omit<UpdateBookService, "token">;
 export type ResultUpdateBook = Omit<BookService, "_id">;
 export interface CreateNoteService extends SingleOperation {
   note: string;
 }
+export type CreateNoteHook = Omit<CreateNoteService, "token">;
 export type ResultCreateNote = Pick<IBook, "_id" | "title" | "notes">;
 export interface DeleteNoteService extends SingleOperation {
   number: string;
 }
+export type DeleteNoteHook = Omit<DeleteNoteService, "token">;
 export type ResultDeleteNote = Omit<ResultCreateNote, "title">;
 export type BookStatus =
   | "Plan to Read"

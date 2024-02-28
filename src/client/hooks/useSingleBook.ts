@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useVerification } from "./useVerification";
 import * as BookService from "../services/books";
+import {
+  type DeleteNoteHook,
+  type CreateNoteHook,
+  type UpdateBookHook,
+} from "../types";
 
 /** Custom hook that manages the actions that can be done for a single book
  * in the library. It verify if the user is logged in, if it is, then can be used
@@ -46,9 +51,17 @@ export function useSingleBook(id: string) {
     data: singleBook.data,
     errorBook: singleBook.error,
     errorAuth,
-    updateBook: updateDataBook,
-    addNote: createNote,
-    removeNote: deleteNote,
-    token,
+    updateDataBook,
+    updateBook: ({ id, recommend, status, review, title }: UpdateBookHook) => {
+      updateDataBook.mutate({ id, recommend, status, token, review, title });
+    },
+    createNote,
+    addNote: ({ note, id }: CreateNoteHook) => {
+      createNote.mutate({ id, note, token });
+    },
+    deleteNote,
+    removeNote: ({ id, number }: DeleteNoteHook) => {
+      deleteNote.mutate({ id, number, token });
+    },
   };
 }
