@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { isAxiosError } from "axios";
 import { useExercise } from "../../hooks/useExercise";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import type { StatusEx } from "../../types";
 import type { IExTracker } from "../../../server/types/basic";
 import CreateExForm from "./CreateExForm";
@@ -10,7 +10,7 @@ import ActionMessage from "../SystemDesign/ActionMessage";
 import UnauthorizedAccess from "../NotFound/AuthError";
 import LogList from "./LogList";
 import FilterExercise from "./FilterExercise";
-import Button from "../SystemDesign/Button";
+import NavMenu from "../MyProfile/NavMenu";
 
 export default function ExerciseTracker() {
   const {
@@ -83,17 +83,7 @@ export default function ExerciseTracker() {
               {action}
             </ActionMessage>
           )}
-          {/** TODO Better nav bar and make it fit in the structure correctly */}
-          <nav className="-order-2 col-start-4 row-span-1 md:absolute">
-            <Link to="/my-profile">
-              <Button
-                color="bg-lime-300 border-lime-500 hover:bg-sky-600 hover:border-sky-500"
-                xSize="w-full"
-              >
-                Return to My Profile
-              </Button>
-            </Link>
-          </nav>
+          <NavMenu />
           <header className="col-span-3 col-start-1 row-span-1 mb-4 md:mb-0">
             <FilterExercise
               getNewList={getNewList}

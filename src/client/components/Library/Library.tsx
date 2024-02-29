@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useBooks } from "../../hooks/useBooks";
 import { isAxiosError } from "axios";
 import { ERROR_BOOKS } from "../../../server/schemas/advanced";
-import { Link } from "react-router-dom";
 import UnauthorizedAccess from "../NotFound/AuthError";
 import ErrorMessage from "../SystemDesign/ErrorMessage";
 import ActionMessage from "../SystemDesign/ActionMessage";
-import Button from "../SystemDesign/Button";
 import LibraryForm from "./LibraryForm";
 import BookList from "./BookList";
 import HeaderLibrary from "./HeaderLibrary";
@@ -17,6 +15,7 @@ import type {
   EmptyData,
   BookService,
 } from "../../types";
+import NavMenu from "../MyProfile/NavMenu";
 
 export default function Library() {
   const {
@@ -154,16 +153,7 @@ export default function Library() {
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
     <main className="relative flex h-full w-full flex-col gap-4 overflow-y-auto bg-gray-50 px-6 py-4">
-      <nav className="right-0 -order-2 md:absolute">
-        <Link to="/my-profile">
-          <Button
-            color="bg-lime-300 border-lime-500 hover:bg-sky-600 hover:border-sky-500"
-            xSize="w-full"
-          >
-            Return to My Profile
-          </Button>
-        </Link>
-      </nav>
+      <NavMenu />
       {errorBook !== null && isAxiosError(errorBook) && (
         <ErrorMessage extraStyles="md:left-1/4 z-10">
           Error: {errorBook.response?.data.error}
