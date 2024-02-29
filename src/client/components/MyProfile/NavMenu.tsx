@@ -7,12 +7,14 @@ interface NavMenuProps {
   positionNav?: string;
   flexCol?: boolean;
   order?: string;
+  colorText?: string;
 }
 
 export default function NavMenu({
   positionNav = "top-0 right-0",
   flexCol = false,
   order = "-order-2",
+  colorText = "text-black",
 }: NavMenuProps) {
   let positionReturn = {
     position: "top-4 right-14",
@@ -34,7 +36,7 @@ export default function NavMenu({
   }
   return (
     <nav
-      className={`${positionNav} ${order} flex items-center justify-center gap-2 md:absolute`}
+      className={`${positionNav} ${order} ${colorText} flex items-center justify-center gap-2 md:absolute`}
     >
       <Link to="/my-profile">
         <ActionButton

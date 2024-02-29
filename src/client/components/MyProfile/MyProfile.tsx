@@ -94,7 +94,7 @@ export default function MyProfile() {
       ) : (
         <CustomBackground
           styles="flex h-full w-full flex-col items-center justify-center gap-10 md:gap-0"
-          bgImg="before:bg-[url('./profileBG.jpg')] before:opacity-5"
+          bgImg="before:bg-[url('/profileBG.jpg')] before:opacity-5"
         >
           {error !== null && isAxiosError(error) && (
             <ErrorMessage extraStyles="z-10">
