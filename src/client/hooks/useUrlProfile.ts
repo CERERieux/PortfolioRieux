@@ -27,10 +27,15 @@ export function useUrlProfile() {
 
   return {
     addUrl,
+    newLink: (url: string) => {
+      addUrl.mutate({ token, url });
+    },
     data: urls.data,
     error: urls.error,
     errorAuth,
     removeUrl,
-    token,
+    deleteLink: (id: string) => {
+      removeUrl.mutate({ id, token });
+    },
   };
 }
