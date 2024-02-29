@@ -6,7 +6,7 @@ interface ActionButtonProps {
   position: string;
   tooltipText: string;
   tooltipPos: string;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   id?: string;
   name?: string;
