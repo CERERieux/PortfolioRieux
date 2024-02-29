@@ -40,7 +40,7 @@ export async function createUser({ username, password }: User) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
   return resultCreateUser;
 }
@@ -58,7 +58,7 @@ export function updateInfoUser({ token, bio, img }: UpdateUserService) {
     .then(({ data }) => data)
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
 }
 
@@ -79,7 +79,7 @@ export async function loginUser({ username, password }: User) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
   return resultLoginUser;
 }
@@ -95,7 +95,7 @@ export async function verifyToken(token: string) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
   return resultVerifyToken;
 }

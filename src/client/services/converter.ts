@@ -9,6 +9,6 @@ export function convertUnit(dataConvert: string) {
     .then(({ data }) => data)
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
 }

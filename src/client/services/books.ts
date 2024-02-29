@@ -90,7 +90,7 @@ export function updateBook({
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
 }
 
@@ -106,7 +106,7 @@ export function deleteBook({ id, token, userId }: DeleteOperation) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
 }
 
@@ -122,7 +122,7 @@ export function createNote({ id, token, note }: CreateNoteService) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
 }
 
@@ -140,6 +140,6 @@ export function deleteNote({ id, token, number }: DeleteNoteService) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error as string };
+      return { error: err.response.data.error.error as string };
     });
 }
