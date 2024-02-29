@@ -1,120 +1,127 @@
 import { isAxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { useUrlProfile } from "../../hooks/useUrlProfile";
 import UnauthorizedAccess from "../NotFound/AuthError";
-import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import NavMenu from "../MyProfile/NavMenu";
+import ErrorMessage from "../SystemDesign/ErrorMessage";
+import ActionMessage from "../SystemDesign/ActionMessage";
+import AddUrlForm from "./AddUrlForm";
+import Button from "../SystemDesign/Button";
+import AddLink from "../Icons/AddLink";
+import CustomBackground from "../SystemDesign/CustomBackground";
+import UrlsTable from "./UrlsTable";
+import FooterAttribution from "../SystemDesign/FooterAttribution";
 
 export default function Url() {
-    const { addUrl, data, error, errorAuth, removeUrl, token } = useUrlProfile()
-    const [action, setAction] = useState<string | null>(null)
-    const [localError, setLocalError] = useState<string | null>(null)
-    const [isCreating, setIsCreating] = useState(false)
-    const [url, setUrl] = useState("")
-    const isError = errorAuth.cause !== null
+  const { addUrl, newLink, data, error, errorAuth, removeUrl, deleteLink } =
+    useUrlProfile(); // Custom hook to get user short Links
+  // 2 states to display results of user actions
+  const [action, setAction] = useState<string | null>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
+  const isError = errorAuth.cause !== null; // Auxiliar to be clearer on display condition at the start
+  const idOpen = "OpenCreateUserLinkDialog"; // Auxiliar for id of the button that open a dialog
 
-    useEffect(() => {
-        if (addUrl.isSuccess) {
-            setUrl("")
-            setIsCreating(false)
-            setLocalError(null)
-            setAction("Your new short URL was created successfully!")
-            setTimeout(() => { setAction(null) }, 2000)
-        }
-        else if (addUrl.isError) {
-            const { error } = addUrl
-            if (isAxiosError(error)) {
-                setLocalError(error.response?.data.error)
-            }
-            else {
-                setLocalError("Something went wrong at creating your new short URL...")
-            }
-            setTimeout(() => { setLocalError(null) }, 3000)
-
-        }
-    }, [addUrl.isSuccess])
-
-    useEffect(() => {
-        if (removeUrl.isSuccess) {
-            setLocalError(null)
-            setAction("Your URL was removed from your list!")
-            setTimeout(() => { setAction(null) }, 2000)
-        }
-        else if (removeUrl.isError) {
-            const { error } = removeUrl
-            if (isAxiosError(error)) {
-                setLocalError(error.response?.data.error)
-            }
-            else {
-                setLocalError("Something went wrong at removing your URL from the list...")
-            }
-            setTimeout(() => { setLocalError(null) }, 3000)
-        }
-    }, [removeUrl.isSuccess])
-
-    const handleDelete = (id: string) => {
-        removeUrl.mutate({ id, token })
+  // Effect that activates when user remove an url from the table
+  useEffect(() => {
+    // Check if removal was completed
+    if (removeUrl.isSuccess) {
+      // If it was completed, check if there wasn't an error
+      if (!("error" in removeUrl.data)) {
+        // If it was a success, display action for 2 seconds
+        setLocalError(null);
+        setAction("Your URL was removed from your list!");
+        setTimeout(() => {
+          setAction(null);
+        }, 2000);
+      } else {
+        // If error happened, show it for 3 seconds
+        setAction(null);
+        setLocalError(removeUrl.data.error);
+        setTimeout(() => {
+          setLocalError(null);
+        }, 3000);
+      }
+    } else if (removeUrl.isError) {
+      // If removal was incomplete due an error, get the error
+      const { error } = removeUrl;
+      if (isAxiosError(error)) {
+        setLocalError(error.response?.data.error);
+      } else {
+        // If axios can't cover the error, show a generic message
+        setLocalError(
+          "Something went wrong at removing your URL from the list...",
+        );
+      }
+      // And show it for 3 seconds
+      setTimeout(() => {
+        setLocalError(null);
+      }, 3000);
     }
-    const handleViewCreation = () => {
-        setIsCreating(!isCreating)
-    }
-    const handleUrlText = (e: ChangeEvent<HTMLInputElement>) => {
-        setUrl(e.target.value)
-    }
-    const handleNewUrl = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (url !== "")
-            addUrl.mutate({ token, url })
-        else {
-            setLocalError("Please fill the URL field")
-        }
-    }
+  }, [removeUrl.isSuccess]);
 
-    return (
-        <div>
-            <Link to="/my-profile"><button>Return to My Profile</button></Link>
-            {isError && <UnauthorizedAccess errorAuth={errorAuth} />}
-            {error !== null && isAxiosError(error) && <h2>{error.response?.data.error}</h2>}
-            {action !== null && <h2>{action}</h2>}
-            {localError !== null && <h2>{localError}</h2>}
-            <div>
-                {!isCreating ?
-                    <button onClick={handleViewCreation}>Create a new URL</button> :
-                    <div>
-                        <form onSubmit={handleNewUrl}>
-                            <label htmlFor="">
-                                Your url: <input type="text" onChange={handleUrlText} value={url} />
-                            </label>
-                            <button>Create!</button>
-                        </form>
-                        <button onClick={handleViewCreation}>Cancel</button>
-                    </div>}
-                {data !== undefined ?
-                    !("error" in data) ?
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Original URL</th>
-                                    <th>Short URL</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.map(url => {
-                                    const id = url._id.toString()
-                                    return (
-                                        <tr key={id}>
-                                            <td><a href={`${url.originalUrl}`} target="_blank" rel="noopener noreferrer">{url.originalUrl}</a></td>
-                                            <td><a href={`/url/${url.shortUrl}`} target="_blank" rel="noopener noreferrer">{url.shortUrl}</a></td>
-                                            <td><button onClick={() => { handleDelete(id); }}>Delete</button></td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                        : <h2>{data.error}</h2>
-                    : !isError && <p>Loading...</p>
-                }
-            </div>
+  // Auxiliar function to remove a link from user table
+  const handleDelete = (id: string) => {
+    deleteLink(id);
+  };
 
-        </div>
-    )
+  // Component that display Unauthorized Access if user isn't logged in or the table that contains all the user links
+  return isError ? (
+    <UnauthorizedAccess errorAuth={errorAuth} />
+  ) : (
+    <CustomBackground
+      bgImg="before:bg-[url('/bgLinks.jpg')] before:opacity-90"
+      styles="flex h-full w-full flex-col items-center justify-start gap-8 px-4 py-2 font-digitalDisplay overflow-y-auto text-slate-50"
+    >
+      <NavMenu flexCol />
+      {error !== null && isAxiosError(error) && (
+        <ErrorMessage extraStyles="md:left-1/4 z-10">
+          {error.response?.data.error}
+        </ErrorMessage>
+      )}
+      {localError !== null && (
+        <ErrorMessage extraStyles="md:left-1/4 z-10">{localError}</ErrorMessage>
+      )}
+      {action !== null && (
+        <ActionMessage extraStyles="md:left-1/4 z-10">{action}</ActionMessage>
+      )}
+      <header className="bg- flex flex-col items-center justify-center gap-4">
+        <h1 className="text-4xl first-letter:text-5xl first-letter:text-amber-500">
+          Your short links!
+        </h1>
+        <Button
+          color="bg-slate-300 border-slate-500 hover:bg-yellow-700 hover:border-yellow-300 transition-all text-black"
+          xSize="w-44 flex gap-2 justify-center items-center transition-all"
+          id={idOpen}
+        >
+          <AddLink />
+          Add a new Link
+        </Button>
+      </header>
+      <main className="flex w-full justify-center">
+        <AddUrlForm
+          addUrl={addUrl}
+          idOpen={idOpen}
+          newLink={newLink}
+          setAction={setAction}
+          setLocalError={setLocalError}
+        />
+        {data !== undefined ? (
+          !("error" in data) ? (
+            <UrlsTable data={data} handleDelete={handleDelete} />
+          ) : (
+            <h2 className="text-xl first-letter:text-2xl first-letter:text-amber-500">
+              {data.error}
+            </h2>
+          )
+        ) : (
+          !isError && <p>Loading...</p>
+        )}
+      </main>
+      <FooterAttribution
+        placeRef="Pixabay."
+        urlRef="https://www.pexels.com/photo/plants-under-starry-sky-355887/"
+        whatIs="Photo by"
+      />
+    </CustomBackground>
+  );
 }
