@@ -89,7 +89,7 @@ export default function TextArea({
         onChange={onChange}
         className={`${invalidStyles} ${styleLine} ${extraStyles} resize-none placeholder:text-sm placeholder:text-gray-300`}
       />
-      <p className="absolute text-sm italic text-red-500 [font-size:11px] [line-height:1rem]">
+      <p className="absolute -bottom-3 left-0 text-sm italic text-red-500 [font-size:11px] [line-height:1rem]">
         {localError}
       </p>
       {max != null && (
