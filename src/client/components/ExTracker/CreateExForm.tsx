@@ -1,10 +1,4 @@
-import {
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-  useEffect,
-  useRef,
-} from "react";
+import { useState, type ChangeEvent, type FormEvent, useEffect } from "react";
 import { isAxiosError } from "axios";
 import type { NewExercise, NewExerciseHook, StatusEx } from "../../types";
 import type { AxiosResponse } from "axios";
@@ -50,13 +44,11 @@ export default function CreateExForm({
   const [date, setDate] = useState(
     convertTodayDate(new Date(Date.now()).toDateString()),
   );
-  const newCycle = useRef(true); // Flag to help the inputs to detect the start of a new execise data
 
   // Effect that activates each time we create a new exercise
   useEffect(() => {
     // If was successful
     if (createExercise.isSuccess) {
-      newCycle.current = true; // Indicate we start a new exercise
       setDescription(""); // Reset the description
       setStatus("Pending"); // The status
       setDate(convertTodayDate(new Date(Date.now()).toDateString())); // And date from the form
