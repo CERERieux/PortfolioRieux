@@ -257,7 +257,7 @@ export async function updateIssue(
   req: Request<{}, {}, ReqBodyIssue, {}>,
   res: Response,
 ) {
-  const { title, text, status, open, _id } = req.body;
+  const { title, text, status, open, _id, project } = req.body;
   if (_id == null)
     return res.status(400).json({ error: ERROR_ISSUES.MISSING_ID });
 
@@ -272,6 +272,7 @@ export async function updateIssue(
   }
 
   const issue: UpdateIssue = {
+    project,
     title,
     text,
     status,
@@ -284,7 +285,7 @@ export async function updateIssue(
     const status = advancedError(resultUpdate);
     return res.status(status).json(resultUpdate);
   }
-  return res.status(200).json(UPDATE_SUCCESS(_id));
+  return res.status(200).json({action:UPDATE_SUCCESS(_id)});
 }
 
 export async function deleteIssue(

@@ -83,6 +83,7 @@ export interface CreateIssue {
 }
 
 export interface UpdateIssue {
+  project?:string;
   title?: string;
   text?: string;
   status?: string;
