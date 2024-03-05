@@ -68,7 +68,7 @@ export async function shortenerURL(req: Request, res: Response) {
   // If the short URL is bigger then 8 characters, then it's an error
   if ("error" in resultURL) {
     const status = basicError(resultURL);
-    return res.status(status).json({ error: resultURL });
+    return res.status(status).json( resultURL );
   } else {
     return res
       .status(201)

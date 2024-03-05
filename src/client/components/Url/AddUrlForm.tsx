@@ -70,7 +70,7 @@ export default function AddUrlForm({
       // If adding couldn't be completed by an error, show it
       const { error } = addUrl;
       if (isAxiosError(error)) {
-        setLocalError(error.response?.data.error.error);
+        setLocalError(error.response?.data.error);
       } else {
         // If axios can't cover the error, give a generic message
         setLocalError("Something went wrong at creating your new short URL...");

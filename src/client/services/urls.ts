@@ -33,7 +33,7 @@ export function createUrl({ token, url }: CreateShortUrl) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error.error as string };
+      return { error: err.response.data.error as string };
     });
 }
 
@@ -49,6 +49,6 @@ export function deleteUrl({ token, id, userId }: DeleteOperation) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error.error as string };
+      return { error: err.response.data.error as string };
     });
 }

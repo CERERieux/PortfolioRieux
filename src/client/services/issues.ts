@@ -46,7 +46,7 @@ export function createIssue({
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error.error as string };
+      return { error: err.response.data.error as string };
     });
 }
 
@@ -70,7 +70,7 @@ export function updateIssue({
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error.error as string };
+      return { error: err.response.data.error as string };
     });
 }
 
@@ -85,6 +85,6 @@ export function deleteIssue({ id, token }: SingleOperation) {
     })
     .catch(err => {
       console.error(err);
-      return { error: err.response.data.error.error as string };
+      return { error: err.response.data.error as string };
     });
 }

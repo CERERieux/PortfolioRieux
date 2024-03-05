@@ -35,7 +35,7 @@ export function createNewExercise({
     data: { description, status, date },
   }).catch(err => {
     console.error(err);
-    return { error: err.response.data.error.error as string };
+    return { error: err.response.data.error as string };
   });
 }
 
@@ -52,7 +52,7 @@ export function updateExercise({
     data: { status, description },
   }).catch(err => {
     console.error(err);
-    return { error: err.response.data.error.error as string };
+    return { error: err.response.data.error as string };
   });
 }
 
@@ -63,6 +63,6 @@ export function deleteExercise({ id, token }: SingleOperation) {
     headers: { Authorization: `Bearer ${token}` },
   }).catch(err => {
     console.error(err);
-    return { error: err.response.data.error.error as string };
+    return { error: err.response.data.error as string };
   });
 }
