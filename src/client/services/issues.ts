@@ -40,9 +40,14 @@ export function createIssue({
     method: "post",
     headers: { Authorization: `Bearer ${userToken}` },
     data: { project, text, title },
-  }).then(({ data }) => {
-    return data;
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error.error as string };
+    });
 }
 
 export function updateIssue({
@@ -54,12 +59,19 @@ export function updateIssue({
   text,
   title,
 }: UpdateIssueService) {
-  return axios({
+  return axios<ResponseAction>({
     url: "/cYSvQmg9kR/advanced/issue-tracker",
     method: "put",
     headers: { Authorization: `Bearer ${token}` },
     data: { _id, open, project, status, text, title },
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error.error as string };
+    });
 }
 
 export function deleteIssue({ id, token }: SingleOperation) {
@@ -67,7 +79,12 @@ export function deleteIssue({ id, token }: SingleOperation) {
     url: `/cYSvQmg9kR/advanced/issue-tracker/${id}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
-  }).then(({ data }) => {
-    return data;
-  });
+  })
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(err => {
+      console.error(err);
+      return { error: err.response.data.error.error as string };
+    });
 }
