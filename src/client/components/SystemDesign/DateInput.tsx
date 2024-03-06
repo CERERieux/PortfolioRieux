@@ -12,9 +12,11 @@ interface DateInputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   lineStyle: boolean;
   newCycle?: boolean;
+  extraStyles?: string;
 }
 
 export default function DateInput({
+  extraStyles,
   lineStyle,
   name,
   onChange,
@@ -79,7 +81,7 @@ export default function DateInput({
         onChange={onChange}
         value={value}
         autoComplete={autoComplete}
-        className={`${invalidStyles} ${styleLine} peer invalid:mb-4`}
+        className={`${invalidStyles} ${styleLine} peer invalid:mb-4 ${extraStyles}`}
       />
       <p
         className={`absolute text-sm italic text-red-500 [font-size:11px] [line-height:1rem] peer-invalid:-bottom-4`}

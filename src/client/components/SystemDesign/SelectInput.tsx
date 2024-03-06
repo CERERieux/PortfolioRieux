@@ -12,6 +12,7 @@ interface SelectInputProps {
   lineStyle: boolean;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   newCycle?: boolean;
+  extraStyles?: string;
 }
 
 export default function SelectInput({
@@ -26,6 +27,7 @@ export default function SelectInput({
   multiple,
   newCycle = false, // Auxiliar to indicate we are in a new cycle and input "modified" flag can be reseted
   required,
+  extraStyles,
 }: SelectInputProps) {
   const modified = useRef(false); // Flag to see if user already interact with the form
   const [localError, setLocalError] = useState(""); // State to save the error that info can have
@@ -75,7 +77,7 @@ export default function SelectInput({
         required={required}
         size={size}
         onChange={onChange}
-        className={`${invalidStyles} ${styleLine}`}
+        className={`${invalidStyles} ${styleLine} ${extraStyles}`}
         value={value}
       >
         {children}
