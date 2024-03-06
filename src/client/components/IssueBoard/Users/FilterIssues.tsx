@@ -1,7 +1,17 @@
-import { type ChangeEvent, type FormEvent, useState } from "react";
+import { type ChangeEvent, useState, useCallback, useEffect } from "react";
 import type { SetUserOptions, StatusIssue } from "../../../types";
+import TitleForm from "../../SystemDesign/TitleForm";
+import LabelForm from "../../SystemDesign/LabelForm";
+import TitleInput from "../../SystemDesign/TitleInput";
+import Input from "../../SystemDesign/Input";
+import SelectInput from "../../SystemDesign/SelectInput";
+import DateInput from "../../SystemDesign/DateInput";
+import debounce from "just-debounce-it";
+import Button from "../../SystemDesign/Button";
+import { CloseNavButton } from "../../SystemDesign/CloseNavButton";
 
 interface FilterIssuesProps {
+  opacity: string;
   searchOptions: ({
     _id,
     createdBy,
@@ -14,32 +24,90 @@ interface FilterIssuesProps {
     updatedOn,
   }: SetUserOptions) => void;
   getNewSearch: (value: React.SetStateAction<boolean>) => void;
+  handleOpacity: () => void;
+}
+// Interface for debouncer function
+interface DebounceIssueFilter {
+  id: string;
+  project: string;
+  title: string;
+  text: string;
+  status: StatusIssue;
+  createdBy: string;
+  createdOn: string;
+  updatedOn: string;
 }
 
 export default function FilterIssues({
   getNewSearch,
   searchOptions,
+  handleOpacity,
+  opacity,
 }: FilterIssuesProps) {
+  // 8 status to handle the filter, so you can filter white any data of the issue
   const [id, setId] = useState("");
-  const [projectS, setProjectS] = useState("");
-  const [titleS, setTitleS] = useState("");
-  const [textS, setTextS] = useState("");
+  const [project, setProject] = useState("");
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
   const [status, setStatus] = useState<StatusIssue>("Any");
   const [createdBy, setCreatedBy] = useState("");
   const [createdOn, setCreatedOn] = useState("");
   const [updatedOn, setUpdatedOn] = useState("");
+  // Auxiliar function to debounce user filter, each 300ms after user stop will call the filter
+  const filterInfo = useCallback(
+    debounce(
+      ({
+        createdBy,
+        createdOn,
+        id,
+        project,
+        status,
+        text,
+        title,
+        updatedOn,
+      }: DebounceIssueFilter) => {
+        searchOptions({
+          _id: id === "" ? undefined : id,
+          project: project === "" ? undefined : project,
+          title: title === "" ? undefined : title,
+          text: text === "" ? undefined : text,
+          createdBy: createdBy === "" ? undefined : createdBy,
+          status: status === "Any" ? undefined : status,
+          createdOn: createdOn === "" ? undefined : createdOn,
+          updatedOn: updatedOn === "" ? undefined : updatedOn,
+        });
+        getNewSearch(true);
+      },
+      300,
+    ),
+    [],
+  );
+  // Effect that call the filters when 1 of them change
+  useEffect(() => {
+    filterInfo({
+      createdBy,
+      createdOn,
+      id,
+      project,
+      status,
+      text,
+      title,
+      updatedOn,
+    });
+  }, [createdBy, createdOn, id, project, status, text, title, updatedOn]);
 
+  // 8 Auxliars to handle the user inputs into the filter
   const handleId = (e: ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
   };
-  const handleProjectS = (e: ChangeEvent<HTMLInputElement>) => {
-    setProjectS(e.target.value);
+  const handleProject = (e: ChangeEvent<HTMLInputElement>) => {
+    setProject(e.target.value);
   };
-  const handleTitleS = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitleS(e.target.value);
+  const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
   };
-  const handleTextS = (e: ChangeEvent<HTMLInputElement>) => {
-    setTextS(e.target.value);
+  const handleText = (e: ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
   };
   const handleCreatedBy = (e: ChangeEvent<HTMLInputElement>) => {
     setCreatedBy(e.target.value);
@@ -53,64 +121,132 @@ export default function FilterIssues({
   const handleUpdatedOn = (e: ChangeEvent<HTMLInputElement>) => {
     setUpdatedOn(e.target.value);
   };
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    searchOptions({
-      _id: id === "" ? undefined : id,
-      project: projectS === "" ? undefined : projectS,
-      title: titleS === "" ? undefined : titleS,
-      text: textS === "" ? undefined : textS,
-      createdBy: createdBy === "" ? undefined : createdBy,
-      status: status === "Any" ? undefined : status,
-      createdOn: createdOn === "" ? undefined : createdOn,
-      updatedOn: updatedOn === "" ? undefined : updatedOn,
-    });
-    getNewSearch(true);
+  // Auxliar to reset the filter
+  const resetFilter = () => {
+    setId("");
+    setProject("");
+    setTitle("");
+    setText("");
+    setCreatedBy("");
+    setStatus("Any");
+    setCreatedOn("");
+    setUpdatedOn("");
   };
+
+  // Component that return the filter
   return (
-    <section>
-      <h3 className="text-">Filter:</h3>
-      <form onSubmit={handleSearch}>
-        <label htmlFor="">
-          ID: <input type="text" value={id} onChange={handleId} />
-        </label>
-        <label htmlFor=""></label>
-        <label htmlFor="">
-          Project:{" "}
-          <input type="text" value={projectS} onChange={handleProjectS} />
-        </label>
-        <label htmlFor="">
-          Title: <input type="text" value={titleS} onChange={handleTitleS} />
-        </label>
-        <label htmlFor="">
-          Description:{" "}
-          <input type="text" value={textS} onChange={handleTextS} />
-        </label>
-        <label htmlFor="">
-          Created By:{" "}
-          <input type="text" value={createdBy} onChange={handleCreatedBy} />
-        </label>
-        <label htmlFor="">
-          Status :{" "}
-          <select name="" id="" value={status} onChange={handleStatus}>
+    <section
+      className={`absolute right-0 top-0 h-full w-full bg-cyan-700/70 backdrop-blur-sm md:w-1/2 lg:w-1/3 ${opacity} flex flex-col items-center justify-center gap-4 shadow-xl shadow-black/40 transition-all duration-500 ease-in-out`}
+    >
+      <TitleForm firstColor="first-letter:text-lime-300 font-sketch">
+        Filter
+      </TitleForm>
+      <div className="flex h-3/4 w-full flex-col items-center justify-around gap-4 [&_span]:w-1/4 [&_span]:text-right [&_span]:md:w-1/5">
+        <LabelForm>
+          <span className={``}>ID</span>
+          <Input
+            name="FilterPublicIssuesByID"
+            type="text"
+            value={id}
+            onChange={handleId}
+            lineStyle
+            extraStyles="border-b-slate-200 focus:border-b-cyan-200"
+          />
+        </LabelForm>
+        <LabelForm>
+          <TitleInput>Project</TitleInput>
+          <Input
+            name="FilterPublicIssuesByProject"
+            type="text"
+            value={project}
+            onChange={handleProject}
+            lineStyle
+            extraStyles="border-b-slate-200 focus:border-b-cyan-200"
+          />
+        </LabelForm>
+        <LabelForm>
+          <TitleInput>Title</TitleInput>
+          <Input
+            name="FilterPublicIssuesByTitle"
+            type="text"
+            value={title}
+            onChange={handleTitle}
+            lineStyle
+            extraStyles="border-b-slate-200 focus:border-b-cyan-200"
+          />
+        </LabelForm>
+        <LabelForm>
+          <TitleInput>Description</TitleInput>
+          <Input
+            name="FilterPublicIssuesByDescription"
+            type="text"
+            value={text}
+            onChange={handleText}
+            lineStyle
+            extraStyles="border-b-slate-200 focus:border-b-cyan-200"
+          />
+        </LabelForm>
+        <LabelForm>
+          <TitleInput>Created By</TitleInput>
+          <Input
+            name="FilterPublicIssuesByCreator"
+            type="text"
+            value={createdBy}
+            onChange={handleCreatedBy}
+            lineStyle
+            extraStyles="border-b-slate-200 focus:border-b-cyan-200"
+          />
+        </LabelForm>
+        <LabelForm style="items-center justify-center -ml-[4.5rem]">
+          <TitleInput>Status</TitleInput>
+          <SelectInput
+            name="FilterPublicIssuesByStatus"
+            value={status}
+            onChange={handleStatus}
+            lineStyle
+            extraStyles="border-b-slate-200 focus:border-b-cyan-200 *:bg-slate-700"
+          >
             <option value="Any">Any</option>
             <option value="Pending">Pending</option>
             <option value="Read">Read</option>
             <option value="Trying to fix">Trying to fix</option>
             <option value="Completed">Completed</option>
             <option value="Ignored">Ignored</option>
-          </select>
-        </label>
-        <label htmlFor="">
-          Created On:{" "}
-          <input type="date" value={createdOn} onChange={handleCreatedOn} />
-        </label>
-        <label htmlFor="">
-          Updated On:{" "}
-          <input type="date" value={updatedOn} onChange={handleUpdatedOn} />
-        </label>
-        <button>Search!</button>
-      </form>
+          </SelectInput>
+        </LabelForm>
+        <LabelForm style="items-center justify-center -ml-16">
+          <TitleInput>Created On</TitleInput>
+          <DateInput
+            name="FilterPublicIssuesByCreationDate"
+            value={createdOn}
+            onChange={handleCreatedOn}
+            max={"2099-12-31"}
+            min={"1990-01-01"}
+            lineStyle
+            extraStyles="border-b-slate-200 focus:border-b-cyan-200"
+          />
+        </LabelForm>
+        <LabelForm style="items-center justify-center -ml-16">
+          <TitleInput>Updated On</TitleInput>
+          <DateInput
+            name="FilterPublicIssuesByUpdateDate"
+            value={updatedOn}
+            onChange={handleUpdatedOn}
+            max={"2099-12-31"}
+            min={"1990-01-01"}
+            lineStyle
+            extraStyles="border-b-slate-200 focus:border-b-cyan-200"
+          />
+        </LabelForm>
+        <CloseNavButton handleOpacity={handleOpacity} />
+        <Button
+          color="bg-slate-50 border-slate-700 hover:bg-slate-600 hover:text-slate-100 transition-all text-black shadow-md shadow-black/20"
+          xSize="w-40 active:bg-blue-500 active:shadow-none active:border-slate-100"
+          onClick={resetFilter}
+        >
+          Reset Filter
+        </Button>
+      </div>
     </section>
   );
 }
