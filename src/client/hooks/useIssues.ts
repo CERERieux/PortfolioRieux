@@ -2,7 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import * as IssueService from "../services/issues";
 import { useUser } from "../store/user";
-import type { GetIssuesService } from "../types";
+import type {
+  CreateIssueHook,
+  GetIssuesService,
+  SetUserOptions,
+} from "../types";
 
 export function useIssues() {
   const { token } = useUser();
@@ -20,6 +24,30 @@ export function useIssues() {
   const [enableSearch, setEnabledSearch] = useState(true);
   const client = useQueryClient();
 
+  const setUserOptions = ({
+    _id,
+    createdBy,
+    createdOn,
+    open,
+    project,
+    status,
+    text,
+    title,
+    updatedOn,
+  }: SetUserOptions) => {
+    setOptions({
+      _id,
+      created_by: createdBy,
+      created_on: createdOn,
+      open,
+      project,
+      status,
+      text,
+      title,
+      token,
+      updated_on: updatedOn,
+    });
+  };
   useEffect(() => {
     client.invalidateQueries({ queryKey: ["issues"] });
   }, [options]);
@@ -47,9 +75,12 @@ export function useIssues() {
     data: getIssues.data,
     error: getIssues.error,
     isFetching: getIssues.isFetching,
+    isCreating: getIssues.isPending,
     getNewSearch: setEnabledSearch,
-    searchOptions: setOptions,
+    searchOptions: setUserOptions,
     addIssue: createIssue,
-    token,
+    addUserIssue: ({ project, text, title }: CreateIssueHook) => {
+      createIssue.mutate({ project, text, title, token });
+    },
   };
 }

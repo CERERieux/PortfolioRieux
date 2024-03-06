@@ -234,6 +234,18 @@ export interface CreateIssueService {
   title: string;
   text: string;
 }
+export type CreateIssueHook = Omit<CreateIssueService, "token">;
+export interface SetUserOptions {
+  _id?: string;
+  createdBy?: string;
+  createdOn?: string;
+  open?: string;
+  project?: string;
+  status?: StatusIssue | "Any";
+  text?: string;
+  title?: string;
+  updatedOn?: string;
+}
 export interface UpdateIssueService extends ReqBodyIssue {
   token: string;
 }
