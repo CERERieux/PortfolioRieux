@@ -31,7 +31,7 @@ export default function ConverterUnit() {
                 name="Converter"
                 value={userInput}
                 onChange={handleUserInput}
-                className="border-x-0 border-b-2 border-t-0 border-blue-600 pb-0 text-center"
+                className="border-x-0 border-b-2 border-t-0 border-blue-600 py-0 pb-0 text-center"
                 autoComplete="off"
               />
             </label>
