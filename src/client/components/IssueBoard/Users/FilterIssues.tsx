@@ -240,8 +240,9 @@ export default function FilterIssues({
         </LabelForm>
         <CloseNavButton handleOpacity={handleOpacity} />
         <Button
-          color="bg-slate-50 border-slate-700 hover:bg-slate-600 hover:text-slate-100 transition-all text-black shadow-md shadow-black/20"
-          xSize="w-40 active:bg-blue-500 active:shadow-none active:border-slate-100"
+          color="bg-slate-50 border-slate-700 hover:bg-slate-600 hover:text-slate-100 active:bg-blue-500 active:border-slate-100"
+          xSize="w-40"
+          extraStyles="active:shadow-none text-black shadow-md shadow-black/20"
           onClick={resetFilter}
         >
           Reset Filter

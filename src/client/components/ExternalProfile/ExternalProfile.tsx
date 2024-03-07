@@ -22,14 +22,10 @@ export default function ExternalProfile() {
       bgImg="before:bg-[url('/profileBG.jpg')] before:opacity-5"
     >
       {error !== null && isAxiosError(error) && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">
-          {error.response?.data.error}
-        </ErrorMessage>
+        <ErrorMessage>{error.response?.data.error}</ErrorMessage>
       )}
       {errorBooks !== null && isAxiosError(errorBooks) && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">
-          {errorBooks.response?.data.error}
-        </ErrorMessage>
+        <ErrorMessage>{errorBooks.response?.data.error}</ErrorMessage>
       )}
       {data !== undefined ? (
         <>

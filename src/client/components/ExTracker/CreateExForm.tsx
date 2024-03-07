@@ -172,8 +172,9 @@ export default function CreateExForm({
       </LabelForm>
       <Button
         disabled={isCreating}
-        color="bg-sky-200 hover:bg-sky-700 border-sky-500 hover:border-sky-900 text-sky-700 shadow-sm shadow-black/10 active:scale-90 active:shadow-none transition-all -ml-16 md:ml-0"
+        color="bg-sky-200 hover:bg-sky-700 border-sky-500 hover:border-sky-900"
         xSize="w-36"
+        extraStyles="text-sky-700 shadow-sm shadow-black/10 active:scale-90 active:shadow-none -ml-16 md:ml-0"
       >
         Create Exercise
       </Button>

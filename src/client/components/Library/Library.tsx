@@ -16,6 +16,7 @@ import type {
   BookService,
 } from "../../types";
 import NavMenu from "../MyProfile/NavMenu";
+import CustomBackground from "../SystemDesign/CustomBackground";
 
 export default function Library() {
   const {
@@ -152,57 +153,56 @@ export default function Library() {
   return errorAuth.cause !== null ? (
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
-    <main className="relative flex h-full w-full flex-col gap-4 overflow-y-auto bg-gray-50 px-6 py-4">
-      <NavMenu />
-      {errorBook !== null && isAxiosError(errorBook) && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">
-          Error: {errorBook.response?.data.error}
-        </ErrorMessage>
-      )}
-      {errorLocal !== null && (
-        <ErrorMessage extraStyles="md:left-1/4 z-20">
-          Error: {errorLocal}
-        </ErrorMessage>
-      )}
-      {action !== null && (
-        <ActionMessage extraStyles="md:left-1/4 z-10">{action}</ActionMessage>
-      )}
-      <HeaderLibrary
-        disabled={
-          (data !== undefined && "error" in data) || deleteLibrary.isPending
-        }
-        handleDeleteLibrary={handleDeleteLibrary}
-        idOpen={idOpen}
-      />
-      <LibraryForm
-        idOpen={idOpen}
-        createBook={createBook}
-        createNewBook={createNewBook}
-        setAction={setAction}
-        setErrorLocal={setErrorLocal}
-      />
-      <FilterBooks
-        recommend={recommend}
-        setRecommend={setRecommend}
-        setStatus={setStatus}
-        setTitle={setTitle}
-        status={status}
-        title={title}
-      />
-      {data !== undefined ? (
-        <BookList
-          data={data}
-          dataFiltered={filteredData}
-          handleRemove={handleRemove}
-          isPending={removeBook.isPending}
+    <CustomBackground
+      bgImg="before:bg-[url('/libraryBG.jpg')] before:opacity-30"
+      styles="w-full h-full"
+    >
+      <main className="relative flex h-full w-full flex-col gap-4 overflow-y-auto px-6 py-4">
+        <NavMenu />
+        {errorBook !== null && isAxiosError(errorBook) && (
+          <ErrorMessage>Error: {errorBook.response?.data.error}</ErrorMessage>
+        )}
+        {errorLocal !== null && (
+          <ErrorMessage>Error: {errorLocal}</ErrorMessage>
+        )}
+        {action !== null && <ActionMessage>{action}</ActionMessage>}
+        <HeaderLibrary
+          disabled={
+            (data !== undefined && "error" in data) || deleteLibrary.isPending
+          }
+          handleDeleteLibrary={handleDeleteLibrary}
+          idOpen={idOpen}
+        />
+        <LibraryForm
+          idOpen={idOpen}
+          createBook={createBook}
+          createNewBook={createNewBook}
+          setAction={setAction}
+          setErrorLocal={setErrorLocal}
+        />
+        <FilterBooks
           recommend={recommend}
+          setRecommend={setRecommend}
+          setStatus={setStatus}
+          setTitle={setTitle}
           status={status}
           title={title}
-          setFilteredData={setFilteredData}
         />
-      ) : (
-        <p>Loading...</p>
-      )}
-    </main>
+        {data !== undefined ? (
+          <BookList
+            data={data}
+            dataFiltered={filteredData}
+            handleRemove={handleRemove}
+            isPending={removeBook.isPending}
+            recommend={recommend}
+            status={status}
+            title={title}
+            setFilteredData={setFilteredData}
+          />
+        ) : (
+          <p>Loading...</p>
+        )}
+      </main>
+    </CustomBackground>
   );
 }

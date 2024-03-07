@@ -23,7 +23,7 @@ export default function BookData({
       : "text-red-500"; // Auxiliar to give color to recommendation
   // Return the main info that is in the right side
   return (
-    <>
+    <section className="flex flex-col justify-center gap-2">
       <h2 className="text-pretty text-center font-elegant text-3xl first-letter:text-5xl first-letter:text-red-500">
         {data.title}
       </h2>
@@ -76,6 +76,6 @@ export default function BookData({
           return null;
         })}
       </ul>
-    </>
+    </section>
   );
 }

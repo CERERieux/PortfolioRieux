@@ -74,23 +74,18 @@ export default function Url() {
     >
       <NavMenu flexCol />
       {error !== null && isAxiosError(error) && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">
-          {error.response?.data.error}
-        </ErrorMessage>
+        <ErrorMessage>{error.response?.data.error}</ErrorMessage>
       )}
-      {localError !== null && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">{localError}</ErrorMessage>
-      )}
-      {action !== null && (
-        <ActionMessage extraStyles="md:left-1/4 z-10">{action}</ActionMessage>
-      )}
+      {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
+      {action !== null && <ActionMessage>{action}</ActionMessage>}
       <header className="bg- flex flex-col items-center justify-center gap-4">
         <h1 className="text-4xl first-letter:text-5xl first-letter:text-amber-500">
           Your short links!
         </h1>
         <Button
-          color="bg-slate-300 border-slate-500 hover:bg-yellow-700 hover:border-yellow-300 transition-all text-black"
-          xSize="w-44 flex gap-2 justify-center items-center transition-all"
+          color="bg-slate-300 border-slate-500 hover:bg-yellow-700 hover:border-yellow-300"
+          xSize="w-44"
+          extraStyles="flex gap-2 justify-center items-center text-black"
           id={idOpen}
         >
           <AddLink />

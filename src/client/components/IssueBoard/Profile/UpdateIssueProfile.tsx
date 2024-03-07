@@ -193,13 +193,13 @@ export default function UpdateIssueProfile({
         <div className="flex w-full items-center justify-center gap-4">
           <Button
             color="bg-blue-300 border-blue-500 hover:bg-blue-600 hover:border-blue-300"
-            xSize="w-40 transition-all"
+            xSize="w-40"
           >
             Update
           </Button>
           <Button
             color="bg-amber-300 border-amber-500 hover:bg-amber-600 hover:border-amber-100"
-            xSize="w-40 transition-all"
+            xSize="w-40"
             onClick={handleCancel}
           >
             Cancel

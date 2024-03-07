@@ -150,7 +150,7 @@ export default function LibraryForm({
         </LabelForm>
         <div className="flex w-full gap-2">
           <Button
-            color="bg-amber-300 border-amber-500 hover:bg-amber-500 hover:border-amber-200 transition-all"
+            color="bg-amber-300 border-amber-500 hover:bg-amber-500 hover:border-amber-200"
             disabled={createBook.isPending}
             id={idClose}
             xSize="w-40"
@@ -161,7 +161,7 @@ export default function LibraryForm({
             Cancel
           </Button>
           <Button
-            color="bg-blue-300 border-blue-500 hover:bg-blue-700 hover:border-blue-300 transition-all"
+            color="bg-blue-300 border-blue-500 hover:bg-blue-700 hover:border-blue-300"
             disabled={createBook.isPending}
             xSize="w-40"
           >

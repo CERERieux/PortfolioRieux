@@ -9,7 +9,7 @@ export default function ActionMessage({
 }: ActionMessageProps) {
   return (
     <div
-      className={`absolute top-10 mx-auto w-full text-pretty rounded-full bg-green-200 px-2 py-1 text-center text-sm text-green-700 md:w-1/2 md:text-base ${extraStyles}`}
+      className={`absolute top-10 z-10 mx-auto w-full text-pretty rounded-full bg-green-200 px-2 py-1 text-center text-sm text-green-700 shadow-md md:left-1/4 md:w-1/2 md:text-base ${extraStyles}`}
     >
       {children}
     </div>

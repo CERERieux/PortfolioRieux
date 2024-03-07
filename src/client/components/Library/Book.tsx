@@ -97,16 +97,10 @@ export default function Book() {
       styles="w-full h-full flex flex-col md:items-center md:justify-center gap-2 md:flex-row overflow-y-auto"
     >
       {errorBook !== null && isAxiosError(errorBook) && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">
-          Error: {errorBook.response?.data.error}
-        </ErrorMessage>
+        <ErrorMessage>Error: {errorBook.response?.data.error}</ErrorMessage>
       )}
-      {localError !== null && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">{localError}</ErrorMessage>
-      )}
-      {action !== null && (
-        <ActionMessage extraStyles="md:left-1/4 z-10">{action}</ActionMessage>
-      )}
+      {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
+      {action !== null && <ActionMessage>{action}</ActionMessage>}
       <nav className="right-6 top-2 -order-2 md:absolute">
         <Link to="/my-profile/library">
           <Button
@@ -148,8 +142,7 @@ export default function Book() {
         placeRef="freepik"
         urlRef="https://www.freepik.com/free-photo/top-view-books-with-copy-space_12151841.htm#fromView=search&page=1&position=7&uuid=0437f0c6-99a6-4acf-805c-fdfc26ddba3b"
         whatIs="Image by"
-        size="md:w-1/6 md:left-0"
-        mx=""
+        size="md:w-1/6"
       />
     </CustomBackground>
   );

@@ -24,20 +24,10 @@ export default function IssueBoard() {
   return (
     <main className="flex h-full w-full flex-col items-center gap-6 overflow-y-auto bg-slate-700 px-6 py-4 text-slate-50">
       {error !== null && isAxiosError(error) && (
-        <ErrorMessage extraStyles="md:left-1/4 shadow-md z-10">
-          {error.response?.data.error}
-        </ErrorMessage>
+        <ErrorMessage>{error.response?.data.error}</ErrorMessage>
       )}
-      {localError !== null && (
-        <ErrorMessage extraStyles="md:left-1/4 shadow-md z-10">
-          {localError}
-        </ErrorMessage>
-      )}
-      {action !== null && (
-        <ActionMessage extraStyles="md:left-1/4 shadow-md z-10">
-          {action}
-        </ActionMessage>
-      )}
+      {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
+      {action !== null && <ActionMessage>{action}</ActionMessage>}
       <h1 className="text-center font-sketch text-3xl first-letter:text-4xl first-letter:text-cyan-300">
         Corner of Issues and Suggestions
       </h1>
@@ -51,16 +41,18 @@ export default function IssueBoard() {
       />
       <div className="flex w-full items-center justify-center gap-4">
         <Button
-          color="bg-slate-300 text-black border-slate-50 hover:bg-lime-600 hover:border-slate-700 transition-all"
-          xSize="w-72 flex justify-center items-center gap-2 shadow-md shadow-black/90"
+          color="bg-slate-300 text-black border-slate-50 hover:bg-lime-600 hover:border-slate-700"
+          xSize="w-72"
+          extraStyles="flex justify-center items-center gap-2 shadow-md shadow-black/90"
           id={idOpen}
         >
           <AddMessage />
           Add New Issue or Suggerence
         </Button>
         <Button
-          color="bg-slate-300 text-black border-slate-50 hover:bg-cyan-600 hover:border-slate-700 transition-all"
-          xSize="w-40 flex justify-center items-center gap-2 shadow-md shadow-black/90"
+          color="bg-slate-300 text-black border-slate-50 hover:bg-cyan-600 hover:border-slate-700"
+          xSize="w-40"
+          extraStyles="flex justify-center items-center gap-2 shadow-md shadow-black/90"
           disabled={opacity.includes("opacity-100")}
           onClick={handleOpacity}
         >

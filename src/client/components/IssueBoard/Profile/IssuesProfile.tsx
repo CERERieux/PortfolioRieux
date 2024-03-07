@@ -28,16 +28,10 @@ export default function IssueProfile() {
       </h1>
       <NavMenu />
       {error !== null && isAxiosError(error) && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">
-          {error.response?.data.error}
-        </ErrorMessage>
+        <ErrorMessage>{error.response?.data.error}</ErrorMessage>
       )}
-      {localError !== null && (
-        <ErrorMessage extraStyles="md:left-1/4 z-10">{localError}</ErrorMessage>
-      )}
-      {action !== null && (
-        <ActionMessage extraStyles="md:left-1/4 z-10">{action}</ActionMessage>
-      )}
+      {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
+      {action !== null && <ActionMessage>{action}</ActionMessage>}
       {data !== undefined ? (
         !("error" in data) ? (
           data.length > 0 ? (

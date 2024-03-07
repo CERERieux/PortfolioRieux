@@ -138,7 +138,7 @@ export default function AddUrlForm({
         </LabelForm>
         <div className="flex gap-2">
           <Button
-            color="bg-amber-300 border-amber-500 hover:bg-red-500 hover:border-red-200 transition-all"
+            color="bg-amber-300 border-amber-500 hover:bg-red-500 hover:border-red-200"
             xSize="w-32"
             onClick={handleCloseByBtn}
             id={idCloseCreate}
@@ -146,7 +146,7 @@ export default function AddUrlForm({
             Cancel
           </Button>
           <Button
-            color="bg-blue-300 border-blue-500 hover:bg-lime-700 hover:border-lime-300 transition-all"
+            color="bg-blue-300 border-blue-500 hover:bg-lime-700 hover:border-lime-300"
             xSize="w-32"
           >
             Create!

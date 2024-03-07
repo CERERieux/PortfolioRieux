@@ -294,7 +294,7 @@ export default function BookAside({
             />
           </LabelForm>
           <Button
-            color="bg-lime-300 border-lime-500 hover:bg-lime-600 hover:border-lime-300 transition-all"
+            color="bg-lime-300 border-lime-500 hover:bg-lime-600 hover:border-lime-300"
             xSize="w-32"
             disabled={isUpdatePending}
           >
@@ -323,7 +323,7 @@ export default function BookAside({
             />
           </LabelForm>
           <Button
-            color="bg-sky-300 border-sky-500 hover:bg-sky-600 hover:border-sky-300 transition-all"
+            color="bg-sky-300 border-sky-500 hover:bg-sky-600 hover:border-sky-300"
             xSize="w-32"
             disabled={isCreatePending}
           >

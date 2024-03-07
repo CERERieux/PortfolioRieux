@@ -83,7 +83,7 @@ export default function FormUrlAll({
         />
       </LabelForm>
       <Button
-        color="bg-blue-300 border-blue-500 hover:bg-lime-700 hover:border-lime-300 transition-all"
+        color="bg-blue-300 border-blue-500 hover:bg-lime-700 hover:border-lime-300"
         xSize="w-32"
       >
         Create!

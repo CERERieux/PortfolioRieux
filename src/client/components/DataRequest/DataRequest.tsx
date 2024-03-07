@@ -73,8 +73,9 @@ export default function DataRequest() {
           </p>
           <Button
             onClick={handleRequest}
-            color="bg-lime-300/90 border-lime-500 hover:bg-lime-700 hover:border-lime-300 transition-all self-center text-pretty"
+            color="bg-lime-300/90 border-lime-500 hover:bg-lime-700 hover:border-lime-300"
             xSize="w-40"
+            extraStyles="self-center text-pretty"
           >
             {showData ? "Hide" : "Show"} my request data
           </Button>

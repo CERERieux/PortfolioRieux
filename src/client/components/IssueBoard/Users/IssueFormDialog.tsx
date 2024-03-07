@@ -198,16 +198,18 @@ export default function IssueFormDialog({
           </LabelForm>
           <div className="mt-2 flex items-center justify-center gap-2">
             <Button
-              color="bg-lime-300 border-lime-500 hover:bg-lime-600 hover:border-lime-300 transition-all"
-              xSize="w-32 text-black"
+              color="bg-lime-300 border-lime-500 hover:bg-lime-600 hover:border-lime-300"
+              xSize="w-32"
+              extraStyles="text-black"
             >
               Send it!
             </Button>
             <Button
-              color="bg-amber-300 border-amber-500 hover:bg-red-600 hover:border-red-700 transition-all"
+              color="bg-amber-300 border-amber-500 hover:bg-red-600 hover:border-red-700"
               id={idClose}
               onClick={handleCloseByBtn}
-              xSize="w-32 text-black"
+              xSize="w-32"
+              extraStyles="text-black"
             >
               Cancel
             </Button>

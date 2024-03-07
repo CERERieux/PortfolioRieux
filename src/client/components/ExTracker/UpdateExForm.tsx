@@ -116,7 +116,7 @@ export default function UpdateExForm({
           </SelectInput>
         </LabelForm>
         <Button
-          color="bg-lime-300 border-lime-500 hover:bg-lime-500 hover:border-lime-700 transition-all"
+          color="bg-lime-300 border-lime-500 hover:bg-lime-500 hover:border-lime-700"
           disabled={isUpdating}
           xSize="w-1/3 lg:w-2/5"
         >
@@ -125,7 +125,7 @@ export default function UpdateExForm({
       </Form>
       <Button
         onClick={cancelUpdate}
-        color="bg-amber-200 border-amber-500 hover:bg-amber-500 hover:border-amber-600 transition-all"
+        color="bg-amber-200 border-amber-500 hover:bg-amber-500 hover:border-amber-600"
         xSize="w-1/3 lg:w-1/5"
       >
         Cancel
