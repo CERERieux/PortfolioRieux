@@ -11,7 +11,7 @@ import { useCallback, useEffect } from "react";
 import debounce from "just-debounce-it";
 
 // Auxiliar to give color to each element in the list, depending if its recommended and the status
-const COLOR_LIST_BOOK = {
+export const COLOR_LIST_BOOK = {
   Yes: {
     "Plan to Read":
       "[background:_linear-gradient(15deg,rgba(103,232,249,.8),rgba(103,232,249,0)_10%),_linear-gradient(192deg,rgba(216,180,254,.8),rgba(216,180,254,0)_30%)]",

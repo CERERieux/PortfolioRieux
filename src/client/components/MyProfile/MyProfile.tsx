@@ -97,15 +97,19 @@ export default function MyProfile() {
           bgImg="before:bg-[url('/profileBG.jpg')] before:opacity-5"
         >
           {error !== null && isAxiosError(error) && (
-            <ErrorMessage extraStyles="z-10">
+            <ErrorMessage extraStyles="md:left-1/4 z-10">
               {error.response?.data.error}
             </ErrorMessage>
           )}
           {localError !== null && (
-            <ErrorMessage extraStyles="z-10">{localError}</ErrorMessage>
+            <ErrorMessage extraStyles="md:left-1/4 z-10">
+              {localError}
+            </ErrorMessage>
           )}
           {action !== null && (
-            <ActionMessage extraStyles="z-10">{action}</ActionMessage>
+            <ActionMessage extraStyles="md:left-1/4 z-10">
+              {action}
+            </ActionMessage>
           )}
           {data !== undefined ? (
             <>
