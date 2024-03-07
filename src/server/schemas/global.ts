@@ -19,6 +19,7 @@ export const ERROR_GUSER = {
   NOT_ADMIN:
     "You are NOT an admin, please do not try to login in this endpoint again.",
   USER_EXIST: "The username is already taken, please introduce a new one",
+  USER_NOT_EXIST:"Looks like the user you wanted to see don't exist! Please try to visit an existent user.",
   USER_NOT_FOUND:
     "Oh... Somehow you are trying to use our services without being logged in, please login or create a new user before using this service.",
 };

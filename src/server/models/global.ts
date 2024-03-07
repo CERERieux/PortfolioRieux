@@ -17,7 +17,7 @@ export async function getUserBasicInfo(_id: string) {
     return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
   });
   if (user === null)
-    return { error: ERROR_GUSER.USER_NOT_FOUND, category: "guser" };
+    return { error: ERROR_GUSER.USER_NOT_EXIST, category: "guser" };
   if ("error" in user) return user;
   else {
     return {

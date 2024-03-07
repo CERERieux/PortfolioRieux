@@ -147,7 +147,8 @@ export function gUserError({ error, category }: ErrorStatus) {
     return 401;
   if (
     error === ERROR_GUSER.USER_EXIST ||
-    error === ERROR_GUSER.INCORRECT_CREDENTIALS
+    error === ERROR_GUSER.INCORRECT_CREDENTIALS ||
+    error === ERROR_GUSER.USER_NOT_EXIST
   )
     return 400;
   // If at the end the error for any reason don't fall in any case, send a 400
