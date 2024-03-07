@@ -1,5 +1,10 @@
 import { Routes, Route } from "react-router-dom";
+import AdminBoards from "./components/AdminPanel/AdminBoards";
+import AdminLogin from "./components/AdminPanel/AdminLogin";
+import AdminMainMenu from "./components/AdminPanel/AdminMainMenu";
+import AdminPanel from "./components/AdminPanel/AdminPanel";
 import AnonBoard from "./components/AnonBoard/AnonBoard";
+import AnonReply from "./components/AnonBoard/AnonReply";
 import AnonThread from "./components/AnonBoard/AnonThread";
 import Book from "./components/Library/Book";
 import Calculator from "./components/Calculator/Calculator";
@@ -7,27 +12,22 @@ import ConverterUnit from "./components/ConverterUnit/ConverterUnit";
 import DataRequest from "./components/DataRequest/DataRequest";
 import DrumMachine from "./components/DM/DrumMachine";
 import ExerciseTracker from "./components/ExTracker/ExerciseTracker";
+import ExternalProfile from "./components/ExternalProfile/ExternalProfile";
 import Home from "./components/Home";
 import IssueBoard from "./components/IssueBoard/Users/IssueBoard";
 import IssueProfile from "./components/IssueBoard/Profile/IssuesProfile";
 import Library from "./components/Library/Library";
 import Login from "./components/Login/Login";
 import Markdown from "./components/Mark_down/Markdown";
+import MyProfile from "./components/MyProfile/MyProfile";
 import NotFound from "./components/NotFound/NotFound";
 import PomodoroClock from "./components/Pomodoro/PomodoroClock";
 import Quote from "./components/Quotes/Quotes";
 import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
+import StockViewer from "./components/Stocks/StockViewer";
 import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
 import Url from "./components/Url/Url";
-import StockViewer from "./components/Stocks/StockViewer";
-import MyProfile from "./components/MyProfile/MyProfile";
-import ExternalProfile from "./components/MyProfile/ExternalProfile";
-import AnonReply from "./components/AnonBoard/AnonReply";
-import AdminPanel from "./components/AdminPanel/AdminPanel";
 import UserDataAdmin from "./components/AdminPanel/UserDataAdmin";
-import AdminLogin from "./components/AdminPanel/AdminLogin";
-import AdminMainMenu from "./components/AdminPanel/AdminMainMenu";
-import AdminBoards from "./components/AdminPanel/AdminBoards";
 
 export default function App() {
   return (
@@ -36,7 +36,6 @@ export default function App() {
       <Route path="/login" element={<Login />}></Route>
       <Route path="/issues-and-suggestions" element={<IssueBoard />}></Route>
       <Route path="/shortener-url" element={<ShortenerUrl />}></Route>
-      <Route path="/communicationNameApp" element={<Home />}></Route>
       <Route path="/my-profile">
         <Route index element={<MyProfile />}></Route>
         <Route path="exercises" element={<ExerciseTracker />}></Route>
@@ -58,6 +57,7 @@ export default function App() {
         <Route path="converter" element={<ConverterUnit />}></Route>
         <Route path="translate-eng" element={<TranslatorEng />}></Route>
       </Route>
+      {/* <Route path="/communicationNameApp" element={<Home />}></Route> */}
       <Route path="/anon-board">
         <Route index element={<AnonBoard />}></Route>
         <Route path=":board/thread" element={<AnonThread />}></Route>
@@ -66,14 +66,14 @@ export default function App() {
       <Route path="/games">
         <Route index element={<Home />}></Route>
         <Route path="sudoku" element={<Home />}></Route>
-        <Route path="ifIDosomethingExtra" element={<Home />}></Route>
+        {/* <Route path="ifIDosomethingExtra" element={<Home />}></Route> */}
       </Route>
       <Route path="/cut-content/portfolio">
         <Route index element={<Home />}></Route>
         <Route path="request-information" element={<DataRequest />}></Route>
         <Route path="stock-api-cert" element={<StockViewer />}></Route>
       </Route>
-      <Route path="/documentation" element={<Home />}></Route>
+      {/* <Route path="/documentation" element={<Home />}></Route> */}
       <Route path={`/${import.meta.env.VITE_ROUTE_ADMIN}/admin`}>
         <Route index element={<AdminMainMenu />}></Route>
         <Route path="login" element={<AdminLogin />}></Route>
