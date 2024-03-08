@@ -11,6 +11,7 @@ import CustomBackground from "../SystemDesign/CustomBackground";
 import HeaderProfile from "./HeaderProfile";
 import ProfileUpdateForm from "./ProfileUpdateForm";
 import FooterAttribution from "../SystemDesign/FooterAttribution";
+import LoaderText from "../NotFound/LoaderText";
 
 export default function MyProfile() {
   const { logoffUser } = useUser(); // <-- TODO move this and make navmenu
@@ -94,7 +95,7 @@ export default function MyProfile() {
       ) : (
         <CustomBackground
           styles="flex h-full w-full flex-col items-center justify-center gap-10 md:gap-0"
-          bgImg="before:bg-[url('/profileBG.jpg')] before:opacity-5"
+          bgImg="before:bg-[url('/profileBG.webp')] before:opacity-5"
         >
           {error !== null && isAxiosError(error) && (
             <ErrorMessage>{error.response?.data.error}</ErrorMessage>
@@ -137,7 +138,9 @@ export default function MyProfile() {
               />
             </>
           ) : (
-            <h3>Loading...</h3>
+            <>
+              <LoaderText />
+            </>
           )}
         </CustomBackground>
       )}

@@ -62,7 +62,7 @@ export default function DataRequest() {
   return (
     <CustomBackground
       styles="flex h-full w-full flex-col items-center justify-center gap-10 md:gap-0 font-digitalDisplay"
-      bgImg="before:bg-[url('/BGNumbers.jpg')] before:opacity-100"
+      bgImg="before:bg-[url('/BGNumbers.webp')] before:opacity-100"
     >
       <main className="flex h-full w-full flex-col items-center justify-center gap-5">
         <article className="flex h-1/3 w-3/4 flex-col gap-4 rounded-md border-4 border-red-800 bg-red-400/70 px-4 py-2 lg:h-1/4">

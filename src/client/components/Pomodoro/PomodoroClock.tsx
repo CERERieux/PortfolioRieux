@@ -17,8 +17,8 @@ export default function PomodoroClock() {
 
   const mainBG =
     clockMode === CLOCKMODES.SESSION
-      ? "bg-[url('/office.jpg')]"
-      : "bg-[url('/forest.jpg')]";
+      ? "bg-[url('/office.webp')]"
+      : "bg-[url('/forest.webp')]";
 
   return (
     <>

@@ -154,7 +154,7 @@ export default function Library() {
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
     <CustomBackground
-      bgImg="before:bg-[url('/libraryBG.jpg')] before:opacity-30"
+      bgImg="before:bg-[url('/libraryBG.webp')] before:opacity-30"
       styles="w-full h-full"
     >
       <main className="relative flex h-full w-full flex-col gap-4 overflow-y-auto px-6 py-4">

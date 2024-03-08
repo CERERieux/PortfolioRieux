@@ -93,7 +93,7 @@ export default function Book() {
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
     <CustomBackground
-      bgImg="before:bg-[url('/bookBG.jpg')] before:opacity-50"
+      bgImg="before:bg-[url('/bookBG.webp')] before:opacity-50"
       styles="w-full h-full flex flex-col md:items-center md:justify-center gap-2 md:flex-row overflow-y-auto"
     >
       {errorBook !== null && isAxiosError(errorBook) && (

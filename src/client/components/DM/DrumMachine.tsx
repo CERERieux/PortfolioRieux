@@ -9,7 +9,7 @@ export default function DrumMachine() {
   const [display, setDisplay] = useState("");
   return (
     <CustomBackground
-      bgImg="before:bg-[url('/DrumboxBG.jpg')] before:opacity-50"
+      bgImg="before:bg-[url('/DrumboxBG.webp')] before:opacity-50"
       styles="w-full h-full"
     >
       <main className="grid h-full w-full grid-cols-1 place-items-center">

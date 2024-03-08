@@ -69,7 +69,7 @@ export default function Url() {
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
     <CustomBackground
-      bgImg="before:bg-[url('/bgLinks.jpg')] before:opacity-90"
+      bgImg="before:bg-[url('/bgLinks.webp')] before:opacity-90"
       styles="flex h-full w-full flex-col items-center justify-start gap-8 px-4 py-2 font-digitalDisplay overflow-y-auto text-slate-50"
     >
       <NavMenu flexCol />
