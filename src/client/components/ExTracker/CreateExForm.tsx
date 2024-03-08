@@ -12,6 +12,7 @@ import Button from "../SystemDesign/Button";
 import DateInput from "../SystemDesign/DateInput";
 import SelectInput from "../SystemDesign/SelectInput";
 import convertTodayDate from "../../utils/convertTodayDate";
+import TitleForm from "../SystemDesign/TitleForm";
 
 interface CreateExFormProps {
   createExercise: UseMutationResult<
@@ -114,9 +115,10 @@ export default function CreateExForm({
   return (
     <Form
       submitFn={handleNewExercise}
-      style="items-center gap-6 justify-start bg-slate-50 pb-6 h-full md:h-[80%] pl-24 md:pl-5 pt-6 rounded-md shadow-lg shadow-black/10"
+      style="items-center gap-6 justify-center bg-slate-50 pb-6 h-full lg:h-[80%] px-5 pt-4 rounded-md shadow-lg shadow-black/10"
       mdMedia="[&_span]:md:w-1/4"
     >
+      <TitleForm firstColor="first-letter:text-sky-400">Add New Note</TitleForm>
       <LabelForm style="justify-start items-center">
         <TitleInput
           firstColor="text-sm first-letter:text-sky-400"
@@ -174,7 +176,7 @@ export default function CreateExForm({
         disabled={isCreating}
         color="bg-sky-200 hover:bg-sky-700 border-sky-500 hover:border-sky-900"
         xSize="w-36"
-        extraStyles="text-sky-700 shadow-sm shadow-black/10 active:scale-90 active:shadow-none -ml-16 md:ml-0"
+        extraStyles="text-sky-700 shadow-sm shadow-black/10 active:scale-90 active:shadow-none"
       >
         Create Exercise
       </Button>

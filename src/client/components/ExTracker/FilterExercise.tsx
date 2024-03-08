@@ -111,7 +111,7 @@ export default function FilterExercise({
 
   // Return a section which will contain the 5 filters
   return (
-    <section className="mx-auto mt-3 flex w-3/4 flex-col items-center justify-center gap-2 rounded-md bg-slate-50 px-4 py-2 pb-6 shadow-md shadow-black/20">
+    <section className="mx-auto mt-3 flex w-3/4 flex-col items-center justify-center gap-2 rounded-md bg-slate-50 px-4 py-2 pb-6 shadow-md shadow-black/20 sm:w-3/5 md:w-full lg:w-3/4">
       <h2 className="-order-1 font-digitalDisplay text-xl first-letter:text-2xl first-letter:text-sky-400">
         Filter
       </h2>
