@@ -22,7 +22,7 @@ export default function IssueProfile() {
   return isError ? (
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
-    <main className="flex h-full w-full flex-col items-center gap-4 bg-red-700/90 p-4">
+    <main className="flex h-full w-full flex-col items-center gap-4 bg-gradient-to-b from-red-700/90 to-red-50 p-4">
       <h1 className="rounded-sm bg-slate-50/95 px-3 py-1 text-3xl shadow-lg shadow-red-900 first-letter:text-4xl first-letter:text-red-800">
         Your Corner of Issues
       </h1>

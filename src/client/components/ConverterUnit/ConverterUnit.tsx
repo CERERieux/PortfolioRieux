@@ -12,17 +12,17 @@ export default function ConverterUnit() {
   } = useConverter();
 
   return (
-    <main className="flex h-full w-full flex-col items-center justify-center gap-6 bg-red-50">
-      <div className="border border-x-0 border-red-200 bg-slate-50 py-10 shadow-inner shadow-red-200 md:w-2/3 md:border-x-[1px]">
+    <main className="flex h-full w-full flex-col items-center justify-center gap-6 [background:_linear-gradient(110deg,rgba(250,248,142,.8),rgba(250,248,142,0)_35%),_linear-gradient(15deg,rgba(103,232,249,.8),rgba(103,232,249,0)_20%),_linear-gradient(192deg,rgba(216,180,254,.8),rgba(216,180,254,0)_30%),_linear-gradient(298deg,rgba(207,250,142,.8),rgba(207,250,142,0)_20%),_linear-gradient(325deg,rgba(207,207,207,.8),rgba(207,207,207,0)_50%),_linear-gradient(120deg,rgba(252,212,213,.8),rgba(252,212,213,0)_50%)]">
+      <div className="border bg-slate-50/30 py-10 shadow-lg shadow-black/10 backdrop-blur-md md:w-2/3 md:border-x-[1px]">
         <form
           onSubmit={handleConversion}
           className="flex w-full flex-col items-center gap-4"
         >
           <section className="flex w-full flex-wrap items-end justify-center gap-5">
-            <h2 className="w-full text-center text-lg">
-              What you want to convert?
+            <h2 className="w-full text-center text-xl first-letter:text-2xl first-letter:text-lime-600">
+              What do you want to convert to?
             </h2>
-            <p className="-mt-2 mb-2 w-full text-center text-sm">
+            <p className="-mt-2 mb-2 w-full text-center text-sm text-orange-500">
               (If input is left empty, it will be taken as the base unit.)
             </p>
             <label className="">

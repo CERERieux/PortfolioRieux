@@ -66,7 +66,7 @@ export default function ExerciseTracker() {
   return errorAuth.cause !== null ? (
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
-    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-sky-100 lg:grid lg:grid-cols-4 lg:grid-rows-4 lg:overflow-hidden">
+    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-gradient-to-b from-sky-100 from-20% to-sky-600 lg:grid lg:grid-cols-4 lg:grid-rows-4 lg:overflow-hidden">
       {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
       {errorEx !== null && isAxiosError(errorEx) && (
         <ErrorMessage>Error: {errorEx.response?.data.error}</ErrorMessage>

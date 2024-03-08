@@ -8,11 +8,13 @@ import useLogin from "../../hooks/useLogin";
 export default function Login() {
   const { action, error, token } = useUser();
   const { view, createUser, handleView, loginUser, setView } = useLogin();
-  const mainColor = view ? "bg-lime-500" : "bg-cyan-300";
+  const mainColor = view
+    ? "bg-gradient-to-t from-lime-400 to-lime-50 from-10%"
+    : "bg-gradient-to-t from-cyan-400 to-cyan-50 from-10%";
 
   return (
     <main
-      className={`flex h-full w-full items-center justify-center ${mainColor} transition-color duration-500`}
+      className={`flex h-full w-full items-center justify-center ${mainColor} transition-all duration-500`}
     >
       {error != null && (
         <ErrorMessage>

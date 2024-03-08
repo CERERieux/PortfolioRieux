@@ -19,7 +19,7 @@ export default function ExternalProfile() {
   return (
     <CustomBackground
       styles="flex h-full w-full flex-col items-center justify-center gap-10 md:gap-0"
-      bgImg="before:bg-[url('/profileBG.jpg')] before:opacity-5"
+      bgImg="before:bg-[url('/profileBG.webp')] before:opacity-5"
     >
       {error !== null && isAxiosError(error) && (
         <ErrorMessage>{error.response?.data.error}</ErrorMessage>

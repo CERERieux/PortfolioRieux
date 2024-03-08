@@ -9,21 +9,21 @@ export function useQuote() {
   const [styles, setStyles] = useState(baseStyle + "bg-rose-100"); // Full styles for the demo
   const [quoteIndex, setQuoteIndex] = useState(0); // And a state for the index of the quote array
   const colors = [
-    "bg-stone-500",
-    "bg-zinc-400",
-    "bg-red-300",
-    "bg-orange-300",
-    "bg-amber-400",
-    "bg-yellow-200",
-    "bg-lime-300",
-    "bg-green-300",
-    "bg-teal-200",
-    "bg-cyan-200",
-    "bg-sky-300",
-    "bg-indigo-300",
-    "bg-purple-300",
-    "bg-fuchsia-300",
-    "bg-pink-300",
+    "from-stone-500",
+    "from-zinc-400",
+    "from-red-300",
+    "from-orange-300",
+    "from-amber-400",
+    "from-yellow-200",
+    "from-lime-300",
+    "from-green-300",
+    "from-teal-200",
+    "from-cyan-200",
+    "from-sky-300",
+    "from-indigo-300",
+    "from-purple-300",
+    "from-fuchsia-300",
+    "from-pink-300",
   ]; // Option color for background
 
   // We create a function that gets the quotes from the API and set the state with the response

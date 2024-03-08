@@ -22,7 +22,7 @@ export default function IssueBoard() {
 
   // Return the component that display all the funcionality of Corner of Issues and Suggestions
   return (
-    <main className="flex h-full w-full flex-col items-center gap-6 overflow-y-auto bg-slate-700 px-6 py-4 text-slate-50">
+    <main className="flex h-full w-full flex-col items-center gap-6 overflow-y-auto bg-gradient-to-t from-slate-700 to-slate-900 to-70% px-6 py-4 text-slate-50">
       {error !== null && isAxiosError(error) && (
         <ErrorMessage>{error.response?.data.error}</ErrorMessage>
       )}
