@@ -15,6 +15,7 @@ export const OPERATOR_NO_START = "+*/";
 export const SIMPLE_OPERATOR = "+-*/";
 
 interface State {
+  power: boolean;
   display: string;
   empty: boolean;
   dot: boolean;
@@ -30,9 +31,11 @@ interface State {
   newOperation: (value: boolean) => void;
   doOperation: () => void;
   clearCalculator: () => void;
+  turnCalculatorOnOff: () => void;
 }
 
 export const useCalculatorStore = create<State>((set, get) => ({
+  power: false, // Value to know if calculator is on or off
   display: "0", // Value of display
   empty: true, // Flag to indicate that user hasn't put a value
   dot: false, // Flag to prevent duplication of .
@@ -41,8 +44,14 @@ export const useCalculatorStore = create<State>((set, get) => ({
   log: [], // Array that saves our history of operations
 
   modifyDisplay: (id, concat) => {
+    const { display } = get();
     if (!concat) {
-      set({ display: id });
+      if (id === display) {
+        set(state => ({
+          display: state.display.slice().concat(id),
+          operation: false,
+        }));
+      } else set({ display: id });
     } else {
       set(state => ({ display: state.display.slice().concat(id) }));
     }
@@ -205,6 +214,17 @@ export const useCalculatorStore = create<State>((set, get) => ({
       dot: false,
       zero: true,
       operation: false,
+    });
+  },
+  turnCalculatorOnOff: () => {
+    const { power } = get();
+    set({
+      display: "0",
+      empty: true,
+      dot: false,
+      zero: true,
+      operation: false,
+      power: !power,
     });
   },
 }));

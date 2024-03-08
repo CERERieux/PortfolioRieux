@@ -4,12 +4,12 @@ import { calculatorInputLogic } from "./calculatorLogic"; // Import the logic of
 interface Props {
   id: string;
   type: string;
+  disableOutside?: boolean;
 }
 
-export function CalculatorButton({ id, type }: Props) {
-  const { handleOperationInput, disableBackButton, styleButton } =
-    calculatorInputLogic();
-  const disable = disableBackButton(type); // Variable to disable the Back button after doing an operation
+export function CalculatorButton({ id, type, disableOutside }: Props) {
+  const { handleOperationInput, styleButton } = calculatorInputLogic();
+  const disable = disableOutside; // Variable to disable the button
   const styles = styleButton(type); // Variable to give style to the button
   const handleClick = () => {
     handleOperationInput(id, type);

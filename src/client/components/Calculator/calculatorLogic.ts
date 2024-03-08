@@ -21,17 +21,23 @@ export function calculatorInputLogic() {
     newOperation,
     doOperation,
     clearCalculator,
+    turnCalculatorOnOff,
+    power,
   } = useCalculatorStore();
 
   const handleOperationInput = (id: string, type: string) => {
-    console.log(
-      type,
-      id,
-      "dot " + dot,
-      "zero " + zero,
-      "empty " + empty,
-      "operation " + operation,
-    );
+    // console.log(
+    //   type,
+    //   id,
+    //   "dot " + dot,
+    //   "zero " + zero,
+    //   "empty " + empty,
+    //   "operation " + operation,
+    // );
+    if (type === TYPE_INPUT.POWER) {
+      turnCalculatorOnOff();
+      return;
+    }
     // In case user clear the calculator with the reset button, we clean it and end function
     if (type === TYPE_INPUT.CLEAR) {
       clearCalculator();
@@ -44,6 +50,7 @@ export function calculatorInputLogic() {
     if (empty) {
       if (id !== "0" && type === TYPE_INPUT.NUMBER) {
         modifyDisplay(id, false);
+        newOperation(false);
         setEmpty(false);
         initialZeroExist(false);
         return;
@@ -231,19 +238,21 @@ export function calculatorInputLogic() {
   // Function to give styles to calculator buttons with Tailwind
   const styleButton = (type: string) => {
     if (type === TYPE_INPUT.NUMBER || type === TYPE_INPUT.DOT)
-      return "h-9 w-full rounded-xl bg-slate-100 text-center shadow-xl active:shadow-none hover:brightness-110";
+      return "h-9 w-full rounded-xl bg-slate-100 text-center shadow-xl active:shadow-none hover:brightness-110 disabled:bg-slate-300 disabled:hover:brightness-100 disabled:opacity-80 transition-colors";
     if (type === TYPE_INPUT.EQUAL)
-      return "h-9 w-full rounded-xl text-center shadow-xl active:shadow-none bg-amber-100 hover:brightness-110";
+      return "h-9 w-full rounded-xl text-center shadow-xl active:shadow-none bg-amber-100 hover:brightness-110 disabled:bg-amber-600 disabled:hover:brightness-100 disabled:opacity-80 transition-colors";
     if (type === TYPE_INPUT.OPERATOR)
-      return "h-9 w-16 rounded-xl bg-indigo-50 shadow-xl active:shadow-none hover:brightness-110";
+      return "h-9 w-16 rounded-xl bg-indigo-50 shadow-xl active:shadow-none hover:brightness-110 disabled:bg-indigo-300 disabled:hover:brightness-100 disabled:opacity-80 transition-colors";
     if (type === TYPE_INPUT.BACK)
-      return "h-8 w-[5.5rem] rounded-xl bg-slate-100 shadow-xl active:shadow-none disabled:opacity-50 disabled:shadow-none hover:brightness-110";
+      return "h-8 w-[6.5rem] rounded-xl bg-slate-100 shadow-xl active:shadow-none disabled:opacity-50 disabled:shadow-none hover:brightness-110 disabled:bg-slate-300 disabled:hover:brightness-100 disabled:opacity-80 transition-colors";
     if (type === TYPE_INPUT.CLEAR)
-      return "h-8 w-[5.5rem] rounded-xl bg-rose-300 shadow-xl active:shadow-none hover:brightness-110";
+      return "h-8 w-[6.5rem] rounded-xl bg-rose-300 shadow-xl active:shadow-none hover:brightness-110 disabled:shadow-none hover:brightness-110 disabled:bg-rose-700 disabled:hover:brightness-100 disabled:opacity-80 transition-colors";
     if (type === TYPE_INPUT.ANS)
-      return "h-8 w-[5.5rem] rounded-xl bg-lime-50 shadow-xl active:shadow-none hover:brightness-110";
+      return "h-8 w-[5.5rem] rounded-xl bg-lime-50 shadow-xl active:shadow-none hover:brightness-110 disabled:shadow-none hover:brightness-110 disabled:bg-lime-600 disabled:hover:brightness-100 disabled:opacity-80 transition-colors";
     if (type === TYPE_INPUT.POWER)
-      return "h-8 w-16 my-2 mr-3 rounded-xl bg-sky-200 shadow-xl active:shadow-none hover:brightness-110";
+      return `h-8 w-16 my-2 mr-2.5 rounded-xl ${
+        power ? "bg-sky-200" : "bg-red-300"
+      } shadow-xl active:shadow-none hover:brightness-110`;
   };
 
   return { handleOperationInput, disableBackButton, styleButton };
