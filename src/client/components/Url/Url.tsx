@@ -12,6 +12,8 @@ import CustomBackground from "../SystemDesign/CustomBackground";
 import UrlsTable from "./UrlsTable";
 import FooterAttribution from "../SystemDesign/FooterAttribution";
 
+const SHORTURL = window.location.href.split("/")[2] + "/url/"; // Auxiliar to know the URL of the domain and use it
+
 export default function Url() {
   const { addUrl, newLink, data, error, errorAuth, removeUrl, deleteLink } =
     useUrlProfile(); // Custom hook to get user short Links
@@ -92,7 +94,7 @@ export default function Url() {
           Add a new Link
         </Button>
       </header>
-      <main className="flex w-full justify-center">
+      <main className="flex w-full flex-col items-center gap-4">
         <AddUrlForm
           addUrl={addUrl}
           idOpen={idOpen}
@@ -100,6 +102,13 @@ export default function Url() {
           setAction={setAction}
           setLocalError={setLocalError}
         />
+        <p>
+          <span className="text-lg text-yellow-300">Remember: </span>
+          To use your short link, you have to add it at the end of{" "}
+          <span className="text-lg italic text-yellow-300 underline">
+            {SHORTURL}
+          </span>
+        </p>
         {data !== undefined ? (
           !("error" in data) ? (
             <UrlsTable data={data} handleDelete={handleDelete} />

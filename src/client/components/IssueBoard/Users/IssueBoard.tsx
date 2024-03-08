@@ -81,7 +81,10 @@ export default function IssueBoard() {
                     issue.updated_on,
                   ).toLocaleDateString();
                   return (
-                    <li key={id} className="w-full">
+                    <li
+                      key={id}
+                      className="w-full border-b-2 border-dotted border-slate-300 pb-4 pt-2"
+                    >
                       <SinglePublicIssue
                         created={created}
                         id={id}

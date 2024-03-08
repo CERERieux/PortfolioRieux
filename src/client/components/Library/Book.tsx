@@ -11,6 +11,7 @@ import BookAside from "./BookAside";
 import BookData from "./BookData";
 import FooterAttribution from "../SystemDesign/FooterAttribution";
 import ActionMessage from "../SystemDesign/ActionMessage";
+import LoaderText from "../NotFound/LoaderText";
 
 export default function Book() {
   const { id } = useParams(); // Get the id of the book from the params of the page
@@ -134,7 +135,7 @@ export default function Book() {
             isDeletePending={deleteNote.isPending}
           />
         ) : (
-          <p>Loading...</p>
+          <LoaderText />
         )}
       </main>
 

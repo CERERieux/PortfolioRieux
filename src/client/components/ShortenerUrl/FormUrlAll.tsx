@@ -45,7 +45,7 @@ export default function FormUrlAll({
       .catch(err => {
         // If an error happened, return it
         console.error(err);
-        return { error: err.response.data.error.error as string };
+        return { error: err.response.data.error as string };
       });
     // If error exist after saving, show it
     if ("error" in fetchResult) {

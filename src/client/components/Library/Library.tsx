@@ -17,6 +17,7 @@ import type {
 } from "../../types";
 import NavMenu from "../MyProfile/NavMenu";
 import CustomBackground from "../SystemDesign/CustomBackground";
+import LoaderText from "../NotFound/LoaderText";
 
 export default function Library() {
   const {
@@ -200,7 +201,7 @@ export default function Library() {
             setFilteredData={setFilteredData}
           />
         ) : (
-          <p>Loading...</p>
+          <LoaderText />
         )}
       </main>
     </CustomBackground>

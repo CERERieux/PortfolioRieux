@@ -3,7 +3,6 @@ import { useProfile } from "../../hooks/useProfile";
 import UnauthorizedAccess from "../NotFound/AuthError";
 import { useState, useEffect, type FormEvent } from "react";
 import type { UserInfo, ImgProfile } from "../../types";
-import { useUser } from "../../store/user";
 import ErrorMessage from "../SystemDesign/ErrorMessage";
 import ActionMessage from "../SystemDesign/ActionMessage";
 import ProfileMenu from "./ProfileMenu";
@@ -14,7 +13,6 @@ import FooterAttribution from "../SystemDesign/FooterAttribution";
 import LoaderText from "../NotFound/LoaderText";
 
 export default function MyProfile() {
-  const { logoffUser } = useUser(); // <-- TODO move this and make navmenu
   const { data, error, errorAuth, updateInfo } = useProfile({}); // Auxiliars to ensure its used only by users
   const [isUpdating, setIsUpdating] = useState(false); // State to handle view between profile info and update form
   // 2 States for the update form and handle user data
@@ -104,12 +102,6 @@ export default function MyProfile() {
           {action !== null && <ActionMessage>{action}</ActionMessage>}
           {data !== undefined ? (
             <>
-              <button
-                onClick={logoffUser}
-                className="absolute bottom-0 left-0 w-20 border bg-slate-200"
-              >
-                Log off
-              </button>
               <header className="flex h-2/5 w-full gap-6 shadow-md shadow-black/20 lg:h-2/5">
                 {!isUpdating ? (
                   <HeaderProfile
@@ -138,9 +130,7 @@ export default function MyProfile() {
               />
             </>
           ) : (
-            <>
-              <LoaderText />
-            </>
+            <LoaderText />
           )}
         </CustomBackground>
       )}

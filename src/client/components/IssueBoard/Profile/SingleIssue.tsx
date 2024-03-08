@@ -15,6 +15,15 @@ interface SingleIssueProps {
   >;
 }
 
+// Auxiliar to give color to the status depending on it
+const COLOR_STATUS = {
+  Pending: "text-red-500",
+  Read: "text-purple-500",
+  Completed: "text-lime-500",
+  "Trying to fix": "text-yellow-500",
+  Ignored: "text-slate-400",
+};
+
 export default function SingleIssue({
   created,
   id,
@@ -37,7 +46,14 @@ export default function SingleIssue({
       </h3>
       <p className="text-sm">{issue.text}</p>
       <p className="-ml-4 text-lg first-letter:text-blue-500">
-        Status: <span className="text-base">{issue.status}</span>
+        Status:{" "}
+        <span
+          className={`text-base ${
+            COLOR_STATUS[issue.status as keyof typeof COLOR_STATUS]
+          }`}
+        >
+          {issue.status}
+        </span>
       </p>
       <p className="left-16 text-end text-xs first-letter:text-blue-500">
         Created at {created}{" "}
