@@ -1,10 +1,12 @@
 import { useState } from "react";
 import reactLogo from "../assets/react.svg";
+import SimpleNavMenu from "./Menu/SimpleNavMenu";
 
 export default function Home() {
   const [count, setCount] = useState(0);
   return (
     <div className="App">
+      <SimpleNavMenu />
       <div>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src="/vite.svg" className="logo" alt="Vite logo" />
