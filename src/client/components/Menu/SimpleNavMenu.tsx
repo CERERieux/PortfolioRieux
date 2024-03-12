@@ -1,21 +1,21 @@
-import { useCloseNavButton } from "./CloseNavButton";
+import { useCloseNavButton } from "../SystemDesign/CloseNavButton";
 import ActionButton from "../SystemDesign/ActionButton";
 import MenuHam from "../Icons/MenuHam";
-import Menu from "../Menu/Menu";
+import Menu from "./Menu";
 
-interface NavMenuProps {
+interface SimpleNavMenuProps {
   positionNav?: string;
   textCol?: boolean;
   order?: string;
   colorText?: string;
 }
 
-export default function NavMenu({
+export default function SimpleNavMenu({
   positionNav = "top-0 right-0",
   textCol = false,
   order = "-order-2",
   colorText = "text-black",
-}: NavMenuProps) {
+}: SimpleNavMenuProps) {
   const { handleOpacity, opacity } = useCloseNavButton(); // Hook to handle the opacity of the menu section
 
   let positionMenu = {
