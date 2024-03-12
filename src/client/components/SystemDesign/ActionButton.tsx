@@ -27,7 +27,7 @@ export default function ActionButton({
 }: ActionButtonProps) {
   return (
     <button
-      className={`${groupName[0]} absolute ${position} rounded-full shadow-sm ${coverColor} p-1 transition-all hover:scale-110 hover:shadow-lg ${hoverColor} active:scale-90 active:shadow-none`}
+      className={`${groupName[0]} absolute ${position} rounded-full shadow-sm ${coverColor} p-1 transition-all hover:scale-110 hover:shadow-lg ${hoverColor} active:scale-90 active:shadow-none disabled:bg-slate-400 disabled:shadow-none disabled:hover:scale-100 disabled:hover:text-black [&_p]:disabled:opacity-0`}
       onClick={onClick}
       disabled={disabled}
       id={id}
