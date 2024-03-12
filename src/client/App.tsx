@@ -89,7 +89,7 @@ export default function App() {
         <Route path="/shortener-url" element={<ShortenerUrl />}></Route>
         <Route path="/my-profile">
           <Route index element={<MyProfile />}></Route>
-          <Route path="exercises" element={<ExerciseTracker />}></Route>
+          <Route path="notes" element={<ExerciseTracker />}></Route>
           <Route path="library" element={<Library />}></Route>
           <Route path="library/:id" element={<Book />}></Route>
           <Route path="issues" element={<IssueProfile />}></Route>

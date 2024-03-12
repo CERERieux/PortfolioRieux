@@ -33,7 +33,7 @@ export default function ProfileMenu() {
         extraStyle="md:col-start-2 md:row-start-1 md:absolute md:bottom-0 md:left-0 hover:brightness-105 hover:drop-shadow-xl hover:shadow-sky-500"
       >
         <Link
-          to="/my-profile/exercises"
+          to="/my-profile/notes"
           className="relative h-full w-full md:block"
         >
           <h2 className={`${headerStyle} text-sky-800`}>Notes</h2>
