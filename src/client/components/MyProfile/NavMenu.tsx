@@ -3,7 +3,7 @@ import MenuHam from "../Icons/MenuHam";
 import Return from "../Icons/Return";
 import ActionButton from "../SystemDesign/ActionButton";
 import { useCloseNavButton } from "../SystemDesign/CloseNavButton";
-import Menu from "../SystemDesign/Menu";
+import Menu from "../Menu/Menu";
 
 interface NavMenuProps {
   positionNav?: string;

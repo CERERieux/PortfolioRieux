@@ -2,10 +2,12 @@ interface SummaryProps {
   children: React.ReactNode;
   canOpen?: boolean;
   needPad?: boolean;
+  extraStyles?: string;
 }
 
 export default function Summary({
   children,
+  extraStyles,
   canOpen = true,
   needPad = true,
 }: SummaryProps) {
@@ -15,7 +17,7 @@ export default function Summary({
   const padding = needPad ? "py-2 pl-2" : "";
   return (
     <summary
-      className={`relative flex items-center gap-4 text-center text-lg ${openStyle} ${padding} transition-all`}
+      className={`relative flex items-center gap-4 text-center text-lg ${openStyle} ${padding} transition-all ${extraStyles}`}
     >
       {children}
     </summary>

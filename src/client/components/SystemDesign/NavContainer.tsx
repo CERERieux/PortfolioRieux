@@ -1,7 +1,7 @@
 import { useCloseNavButton } from "./CloseNavButton";
 import ActionButton from "../SystemDesign/ActionButton";
 import MenuHam from "../Icons/MenuHam";
-import Menu from "./Menu";
+import Menu from "../Menu/Menu";
 
 interface NavMenuProps {
   positionNav?: string;

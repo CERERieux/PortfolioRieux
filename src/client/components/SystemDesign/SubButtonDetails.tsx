@@ -3,24 +3,25 @@ import Button from "./Button";
 
 interface SubButtonDetailsProps {
   children: React.ReactNode;
-  buttonColor: string;
   colorGroup: `group-hover/${string}:bg-${string} group-hover/${string}:border-${string}`;
+  toLinkRoute: string;
 }
 
 export default function SubButtonDetails({
   children,
-  buttonColor,
   colorGroup,
+  toLinkRoute,
 }: SubButtonDetailsProps) {
   return (
     <Link
-      to="/my-profile"
-      className={`mx-auto my-2 flex w-3/4 justify-center pl-4`}
+      to={toLinkRoute}
+      className={`flex w-1/2 items-center justify-center gap-4`}
     >
       <Button
-        color={`${colorGroup} ${buttonColor}`}
+        color={`${colorGroup}`}
         xSize="w-full"
-        extraStyles="flex gap-4 items-center text-black"
+        extraStyles="flex gap-4 items-center"
+        textHover={false}
       >
         {children}
       </Button>
