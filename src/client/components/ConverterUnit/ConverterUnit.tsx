@@ -1,4 +1,5 @@
 import useConverter from "../../hooks/useConverter";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 
 export default function ConverterUnit() {
   const {
@@ -13,6 +14,7 @@ export default function ConverterUnit() {
 
   return (
     <main className="flex h-full w-full flex-col items-center justify-center gap-6 [background:_linear-gradient(110deg,rgba(250,248,142,.8),rgba(250,248,142,0)_35%),_linear-gradient(15deg,rgba(103,232,249,.8),rgba(103,232,249,0)_20%),_linear-gradient(192deg,rgba(216,180,254,.8),rgba(216,180,254,0)_30%),_linear-gradient(298deg,rgba(207,250,142,.8),rgba(207,250,142,0)_20%),_linear-gradient(325deg,rgba(207,207,207,.8),rgba(207,207,207,0)_50%),_linear-gradient(120deg,rgba(252,212,213,.8),rgba(252,212,213,0)_50%)]">
+      <SimpleNavMenu />
       <div className="border bg-slate-50/30 py-10 shadow-lg shadow-black/10 backdrop-blur-md md:w-2/3 md:border-x-[1px]">
         <form
           onSubmit={handleConversion}

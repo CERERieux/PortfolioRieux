@@ -1,6 +1,7 @@
 import { useMarkdown } from "../../hooks/useMarkdown"; // Our custom hook that manages the users input and translate it
 import Expand from "../Icons/Expand";
 import Minimize from "../Icons/Minimize";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 import Button from "../SystemDesign/Button";
 import Dialog from "../SystemDesign/Dialog";
 const STYLES = {
@@ -43,7 +44,7 @@ export default function Markdown() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-around gap-4 bg-gradient-to-b from-lime-100 to-60%">
+    <div className="relative flex h-full w-full flex-col items-center justify-around gap-4 bg-gradient-to-b from-lime-100 to-60%">
       <header
         className={`flex h-3/5 w-full flex-col items-center justify-center gap-4 px-6 py-2 md:h-2/5 md:flex-row ${hide}`}
       >
@@ -94,6 +95,7 @@ export default function Markdown() {
           className="my-2 w-full resize-none border-none md:w-2/3"
         ></textarea>
       </header>
+      {size === "min" && <SimpleNavMenu positionNav="-top-2 left-[4.5rem]" />}
       <div className={`${previewHeight} ${STYLES.BASE}`}>
         <button
           className="group/expand absolute right-8 rounded-full bg-lime-500 p-2 transition-all hover:scale-110 hover:shadow-lg hover:shadow-lime-200"

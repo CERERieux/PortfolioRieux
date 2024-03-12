@@ -1,4 +1,5 @@
 import { useQuote } from "../../hooks/useQuote"; // Import a custom hook to manage the quotes
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 
 export default function Quote() {
   const { quote, getNewQuote, styles } = useQuote(); // Bring a quote and a function that returns a new quote from the hook
@@ -11,6 +12,7 @@ export default function Quote() {
 
   return (
     <main className={`bg-gradient-to-b ${styles}`}>
+      <SimpleNavMenu />
       <section className="md: flex h-1/2 w-2/3 flex-col items-center justify-center gap-4 rounded-lg border border-slate-400 bg-slate-50 shadow-sm shadow-gray-400 md:h-[35%] md:w-1/2 md:justify-around md:gap-3 md:py-4 lg:w-5/12">
         <h4 className="h-2/5 w-5/6 text-pretty text-center md:h-1/2 md:w-11/12">
           {quote?.quote}

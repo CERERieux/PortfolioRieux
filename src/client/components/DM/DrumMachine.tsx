@@ -3,6 +3,7 @@ import { SoundButton } from "./SoundButton"; // Our component that shows a butto
 import { SOUND_NAMES } from "./soundHub"; // A dictionary that give us the name of the mp3 to play
 import CustomBackground from "../SystemDesign/CustomBackground";
 import FooterAttribution from "../SystemDesign/FooterAttribution";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 
 export default function DrumMachine() {
   // We start the state of the component as empty, it will show later the name of the mp3 file that was played
@@ -12,6 +13,7 @@ export default function DrumMachine() {
       bgImg="before:bg-[url('/DrumboxBG.webp')] before:opacity-50"
       styles="w-full h-full"
     >
+      <SimpleNavMenu />
       <main className="grid h-full w-full grid-cols-1 place-items-center">
         <div className="grid h-1/3 w-2/3 grid-cols-2 grid-rows-2 place-items-center justify-around border border-black bg-zinc-800 bg-gradient-to-b from-slate-500 via-transparent via-10% to-zinc-950 to-90% shadow-lg shadow-zinc-800/70 sm:w-1/2 md:h-2/5 md:w-2/5 lg:w-1/3">
           <h2 className="col-span-1 row-span-1 pt-6 text-lg italic text-slate-100 first-letter:text-3xl first-letter:text-red-600 lg:text-2xl lg:first-letter:text-4xl">

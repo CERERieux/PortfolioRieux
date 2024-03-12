@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useUser } from "../../store/user";
 import FormUrlAll from "./FormUrlAll";
 import CustomBackground from "../SystemDesign/CustomBackground";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 
 export default function ShortenerUrl() {
   const [shortUrl, setShortUrl] = useState(""); // State to save the short url if adding was successful
@@ -24,6 +25,7 @@ export default function ShortenerUrl() {
         </h1>
         <p>{`Here you can get a short link through my "service".`}</p>
       </header>
+      <SimpleNavMenu />
       <section className={`h-1/4 px-8 py-4 ${bgStyle}`}>
         <FormUrlAll
           setError={setError}

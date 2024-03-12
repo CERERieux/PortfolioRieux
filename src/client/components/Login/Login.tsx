@@ -4,6 +4,7 @@ import ActionMessage from "../SystemDesign/ActionMessage";
 import RedirectLoginHome from "./RedirectLoginHome";
 import LoginViewHandler from "./LoginViewHandler";
 import useLogin from "../../hooks/useLogin";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 
 export default function Login() {
   const { action, error, token } = useUser();
@@ -16,6 +17,7 @@ export default function Login() {
     <main
       className={`flex h-full w-full items-center justify-center ${mainColor} transition-all duration-500`}
     >
+      <SimpleNavMenu />
       {error != null && (
         <ErrorMessage>
           <p>{error}</p>

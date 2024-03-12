@@ -11,6 +11,7 @@ import HeaderProfile from "./HeaderProfile";
 import ProfileUpdateForm from "./ProfileUpdateForm";
 import FooterAttribution from "../SystemDesign/FooterAttribution";
 import LoaderText from "../NotFound/LoaderText";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 
 export default function MyProfile() {
   const { data, error, errorAuth, updateInfo } = useProfile({}); // Auxiliars to ensure its used only by users
@@ -93,7 +94,7 @@ export default function MyProfile() {
       ) : (
         <CustomBackground
           styles="flex h-full w-full flex-col items-center justify-center gap-10 md:gap-0"
-          bgImg="before:bg-[url('/profileBG.webp')] before:opacity-5"
+          bgImg="before:bg-[url('/profileBG.webp')] before:opacity-5 relative"
         >
           {error !== null && isAxiosError(error) && (
             <ErrorMessage>{error.response?.data.error}</ErrorMessage>
@@ -121,6 +122,7 @@ export default function MyProfile() {
                   />
                 )}
               </header>
+              <SimpleNavMenu positionNav="absolute left-16 top-[30%] sm:top-[25%] md:top-[35%] lg:top-[30%] md:right-0 z-20" />
               <ProfileMenu />
               <FooterAttribution
                 whatIs="Background Image by"

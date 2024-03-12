@@ -1,5 +1,6 @@
 import { useTimerClock } from "../../hooks/useTimerClock";
 import { CLOCKMODES, useClockStore } from "../../store/clock";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 import FooterSession from "./FooterSession";
 import SessionBox from "./SessionBox";
 import Timer from "./Timer";
@@ -22,6 +23,7 @@ export default function PomodoroClock() {
 
   return (
     <>
+      <SimpleNavMenu />
       <main
         className={`flex h-full w-full flex-col items-center justify-center gap-4 ${mainBG} bg-cover bg-no-repeat transition-all duration-300`}
       >

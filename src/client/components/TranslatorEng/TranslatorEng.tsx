@@ -1,5 +1,6 @@
 import { sanitizeInput } from "../../utils/sanitize";
 import { useTranslator, AME_TO_BRIT } from "../../hooks/useTranslator";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 
 export default function TranslatorEng() {
   const { error, translation, handleInput, handleMode, mode, userInput } =
@@ -11,13 +12,13 @@ export default function TranslatorEng() {
   const ukFlag = "bg-[url('/UKFlag.svg')]";
 
   return (
-    <main className="flex h-full w-full flex-col place-items-center gap-6 overflow-y-scroll bg-slate-50 py-6">
+    <main className="relative flex h-full w-full flex-col place-items-center gap-6 overflow-y-auto bg-slate-50 py-6">
       <h2 className="text-xl">
         Translator{" "}
         <span className="font-comic text-xl uppercase">American</span> -{" "}
         <span className="font-elegant text-3xl">British</span>
       </h2>
-
+      <SimpleNavMenu positionNav="top-0 right-4" />
       <label className="relative inline-flex cursor-pointer items-center">
         <input
           type="checkbox"

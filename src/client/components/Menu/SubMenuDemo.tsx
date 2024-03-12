@@ -78,7 +78,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
 
       <RedirectButton
         colorCover="hover:bg-lime-100 hover:border-lime-400"
-        toRedirect="/demo/quotes"
+        toRedirect="/demo/quote"
         needPad={false}
       >
         <Quote size="32" /> Quote Machine

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useCalculatorStore, TYPE_INPUT } from "../../store/calculator";
 import { CalculatorButton } from "./CalculatorButton";
 import { calculatorInputLogic } from "./calculatorLogic";
+import SimpleNavMenu from "../Menu/SimpleNavMenu";
 
 export default function Calculator() {
   const { display, log, power } = useCalculatorStore();
@@ -105,6 +106,7 @@ export default function Calculator() {
 
   return (
     <div className="h-full w-full bg-gradient-to-b from-slate-900">
+      <SimpleNavMenu />
       <main className="mx-auto flex max-w-screen-lg flex-col items-center">
         <h2 className="pb-3 pt-6 font-logCalculator text-3xl text-slate-100">
           Calculator
