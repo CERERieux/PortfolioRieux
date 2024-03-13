@@ -2,35 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import LoadingSpinner from "./components/NotFound/LoadingSpinner";
 
-// import AdminBoards from "./components/AdminPanel/AdminBoards";
-// import AdminLogin from "./components/AdminPanel/AdminLogin";
-// import AdminMainMenu from "./components/AdminPanel/AdminMainMenu";
-// import AdminPanel from "./components/AdminPanel/AdminPanel";
-// import AnonBoard from "./components/AnonBoard/AnonBoard";
-// import AnonReply from "./components/AnonBoard/AnonReply";
-// import AnonThread from "./components/AnonBoard/AnonThread";
-// import Book from "./components/Library/Book";
-// import Calculator from "./components/Calculator/Calculator";
-// import ConverterUnit from "./components/ConverterUnit/ConverterUnit";
-// import DataRequest from "./components/DataRequest/DataRequest";
-// import DrumMachine from "./components/DM/DrumMachine";
-// import ExerciseTracker from "./components/ExTracker/ExerciseTracker";
-// import ExternalProfile from "./components/ExternalProfile/ExternalProfile";
-// import Home from "./components/Home";
-// import IssueBoard from "./components/IssueBoard/Users/IssueBoard";
-// import IssueProfile from "./components/IssueBoard/Profile/IssuesProfile";
-// import Library from "./components/Library/Library";
-// import Login from "./components/Login/Login";
-// import Markdown from "./components/Mark_down/Markdown";
-// import MyProfile from "./components/MyProfile/MyProfile";
-// import NotFound from "./components/NotFound/NotFound";
-// import PomodoroClock from "./components/Pomodoro/PomodoroClock";
-// import Quote from "./components/Quotes/Quotes";
-// import ShortenerUrl from "./components/ShortenerUrl/ShortenerUrl";
-// import StockViewer from "./components/Stocks/StockViewer";
-// import TranslatorEng from "./components/TranslatorEng/TranslatorEng";
-// import Url from "./components/Url/Url";
-// import UserDataAdmin from "./components/AdminPanel/UserDataAdmin";
 const AdminBoards = lazy(() => import("./components/AdminPanel/AdminBoards"));
 const AdminLogin = lazy(() => import("./components/AdminPanel/AdminLogin"));
 const AdminMainMenu = lazy(
@@ -63,6 +34,7 @@ const IssueProfile = lazy(
 const Library = lazy(() => import("./components/Library/Library"));
 const Login = lazy(() => import("./components/Login/Login"));
 const Markdown = lazy(() => import("./components/Mark_down/Markdown"));
+const MenuDemos = lazy(() => import("./components/Menu/MenuDemos"));
 const MyProfile = lazy(() => import("./components/MyProfile/MyProfile"));
 const NotFound = lazy(() => import("./components/NotFound/NotFound"));
 const PomodoroClock = lazy(() => import("./components/Pomodoro/PomodoroClock"));
@@ -99,7 +71,7 @@ export default function App() {
           <Route index element={<ExternalProfile />}></Route>
         </Route>
         <Route path="/demo">
-          <Route index element={<Home />}></Route>
+          <Route index element={<MenuDemos />}></Route>
           <Route path="quote" element={<Quote />}></Route>
           <Route path="calculator" element={<Calculator />}></Route>
           <Route path="markdown" element={<Markdown />}></Route>
