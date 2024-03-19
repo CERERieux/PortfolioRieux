@@ -7,6 +7,7 @@ export const advancedRouter = Router();
 
 advancedRouter.route("/converter").get(AdvancedController.convertHandler);
 
+advancedRouter.route("/sudoku/puzzle").get(AdvancedController.getPuzzle)
 advancedRouter.route("/sudoku/check").post(AdvancedController.checkSudoku);
 advancedRouter.route("/sudoku/solve").post(AdvancedController.solveSudoku);
 

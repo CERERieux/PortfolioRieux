@@ -27,6 +27,16 @@ import {
 import { advancedError } from "./error";
 import { ERROR_GUSER } from "../schemas/global";
 
+const PUZZLES = {
+  0:"6.1.7..3....4.35.6.....619.2....79..8....9..2.1...8....7....65.4.....2..5267....8",
+  1:"..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..",
+  2:"47...3..9..9....27.1.97...6.6..9...88..7.695....4...63.271.9.8....23..7..3..4729.",
+  3:"6.....8..78..593.63.1.48.2....5.79...7.8..1.....4..7....7.6...921.9.5..89.3...475",
+  4:"8......5.5...8...3.3.5.2..49....5....62.37.8..53.......4..5.63.......7..3.621.5..",
+  5:".....1.5.35.......8.46532...3..4....4....9.3.9....6..8..2....6...........13......",
+  6:"4..7.1.5.7..385......4.69....914......48...9526...378..27..8..964.2.953.93..74.2."
+}
+
 const UPDATE_SUCCESS = (id: string) => `Successfully updated issue ${id}`;
 const translator = new AdvancedModel.Translator();
 
@@ -70,6 +80,11 @@ export function convertHandler(
 }
 
 /** ------------------------------------------------------------------------ */
+
+export function getPuzzle( req: Request<{},{},{},{index:keyof typeof PUZZLES}>, res: Response ){
+  const puzzleIndex = req.query.index
+  return res.status(200).json(PUZZLES[puzzleIndex])
+}
 
 export function checkSudoku(
   req: Request<{}, {}, SudokuBody, {}>,
