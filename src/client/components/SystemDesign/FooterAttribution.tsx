@@ -7,6 +7,7 @@ interface FooterAttributionProps {
   extra?: string;
   size?: string;
   mx?: string;
+  backdrop?: boolean;
 }
 
 /** Component that display a footer in case I need to give attribution for
@@ -19,10 +20,13 @@ export default function FooterAttribution({
   extra,
   size = "md:left-1/3 md:w-1/3",
   mx = "md:mx-auto",
+  backdrop = false,
 }: FooterAttributionProps) {
   return (
     <footer
-      className={`absolute bottom-0 w-full bg-black/60 py-1 text-center text-xs text-white/70 ${size} ${mx} md:rounded-lg`}
+      className={`absolute bottom-0 w-full bg-black/60 py-1 text-center text-xs text-white/70 ${size} ${mx} md:rounded-lg ${
+        backdrop && "backdrop-blur-sm"
+      }`}
     >
       <p>
         {whatIs}{" "}
