@@ -8,6 +8,7 @@ interface SudokuState {
   currentSudoku: number;
   localError: string | null;
   sudokuString: string;
+  sudokuBackup: string;
   validCoord: boolean | null;
   validSudoku: boolean;
   checkSudoku: () => void;
@@ -17,6 +18,7 @@ interface SudokuState {
   resolveSudoku: () => void;
   verifyInput: (number: string, coord: `^[A-I][0-9]$`) => void;
   resetGame: () => void;
+  restartSudoku: () => void;
 }
 
 export const useSudokuStore = create<SudokuState>((set, get) => ({
@@ -26,6 +28,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
   currentSudoku: Math.floor(Math.random() * 7), // Auxiliar to get a sudoku from backend
   localError: null, // Auxliar to display messages of errors
   sudokuString: "", // Auxiliar to save the sudoku as string and be able to send it to the backend
+  sudokuBackup: "", // Auxiliar to reset the sudoku to the initial state
   validCoord: null, // Boolean to display if user value is valid at 1 coordinate
   validSudoku: false, // Boolean to display if sudoku is valid or not, by default is not because it's incomplete
 
@@ -74,6 +77,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
     set({
       currentSudoku: puzzleNumber,
       sudokuString: puzzle,
+      sudokuBackup: puzzle,
     });
   },
 
@@ -87,7 +91,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
     const newSudoku =
       sudokuString.substring(0, place) +
       newValue +
-      sudokuString.substring(place);
+      sudokuString.substring(place + 1);
     set({ sudokuString: newSudoku });
   },
 
@@ -149,8 +153,17 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
       conflicts: null,
       localError: null,
       sudokuString: "",
+      sudokuBackup: "",
       validCoord: null,
       validSudoku: false,
+    });
+  },
+
+  /** Function to return the sudoku to its initial state */
+  restartSudoku: () => {
+    const { sudokuBackup } = get();
+    set({
+      sudokuString: sudokuBackup,
     });
   },
 }));
