@@ -61,6 +61,9 @@ const CAUSE_ERROR_DATA = {
 
 export default function UnauthorizedAccess({ errorAuth }: Props) {
   // For avatars
+  // <a href="https://www.freepik.com/free-photo/sunshine-through-huge-tree_2829629.htm#fromView=search&page=1&position=5&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57">Image by freepik</a>
+  // <a href="https://www.freepik.com/free-photo/beautiful-island_1114645.htm#fromView=search&page=1&position=45&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57">Image by mrsiraphol on Freepik</a>
+  // <a href="https://www.freepik.com/free-photo/man-with-hands-wide-open-standing-top-mountain-enjoying-incredible-view-lake_18088638.htm#fromView=search&page=1&position=49&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57">Image by wirestock on Freepik</a>
   // <a href="https://www.freepik.com/free-photo/oak-forest-autumn_1239302.htm#fromView=search&page=1&position=12&uuid=29ad8a95-e5dd-43e8-ab57-a0870e7b0cb3">Image by bearfotos on Freepik</a>
   // https://www.freepik.com/search?ai=excluded&format=search&last_filter=query&last_value=nature&orientation=square&query=nature&type=photo
   const { message, cause } = errorAuth;
