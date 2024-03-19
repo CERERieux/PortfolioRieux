@@ -3,11 +3,11 @@ import { useSudokuStore } from "../../../store/sudoku";
 import SimpleNavMenu from "../../Menu/SimpleNavMenu";
 import CustomBackground from "../../SystemDesign/CustomBackground";
 import FooterAttribution from "../../SystemDesign/FooterAttribution";
-import NumberBox from "./NumberBox";
 import ActionMessage from "../../SystemDesign/ActionMessage";
 import ErrorMessage from "../../SystemDesign/ErrorMessage";
-import GridSudoku from "../GridSudoku";
+import GridSudoku from "./GridSudoku";
 import Button from "../../SystemDesign/Button";
+import AsideSudoku from "./AsideSudoku";
 
 export default function Sudoku() {
   const {
@@ -17,7 +17,6 @@ export default function Sudoku() {
     conflicts,
     getAnswer,
     localError,
-    replaceNumber,
     resolveSudoku,
     sudokuString,
     validCoord,
@@ -46,23 +45,18 @@ export default function Sudoku() {
 
   return (
     <CustomBackground
-      bgImg="before:bg-[url('/SudokuBG.webp')] before:opacity-50"
-      styles="w-full h-full relative flex flex-col items-center gap-6 py-4 px-8"
+      bgImg="before:bg-[url('/SudokuBG.webp')] before:opacity-80"
+      styles="w-full h-full flex flex-col items-center gap-6 py-4 pb-8 md:pb-4 px-8 overflow-y-auto"
     >
       {action !== null && <ActionMessage>{action}</ActionMessage>}
       {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
       <header>
-        <SimpleNavMenu />
+        <SimpleNavMenu positionNav="top-0 right-4 absolute" />
         <h1 className="font-comic text-3xl text-slate-700">Sudoku</h1>
       </header>
-      <div className="flex flex-col items-center justify-center lg:flex-row">
-        <aside className="order-2 flex w-96 justify-end bg-slate-200 lg:-order-1 lg:flex-col">
-          <Button color="">Solve</Button>
-          <Button color="">Verify Coordinate</Button>
-          <Button color="">New Sudoku</Button>
-          <Button color="">Reset Sudoku</Button>
-        </aside>
-        <main className="flex w-[600px] items-center justify-center bg-white">
+      <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
+        <AsideSudoku />
+        <main className="flex h-[450px] w-[410px] items-center justify-center rounded-xl bg-white/60 backdrop-blur-md sm:w-[450px]">
           <GridSudoku />
         </main>
       </div>
@@ -71,6 +65,7 @@ export default function Sudoku() {
         urlRef="https://www.freepik.es/foto-gratis/pequena-cascada_922466.htm#fromView=search&page=1&position=9&uuid=e256f375-2f29-432f-acc0-c54aa471c1aa"
         whatIs="Image"
         extra=" by JaredMoore"
+        backdrop
       />
     </CustomBackground>
   );
