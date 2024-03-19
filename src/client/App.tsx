@@ -43,6 +43,7 @@ const ShortenerUrl = lazy(
   () => import("./components/ShortenerUrl/ShortenerUrl"),
 );
 const StockViewer = lazy(() => import("./components/Stocks/StockViewer"));
+const Sudoku = lazy(() => import("./components/Games/Sudoku/Sudoku"));
 const TranslatorEng = lazy(
   () => import("./components/TranslatorEng/TranslatorEng"),
 );
@@ -80,16 +81,16 @@ export default function App() {
           <Route path="converter" element={<ConverterUnit />}></Route>
           <Route path="translate-eng" element={<TranslatorEng />}></Route>
         </Route>
+        <Route path="/games">
+          {/* <Route index element={<Home />}></Route> */}
+          <Route path="sudoku" element={<Sudoku />}></Route>
+          {/* <Route path="ifIDosomethingExtra" element={<Home />}></Route> */}
+        </Route>
         {/* <Route path="/communicationNameApp" element={<Home />}></Route> */}
         <Route path="/anon-board">
           <Route index element={<AnonBoard />}></Route>
           <Route path=":board/thread" element={<AnonThread />}></Route>
           <Route path=":board/:thread/reply" element={<AnonReply />}></Route>
-        </Route>
-        <Route path="/games">
-          <Route index element={<Home />}></Route>
-          <Route path="sudoku" element={<Home />}></Route>
-          {/* <Route path="ifIDosomethingExtra" element={<Home />}></Route> */}
         </Route>
         <Route path="/cut-content/portfolio">
           <Route index element={<Home />}></Route>

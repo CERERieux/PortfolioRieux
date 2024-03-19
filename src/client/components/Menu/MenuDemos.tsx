@@ -47,7 +47,6 @@ export default function MenuDemos() {
           <TypeScript size="40" />
           <Tailwind width="40" height="24" />
           <ReactIcon width="40" height="36" />
-          <Express size="40" />
         </WindowPreview>
 
         <WindowPreview
@@ -59,7 +58,6 @@ export default function MenuDemos() {
           <TypeScript size="40" />
           <Tailwind width="40" height="24" />
           <ReactIcon width="40" height="36" />
-          <Express size="40" />
         </WindowPreview>
 
         <WindowPreview
@@ -83,7 +81,6 @@ export default function MenuDemos() {
           <TypeScript size="40" />
           <Tailwind width="40" height="24" />
           <ReactIcon width="40" height="36" />
-          <Express size="40" />
         </WindowPreview>
 
         <WindowPreview
@@ -95,7 +92,6 @@ export default function MenuDemos() {
           <TypeScript size="40" />
           <Tailwind width="40" height="24" />
           <ReactIcon width="40" height="36" />
-          <Express size="40" />
         </WindowPreview>
       </main>
     </div>
