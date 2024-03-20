@@ -60,7 +60,7 @@ export default function GridSudoku() {
       // If the sudoku is empty, then reset the boxes
       setInputBoxes([]);
     }
-  }, [sudokuString]);
+  }, [sudokuString, validSudoku]);
 
   return (
     <section className="flex max-w-96 border-collapse flex-wrap items-center justify-center">

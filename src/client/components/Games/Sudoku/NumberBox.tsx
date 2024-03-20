@@ -214,7 +214,7 @@ export default function NumberBox({
         autoComplete="off"
         maxLength={1}
         minLength={0}
-        pattern="^[0-9]$"
+        pattern="^[1-9]$"
         name={name}
         value={value}
         onChange={handleChange}

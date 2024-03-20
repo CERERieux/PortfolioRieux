@@ -6,6 +6,7 @@ interface SudokuState {
   answer: string;
   conflicts: string[] | null;
   currentSudoku: number;
+  isSolveAuto: boolean;
   localError: string | null;
   sudokuString: string;
   sudokuBackup: string;
@@ -26,6 +27,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
   action: null, // Auxliar to display messages of success
   conflicts: null, // Auxiliar to display conflicts in case of validate a coordinate
   currentSudoku: Math.floor(Math.random() * 7), // Auxiliar to get a sudoku from backend
+  isSolveAuto: false, // Auxiliar to see if user clicked on the button that solves the sudoku
   localError: null, // Auxliar to display messages of errors
   sudokuString: "", // Auxiliar to save the sudoku as string and be able to send it to the backend
   sudokuBackup: "", // Auxiliar to reset the sudoku to the initial state
@@ -34,14 +36,15 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
 
   /** Function to see if user filled the sudoku correctly or not */
   checkSudoku: () => {
-    const { answer, sudokuString } = get(); // Get the user answer and the correct answer
+    const { answer, sudokuString, isSolveAuto } = get(); // Get the user answer and the correct answer
     // If those are the same, show a message to display it
     if (answer === sudokuString) {
-      set({
-        action: "Congratulations, you solved this sudoku!",
-        validSudoku: true,
-        localError: null,
-      });
+      if (!isSolveAuto)
+        set({
+          action: "Congratulations, you solved this sudoku!",
+          validSudoku: true,
+          localError: null,
+        });
     } else {
       // If not are the same, then show an "error" to let know user there is something wrong
       set({
@@ -85,8 +88,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
   replaceNumber: (input, place) => {
     const { sudokuString } = get(); // Get the original sudoku
     // If the input is empty or is a character that isn't valid, put a dot, else, put the input
-    const newValue =
-      input === "" || !"0123456789".includes(input) ? "." : input;
+    const newValue = input === "" || !"123456789".includes(input) ? "." : input;
     // Make a new one that includes user input and set it in the state
     const newSudoku =
       sudokuString.substring(0, place) +
@@ -97,8 +99,8 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
 
   /** Function that solves the current sudoku */
   resolveSudoku: async () => {
-    const { sudokuString } = get(); // Get the sudoku
-    const solution = await SudokuService.solveSudoku(sudokuString); // And solve it
+    const { sudokuBackup } = get(); // Get the sudoku
+    const solution = await SudokuService.solveSudoku(sudokuBackup); // And solve it
     // If there is an error, display it for 3 seconds
     if ("error" in solution) {
       set({ localError: solution.error, action: null });
@@ -109,6 +111,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
       // If it's a success, then display the solution and a message about it for 3s
       set({
         conflicts: null,
+        isSolveAuto: true,
         localError: null,
         validCoord: null,
         validSudoku: true,
@@ -151,6 +154,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
       action: null,
       answer: "",
       conflicts: null,
+      isSolveAuto: false,
       localError: null,
       sudokuString: "",
       sudokuBackup: "",
