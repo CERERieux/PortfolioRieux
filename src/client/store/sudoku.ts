@@ -168,6 +168,10 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
     const { sudokuBackup } = get();
     set({
       sudokuString: sudokuBackup,
+      action: "Sudoku reseted!",
     });
+    setTimeout(() => {
+      set({ action: null });
+    }, 3000);
   },
 }));
