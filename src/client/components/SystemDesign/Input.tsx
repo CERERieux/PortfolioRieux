@@ -16,6 +16,7 @@ interface TextInputProps {
   newCycle?: boolean;
   extraStyles?: string;
   canBeTooLong?: boolean;
+  pattern?: string;
 }
 
 export default function Input({
@@ -32,6 +33,7 @@ export default function Input({
   value,
   lineStyle,
   onChange,
+  pattern,
   newCycle = false, // Auxiliar to indicate we are in a new cycle and input "modified" flag can be reseted
   canBeTooLong = false, // Auxiliar to activate styles in case text overflow input text
 }: TextInputProps) {
@@ -98,6 +100,7 @@ export default function Input({
           onChange={onChange}
           className={`${invalidStyles} ${styleLine} ${extraStyles} placeholder:text-sm placeholder:text-gray-300`}
           size={size}
+          pattern={pattern}
         />
       </div>
       <p className="absolute text-sm italic text-red-500 [font-size:11px] [line-height:1rem]">
