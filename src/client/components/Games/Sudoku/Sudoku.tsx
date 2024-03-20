@@ -6,7 +6,6 @@ import FooterAttribution from "../../SystemDesign/FooterAttribution";
 import ActionMessage from "../../SystemDesign/ActionMessage";
 import ErrorMessage from "../../SystemDesign/ErrorMessage";
 import GridSudoku from "./GridSudoku";
-import Button from "../../SystemDesign/Button";
 import AsideSudoku from "./AsideSudoku";
 
 export default function Sudoku() {
@@ -14,16 +13,10 @@ export default function Sudoku() {
     getInitialSudoku,
     action,
     checkSudoku,
-    conflicts,
     getAnswer,
     localError,
-    resolveSudoku,
     sudokuString,
-    validCoord,
-    validSudoku,
-    verifyInput,
-  } = useSudokuStore();
-
+  } = useSudokuStore(); // Get the info needed from the store
   const [newSudoku, setNewSudoku] = useState(true); // Auxiliar flag to get new sudoku when needed
 
   // Effect that activates at the start and when newSudoku changes
@@ -43,6 +36,14 @@ export default function Sudoku() {
     }
   }, [sudokuString]);
 
+  // Effect that activates each time sudoku changes
+  useEffect(() => {
+    // If the sudoku is completed, check if it's correct or not
+    if (!sudokuString.includes(".") && sudokuString !== "") {
+      checkSudoku();
+    }
+  }, [sudokuString]);
+
   return (
     <CustomBackground
       bgImg="before:bg-[url('/SudokuBG.webp')] before:opacity-80"
@@ -52,11 +53,13 @@ export default function Sudoku() {
       {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
       <header>
         <SimpleNavMenu positionNav="top-0 right-4 absolute" />
-        <h1 className="font-comic text-3xl text-slate-700">Sudoku</h1>
+        <h1 className="rounded-md bg-slate-700/80 px-6 py-1 font-comic text-3xl text-slate-100 shadow-inner shadow-slate-50/50 backdrop-blur-md">
+          Sudoku
+        </h1>
       </header>
       <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
-        <AsideSudoku />
-        <main className="flex h-[450px] w-[410px] items-center justify-center rounded-xl bg-white/60 backdrop-blur-md sm:w-[450px]">
+        <AsideSudoku setNewSudoku={setNewSudoku} />
+        <main className="flex h-[450px] w-[410px] items-center justify-center rounded-xl bg-white/60 shadow-lg shadow-black backdrop-blur-md sm:w-[450px]">
           <GridSudoku />
         </main>
       </div>

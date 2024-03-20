@@ -17,35 +17,35 @@ const INDEX_BORDERS = ["147", "258", "369"];
 const BORDERS = {
   "147": {
     A: "border-t-4 border-l-4",
-    B: "border-t-4",
-    C: "border-t-4 border-r-4",
+    B: "border-l-4",
+    C: "border-b-4 border-l-4",
     D: "border-t-4 border-l-4",
-    E: "border-t-4",
-    F: "border-t-4 border-r-4",
+    E: "border-l-4",
+    F: "border-b-4 border-l-4",
     G: "border-t-4 border-l-4",
-    H: "border-t-4",
-    I: "border-t-4 border-r-4",
+    H: "border-l-4",
+    I: "border-b-4 border-l-4",
   },
   "258": {
-    A: "border-l-4",
+    A: "border-t-4",
     B: "",
-    C: "border-r-4",
-    D: "border-l-4",
+    C: "border-b-4",
+    D: "border-t-4",
     E: "",
-    F: "border-r-4",
-    G: "border-l-4",
+    F: "border-b-4",
+    G: "border-t-4",
     H: "",
-    I: "border-r-4",
+    I: "border-b-4",
   },
   "369": {
-    A: "border-b-4 border-l-4",
-    B: "border-b-4",
+    A: "border-t-4 border-r-4",
+    B: "border-r-4",
     C: "border-b-4 border-r-4",
-    D: "border-b-4 border-l-4",
-    E: "border-b-4",
+    D: "border-t-4 border-r-4",
+    E: "border-r-4",
     F: "border-b-4 border-r-4",
-    G: "border-b-4 border-l-4",
-    H: "border-b-4",
+    G: "border-t-4 border-r-4",
+    H: "border-r-4",
     I: "border-b-4 border-r-4",
   },
 };
@@ -201,12 +201,12 @@ export default function NumberBox({
   ) : (
     <div className="relative h-10 w-10">
       {"ABCDEFGHI".includes(coordLetter) && (
-        <p className="absolute -top-9 left-3.5 text-2xl">{letter}</p>
+        <p className="absolute -left-4 bottom-2 text-2xl sm:-left-6">
+          {letter}
+        </p>
       )}
       {"123456789".includes(coordNumber) && (
-        <p className="absolute -left-4 bottom-2 text-2xl sm:-left-6">
-          {number}
-        </p>
+        <p className="absolute -top-9 left-3.5 text-2xl">{number}</p>
       )}
       <input
         type="text"
