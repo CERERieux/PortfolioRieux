@@ -7,6 +7,8 @@ import ErrorMessage from "../SystemDesign/ErrorMessage";
 import HeaderExternalProfile from "./HeaderExternalProfile";
 import ExternalBookList from "./ExternalBookList";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
+import FooterAttributionMultiple from "../SystemDesign/FooterAttributionMultiple";
+import { ATTRIBUTION_PFP } from "../MyProfile/MyProfile";
 
 export default function ExternalProfile() {
   const { id } = useParams(); // Get the ID from the parameters
@@ -52,6 +54,28 @@ export default function ExternalProfile() {
               )
             )}
           </main>
+          <FooterAttributionMultiple
+            samePlace
+            whatIsFrom1="Background Image by"
+            placeRef1="on Freepik"
+            extra1=" NACreative"
+            urlRef1="https://www.freepik.com/free-vector/halftone-background-abstract-black-white-dots-shape_25976232.htm#query=dot%20pattern&position=3&from_view=search&track=ais&uuid=587b59f3-6554-41ba-8e64-dd0cab7d17ae"
+            whatIsFrom2={
+              ATTRIBUTION_PFP[data.img as keyof typeof ATTRIBUTION_PFP]
+                .whatIsFrom2
+            }
+            placeRef2={
+              ATTRIBUTION_PFP[data.img as keyof typeof ATTRIBUTION_PFP]
+                .placeRef2
+            }
+            extra2={
+              ATTRIBUTION_PFP[data.img as keyof typeof ATTRIBUTION_PFP].extra2
+            }
+            urlRef2={
+              ATTRIBUTION_PFP[data.img as keyof typeof ATTRIBUTION_PFP]
+                .whatIsFrom2
+            }
+          />
         </>
       ) : (
         error === null && <p>Loading user...</p>

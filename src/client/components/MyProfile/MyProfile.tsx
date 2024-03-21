@@ -9,9 +9,55 @@ import ProfileMenu from "./ProfileMenu";
 import CustomBackground from "../SystemDesign/CustomBackground";
 import HeaderProfile from "./HeaderProfile";
 import ProfileUpdateForm from "./ProfileUpdateForm";
-import FooterAttribution from "../SystemDesign/FooterAttribution";
 import LoaderText from "../NotFound/LoaderText";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
+import FooterAttributionMultiple from "../SystemDesign/FooterAttributionMultiple";
+
+// For avatars credit references
+export const ATTRIBUTION_PFP = {
+  "type-img-1": {
+    whatIsFrom2: "Profile Image by ",
+    urlRef2:
+      "https://www.freepik.com/free-photo/manhattan-downtown-architecture-night-view_26740875.htm#fromView=search&page=1&position=2&uuid=1f2a1068-425a-4cbf-9d76-884802326e84",
+    extra2: "TravelScape",
+    placeRef2: "on Freepik",
+  },
+  "type-img-2": {
+    whatIsFrom2: "Profile Image by ",
+    urlRef2:
+      "https://www.freepik.com/free-photo/skyscrapers-from-low-angle-view_1119728.htm#fromView=search&page=2&position=4&uuid=1f2a1068-425a-4cbf-9d76-884802326e84",
+    extra2: "fanjianhua",
+    placeRef2: "on Freepik",
+  },
+  "type-img-3": {
+    whatIsFrom2: "Profile Image by ",
+    urlRef2:
+      "https://www.freepik.com/free-photo/sunshine-through-huge-tree_2829629.htm#fromView=search&page=1&position=5&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57",
+    extra2: "Freepik",
+    placeRef2: "on Freepik",
+  },
+  "type-img-4": {
+    whatIsFrom2: "Profile Image by ",
+    urlRef2:
+      "https://www.freepik.com/free-photo/beautiful-island_1114645.htm#fromView=search&page=1&position=45&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57",
+    extra2: "mrsiraphol",
+    placeRef2: "on Freepik",
+  },
+  "type-img-5": {
+    whatIsFrom2: "Profile Image by ",
+    urlRef2:
+      "https://www.freepik.com/free-photo/man-with-hands-wide-open-standing-top-mountain-enjoying-incredible-view-lake_18088638.htm#fromView=search&page=1&position=49&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57",
+    extra2: "wirestock",
+    placeRef2: "on Freepik",
+  },
+  "type-img-6": {
+    whatIsFrom2: "Profile Image by ",
+    urlRef2:
+      "https://www.freepik.com/free-photo/oak-forest-autumn_1239302.htm#fromView=search&page=1&position=12&uuid=29ad8a95-e5dd-43e8-ab57-a0870e7b0cb3",
+    extra2: "bearfotos",
+    placeRef2: "on Freepik",
+  },
+};
 
 export default function MyProfile() {
   const { data, error, errorAuth, updateInfo } = useProfile({}); // Auxiliars to ensure its used only by users
@@ -124,11 +170,28 @@ export default function MyProfile() {
               </header>
               <SimpleNavMenu positionNav="absolute left-16 top-[25%] md:top-[35%] md:top-[30%] lg:right-0 z-20" />
               <ProfileMenu />
-              <FooterAttribution
-                whatIs="Background Image by"
-                placeRef="NACreative"
-                extra=" on Freepik"
-                urlRef="https://www.freepik.com/free-vector/halftone-background-abstract-black-white-dots-shape_25976232.htm#query=dot%20pattern&position=3&from_view=search&track=ais&uuid=587b59f3-6554-41ba-8e64-dd0cab7d17ae"
+              <FooterAttributionMultiple
+                samePlace
+                whatIsFrom1="Background Image by"
+                placeRef1="on Freepik"
+                extra1=" NACreative"
+                urlRef1="https://www.freepik.com/free-vector/halftone-background-abstract-black-white-dots-shape_25976232.htm#query=dot%20pattern&position=3&from_view=search&track=ais&uuid=587b59f3-6554-41ba-8e64-dd0cab7d17ae"
+                whatIsFrom2={
+                  ATTRIBUTION_PFP[data.img as keyof typeof ATTRIBUTION_PFP]
+                    .whatIsFrom2
+                }
+                placeRef2={
+                  ATTRIBUTION_PFP[data.img as keyof typeof ATTRIBUTION_PFP]
+                    .placeRef2
+                }
+                extra2={
+                  ATTRIBUTION_PFP[data.img as keyof typeof ATTRIBUTION_PFP]
+                    .extra2
+                }
+                urlRef2={
+                  ATTRIBUTION_PFP[data.img as keyof typeof ATTRIBUTION_PFP]
+                    .whatIsFrom2
+                }
               />
             </>
           ) : (
