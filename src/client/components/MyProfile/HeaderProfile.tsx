@@ -7,6 +7,14 @@ interface HeaderProfileProps {
   handleViewUpdateProfile: (data: UserInfo) => void;
 }
 
+// For avatars credit references
+// <a href="https://www.freepik.com/free-photo/manhattan-downtown-architecture-night-view_26740875.htm#fromView=search&page=1&position=2&uuid=1f2a1068-425a-4cbf-9d76-884802326e84">Image by TravelScape on Freepik</a>
+// <a href="https://www.freepik.com/free-photo/skyscrapers-from-low-angle-view_1119728.htm#fromView=search&page=2&position=4&uuid=1f2a1068-425a-4cbf-9d76-884802326e84">Image by fanjianhua on Freepik</a>
+// <a href="https://www.freepik.com/free-photo/sunshine-through-huge-tree_2829629.htm#fromView=search&page=1&position=5&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57">Image by freepik</a>
+// <a href="https://www.freepik.com/free-photo/beautiful-island_1114645.htm#fromView=search&page=1&position=45&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57">Image by mrsiraphol on Freepik</a>
+// <a href="https://www.freepik.com/free-photo/man-with-hands-wide-open-standing-top-mountain-enjoying-incredible-view-lake_18088638.htm#fromView=search&page=1&position=49&uuid=737e70a4-6062-4ca0-b6c3-b396cc9dbb57">Image by wirestock on Freepik</a>
+// <a href="https://www.freepik.com/free-photo/oak-forest-autumn_1239302.htm#fromView=search&page=1&position=12&uuid=29ad8a95-e5dd-43e8-ab57-a0870e7b0cb3">Image by bearfotos on Freepik</a>
+
 /** Component that display user info like username, pfp and bio */
 export default function HeaderProfile({
   data,
@@ -20,9 +28,12 @@ export default function HeaderProfile({
             {data.username}
           </span>
         </h2>
-        {/** Replace with the actual image later */}
-        <div className="mx-2 mt-2 flex h-32 w-32 items-center justify-center rounded-full bg-slate-50">
-          {data.img}
+        <div className="mx-2 mt-2 flex h-32 w-32 items-center justify-center">
+          <img
+            src={`/${data.img}.webp`}
+            alt="User Image Profile"
+            className="max-h-full max-w-full rounded-full"
+          />
         </div>
       </section>
       {

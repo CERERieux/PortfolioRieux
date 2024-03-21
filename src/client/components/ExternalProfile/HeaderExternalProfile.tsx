@@ -16,9 +16,12 @@ export default function HeaderExternalProfile({
             {data.username}
           </span>
         </h2>
-        {/** Replace with the actual image later */}
-        <div className="mx-2 mt-2 flex h-32 w-32 items-center justify-center rounded-full bg-slate-50">
-          {data.img}
+        <div className="mx-2 mt-2 flex h-32 w-32 items-center justify-center">
+          <img
+            src={`/${data.img}.webp`}
+            alt="User Image Profile"
+            className="max-h-full max-w-full rounded-full"
+          />
         </div>
       </section>
       {

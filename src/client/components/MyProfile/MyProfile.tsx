@@ -122,7 +122,7 @@ export default function MyProfile() {
                   />
                 )}
               </header>
-              <SimpleNavMenu positionNav="absolute left-16 top-[30%] sm:top-[25%] md:top-[35%] lg:top-[30%] md:right-0 z-20" />
+              <SimpleNavMenu positionNav="absolute left-16 top-[25%] md:top-[35%] md:top-[30%] lg:right-0 z-20" />
               <ProfileMenu />
               <FooterAttribution
                 whatIs="Background Image by"

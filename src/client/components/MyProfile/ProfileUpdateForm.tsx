@@ -40,7 +40,14 @@ export default function ProfileUpdateForm({
 
   /** Component that return the form that update user info */
   return (
-    <div className="flex h-full w-full items-center justify-center px-6 py-2">
+    <div className="relative flex h-full w-full items-center justify-center px-6 py-2">
+      <div className=" mx-2 flex h-32 w-32 items-center justify-center opacity-0 sm:opacity-100">
+        <img
+          src={`/${imgProfile}.webp`}
+          alt="User Image Profile"
+          className="max-h-full max-w-full rounded-full"
+        />
+      </div>
       <Form
         submitFn={handleForm}
         style="items-center gap-2 flex-row lg:grid lg:grid-cols-2 lg:grid-rows-2"
