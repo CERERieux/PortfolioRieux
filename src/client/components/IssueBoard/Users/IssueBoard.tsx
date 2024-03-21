@@ -10,6 +10,7 @@ import FilterIssues from "./FilterIssues";
 import SinglePublicIssue from "./SinglePublicIssue";
 import FilterOptions from "../../Icons/FilterOptions";
 import { useCloseNavButton } from "../../SystemDesign/CloseNavButton";
+import SimpleNavMenu from "../../Menu/SimpleNavMenu";
 
 export default function IssueBoard() {
   const { data, error, addIssue, searchOptions, getNewSearch, addUserIssue } =
@@ -31,6 +32,7 @@ export default function IssueBoard() {
       <h1 className="text-center font-sketch text-3xl first-letter:text-4xl first-letter:text-cyan-300">
         Corner of Issues and Suggestions
       </h1>
+      <SimpleNavMenu positionNav="top-0 right-4" />
       <IssueFormDialog
         addIssue={addIssue}
         addUserIssue={addUserIssue}
