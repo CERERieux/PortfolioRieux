@@ -115,7 +115,7 @@ export default function CreateExForm({
   return (
     <Form
       submitFn={handleNewExercise}
-      style="items-center gap-6 justify-center bg-slate-50 pb-6 h-full lg:h-[80%] px-5 pt-4 rounded-md shadow-lg shadow-black/10"
+      style="items-center gap-6 justify-center bg-gradient-to-b from-yellow-50 from-10% via-yellow-200 via-90% to-yellow-400 border border-amber-500 pb-6 h-full lg:h-[80%] px-5 pt-4 rounded-md shadow-lg shadow-black/10"
       mdMedia="[&_span]:md:w-1/4"
     >
       <TitleForm firstColor="first-letter:text-sky-400">Add New Note</TitleForm>

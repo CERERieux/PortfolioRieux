@@ -53,7 +53,7 @@ export default function ProfileUpdateForm({
         style="items-center gap-2 flex-row lg:grid lg:grid-cols-2 lg:grid-rows-2"
       >
         <LabelForm style="lg:col-start-1 lg:row-span-2">
-          <TitleInput required>About Me</TitleInput>
+          <TitleInput>About Me</TitleInput>
           <TextArea
             name="BioUpdate"
             cols={50}

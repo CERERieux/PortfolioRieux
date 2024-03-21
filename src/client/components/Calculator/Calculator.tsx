@@ -115,7 +115,7 @@ export default function Calculator() {
           <div className="grid w-[400px] grid-cols-4 gap-3 rounded-xl border-4 border-slate-800 bg-slate-700 px-5 pb-8 pt-6 shadow-2xl md:max-w-md">
             <div className={`${styleDisplay} transition-colors`}>
               <p className="">
-                {power ? display : "Turn ON calculator to use"}
+                {power ? display : "Turn ON the calculator to use"}
               </p>
             </div>
             <div className="col-span-4 mx-1 grid w-full grid-cols-4 gap-1">

@@ -12,7 +12,7 @@ import CustomBackground from "../SystemDesign/CustomBackground";
 import UrlsTable from "./UrlsTable";
 import FooterAttribution from "../SystemDesign/FooterAttribution";
 
-const SHORTURL = window.location.href.split("/")[2] + "/url/"; // Auxiliar to know the URL of the domain and use it
+export const SHORTURL = window.location.href.split("/")[2] + "/url/"; // Auxiliar to know the URL of the domain and use it
 
 export default function Url() {
   const { addUrl, newLink, data, error, errorAuth, removeUrl, deleteLink } =

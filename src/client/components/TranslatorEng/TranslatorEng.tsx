@@ -31,7 +31,7 @@ export default function TranslatorEng() {
           <p className="">American</p>
           <p className="">British</p>
         </div>
-        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+        <span className="ms-3 text-sm font-medium text-red-500 dark:text-red-200">
           Current mode
         </span>
       </label>
