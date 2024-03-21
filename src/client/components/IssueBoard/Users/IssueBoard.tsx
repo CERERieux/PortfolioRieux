@@ -32,6 +32,17 @@ export default function IssueBoard() {
       <h1 className="text-center font-sketch text-3xl first-letter:text-4xl first-letter:text-cyan-300">
         Corner of Issues and Suggestions
       </h1>
+      <p className="text-balance text-sm text-lime-200">
+        This is a place where you can send me your recommendations or complaints
+        about my portfolio! <br />
+        Something in the visual interface bothers you? Send your comment. <br />
+        There is a bug or an error that you found while using my portfolio? Let
+        me know and I&apos;ll try to fix it as quickly as possible. <br />
+        Do you have an idea that you think will be great to add? Post it here.{" "}
+        <br />
+        Do not doubt to send your issue or suggestion, it&apos;s very likely I
+        will read it. And thanks for reading and using this app if you do!
+      </p>
       <SimpleNavMenu positionNav="top-0 right-4" />
       <IssueFormDialog
         addIssue={addIssue}
