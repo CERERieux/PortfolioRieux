@@ -22,7 +22,7 @@ export default function Sudoku() {
   // Effect that activates at the start and when newSudoku changes
   useEffect(() => {
     // If it's a new sudoku cycle
-    if (newSudoku) {
+    if (newSudoku && sudokuString === "") {
       getInitialSudoku(); // Get a sudoku to resolve
     }
   }, [newSudoku]);
