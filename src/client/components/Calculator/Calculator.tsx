@@ -3,6 +3,7 @@ import { useCalculatorStore, TYPE_INPUT } from "../../store/calculator";
 import { CalculatorButton } from "./CalculatorButton";
 import { calculatorInputLogic } from "./calculatorLogic";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
+import OpenInfo from "../SystemDesign/OpenInfo";
 
 export default function Calculator() {
   const { display, log, power } = useCalculatorStore();
@@ -108,9 +109,48 @@ export default function Calculator() {
     <div className="h-full w-full bg-gradient-to-b from-slate-900">
       <SimpleNavMenu />
       <main className="mx-auto flex max-w-screen-lg flex-col items-center">
-        <h2 className="pb-3 pt-6 font-logCalculator text-3xl text-slate-100">
-          Calculator
-        </h2>
+        <section className="relative flex w-fit justify-center gap-2">
+          <h2 className="pb-3 pt-6 font-logCalculator text-3xl text-slate-100">
+            Calculator
+          </h2>
+          <OpenInfo
+            idClose="CloseDialogInfoCalc"
+            idDialog="DialogForInfoCalc"
+            idOpen="OpenDialogInfoCalc"
+          >
+            <h3 className="text-lg text-blue-600">
+              This calculator is a simple one, but you can control it with the
+              keyboard!
+            </h3>
+            <p className="self-start text-red-700">Controls:</p>
+            <ul className="h-40 w-full *:pl-2 *:text-sm">
+              <li>
+                - Use <em className="text-red-600">Space</em> key to turn ON the
+                calculator.
+              </li>
+              <li>
+                - Use any <em className="text-red-600">Numerical Key</em> for
+                digits from 0 to 9 .
+              </li>
+              <li>
+                - Use <em className="text-red-600">Backspace</em> key to delete
+                your last input.
+              </li>
+              <li>
+                - Use <em className="text-red-600">Esc</em> key to reset the
+                display.
+              </li>
+              <li>
+                - Use <em className="text-red-600">Symbol Keys</em> for
+                operations (., +, -, *, /).
+              </li>
+              <li>
+                - Use <em className="text-red-600">Enter</em> key to get the
+                result of your operation.
+              </li>
+            </ul>
+          </OpenInfo>
+        </section>
         <div className="mt-6 flex min-w-full flex-col items-center justify-between gap-12 md:flex-row md:px-7">
           <div className="grid w-[400px] grid-cols-4 gap-3 rounded-xl border-4 border-slate-800 bg-slate-700 px-5 pb-8 pt-6 shadow-2xl md:max-w-md">
             <div className={`${styleDisplay} transition-colors`}>

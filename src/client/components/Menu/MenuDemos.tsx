@@ -18,7 +18,7 @@ export default function MenuDemos() {
           certifications with some modifications and styles added. <br />
           From the ones I think are the best to show, whether it&apos;s for the
           style or utility, like the Pomodoro Clock or the Translator between UK
-          English and USA english. <br />
+          English and USA English. <br />
           To the simpler ones, like just a machine that display quotes that I
           get from an API. <br />
         </p>

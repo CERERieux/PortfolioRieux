@@ -4,6 +4,7 @@ import Minimize from "../Icons/Minimize";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
 import Button from "../SystemDesign/Button";
 import Dialog from "../SystemDesign/Dialog";
+import OpenInfo from "../SystemDesign/OpenInfo";
 const STYLES = {
   BASE: "w-full overflow-y-auto p-4 bg-white shadow-inner shadow-gray-300",
   A: "[&_a]:border-b-[1px] [&_a]:border-blue-400 [&_a]:text-blue-400",
@@ -73,7 +74,39 @@ export default function Markdown() {
           </article>
         </Dialog>
         <section className="w-full bg-white px-4 py-2 shadow-md md:w-1/3">
-          <h1 className="font-sketch text-2xl">Markdown parser</h1>
+          <section className="relative flex w-fit justify-center gap-2">
+            <h1 className="font-sketch text-2xl">Markdown parser</h1>
+            <OpenInfo
+              idClose="CloseDialogInfoPomodoroClock"
+              idDialog="DialogForInfoPomodoroClock"
+              idOpen="OpenDialogInfoPomodoroClock"
+              posScreen="top-0 -right-12"
+            >
+              <h3 className="text-lg text-red-600">What is Markdown?</h3>
+              <p className="max-w-[600px] self-start text-pretty">
+                Markdown is a <em>lightweight markup language</em> that you can
+                use to add formatting elements to plaintext text documents.{" "}
+                <br /> <em>Created by John Gruber in 2004</em>, Markdown is now
+                one of the world&apos;s most popular markup languages.
+              </p>
+              <p className="max-w-[600px] self-start text-pretty">
+                <span className="text-red-500">
+                  I left you an example of how to use Markdown in the text area
+                  located on the top of the screen and how the result looks like
+                  in the preview under it!
+                </span>{" "}
+                <br />
+                You can expand the preview zone with the{" "}
+                <span className="text-lime-500">green button</span> located on
+                the right side of the screen. <br />
+                If you want start a clean document, just delete the content with
+                the <span className="text-amber-500">yellow button</span>, after
+                confirm that you want to delete the content, the text area will
+                be clean and ready to display your inputs! <br />
+                Or you can edit the current example.
+              </p>
+            </OpenInfo>
+          </section>
           <p className="text-pretty">
             Enter your content in the next area, the results will be shown below
           </p>

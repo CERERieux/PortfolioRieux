@@ -1,6 +1,7 @@
 import { sanitizeInput } from "../../utils/sanitize";
 import { useTranslator, AME_TO_BRIT } from "../../hooks/useTranslator";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
+import OpenInfo from "../SystemDesign/OpenInfo";
 
 export default function TranslatorEng() {
   const { error, translation, handleInput, handleMode, mode, userInput } =
@@ -13,11 +14,52 @@ export default function TranslatorEng() {
 
   return (
     <main className="relative flex h-full w-full flex-col place-items-center gap-6 overflow-y-auto bg-slate-50 py-6">
-      <h2 className="text-xl">
-        Translator{" "}
-        <span className="font-comic text-xl uppercase">American</span> -{" "}
-        <span className="font-elegant text-3xl">British</span>
-      </h2>
+      <section className="relative flex w-fit justify-center gap-2">
+        <h2 className="text-xl">
+          Translator{" "}
+          <span className="font-comic text-xl uppercase">American</span> -{" "}
+          <span className="font-elegant text-3xl">British</span>
+        </h2>
+        <OpenInfo
+          idClose="CloseDialogInfoPomodoroClock"
+          idDialog="DialogForInfoPomodoroClock"
+          idOpen="OpenDialogInfoPomodoroClock"
+          posScreen="top-0 -right-12"
+        >
+          <h3 className="text-lg text-amber-600">
+            What purpose this translator have?
+          </h3>
+          <p className="max-w-[600px] self-start text-pretty">
+            Sometimes there are words on English that we don&apos;t recognize,
+            because we are used to 1 type of English. <br />
+            Times where we struggle to identify the word that our friends from
+            different countries use and complicate the things a little bit...{" "}
+            <br /> So the purpose of this translator is, to help you to
+            understand what they are saying in case a strange words come to you!
+          </p>
+          <p className="max-w-[600px] self-start text-pretty">
+            In the bottom part of the page, you can find some examples to
+            illustrate what I&apos;m reffering to. This translator use a list of
+            words from both type of English. <br /> So if there is a strange
+            word and this translator can&apos;t cover it, then maybe it&apos;s a
+            new word or something you will need to ask in another part to know
+            what it is.
+            <br /> In case the sentence is normal, this will not translate and
+            say that all is okay. Otherwise, you will get a translation.
+          </p>
+          <p className="max-w-[600px] self-start text-pretty text-blue-600">
+            Instructions:
+          </p>
+          <ul className="h-20 w-full *:pl-2 *:text-sm md:h-16">
+            <li>
+              - Check the setting on the top to ensure you are getting the
+              result you need.
+            </li>
+            <li>- Type in the left box your sentence.</li>
+            <li>- Get your result in the right box!</li>
+          </ul>
+        </OpenInfo>
+      </section>
       <SimpleNavMenu positionNav="top-0 right-4" />
       <label className="relative inline-flex cursor-pointer items-center">
         <input
