@@ -24,7 +24,7 @@ const ExerciseTracker = lazy(
 const ExternalProfile = lazy(
   () => import("./components/ExternalProfile/ExternalProfile"),
 );
-const Home = lazy(() => import("./components/Home"));
+const Home = lazy(() => import("./components/Home/Home"));
 const IssueBoard = lazy(
   () => import("./components/IssueBoard/Users/IssueBoard"),
 );
