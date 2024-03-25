@@ -9,6 +9,7 @@ import LogoutIcon from "../Icons/LogoutIcon";
 import Button from "../SystemDesign/Button";
 import ArrowRight from "../Icons/ArrowRight";
 import RedirectButton from "../SystemDesign/RedirectButton";
+import HomeIcon from "../Icons/HomeIcon";
 
 interface MainMenuProps {
   username: string;
@@ -22,6 +23,12 @@ export default function MainMenu({
 }: MainMenuProps) {
   return (
     <>
+      <RedirectButton
+        colorCover="hover:bg-sky-200 hover:border-sky-600"
+        toRedirect="/home"
+      >
+        <HomeIcon size="32" /> Home
+      </RedirectButton>
       {username !== "" && (
         <Button
           color="hover:border-slate-700 hover:shadow-md hover:shadow-black/20 hover:bg-slate-50"

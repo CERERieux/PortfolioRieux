@@ -85,8 +85,8 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
       </RedirectButton>
 
       <Button
-        color="hover:bg-slate-800 hover:border-slate-900 hover:shadow-md hover:shadow-black/20 "
-        extraStyles="flex items-center gap-4 text-center text-lg"
+        color="hover:bg-slate-100 hover:border-slate-400 hover:shadow-md hover:shadow-black/20 "
+        extraStyles="flex items-center gap-4 text-center text-lg hover:text-black"
         textHover={false}
         onClick={handleMenu}
       >
