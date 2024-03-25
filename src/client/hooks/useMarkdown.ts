@@ -1,5 +1,5 @@
 import { marked } from "marked"; // Library that translate text to HTML
-import { useState } from "react"; // Function to save our App state
+import { useEffect, useState } from "react"; // Function to save our App state
 import { sanitizeInput } from "../utils/sanitize";
 
 // An example of markdown that displays at the start
@@ -49,6 +49,12 @@ marked.use({
 export function useMarkdown() {
   const [markdown, setMarkdown] = useState(PREVIEW_TEXT); // Our initial state is the example markdown
   const [size, setSize] = useState<"min" | "max">("min");
+
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Markdown Parser";
+  }, []);
+
   const handleEditorChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMarkdown(e.target.value); // Each time the user changes the textarea in the app, we save the change
   };

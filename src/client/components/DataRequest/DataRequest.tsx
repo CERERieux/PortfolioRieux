@@ -19,6 +19,11 @@ export default function DataRequest() {
   const [error, setError] = useState(""); // State in case we have an error at fetching
   const [showData, setShowData] = useState(false); // State to handle the info, if it's visible or not
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Data From Your Requests";
+  }, []);
+
   // Effect that activates each time we change the showData state
   useEffect(() => {
     // An async function to handle the fetch to do

@@ -20,6 +20,11 @@ export default function Sudoku() {
   } = useSudokuStore(); // Get the info needed from the store
   const [newSudoku, setNewSudoku] = useState(true); // Auxiliar flag to get new sudoku when needed
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Sudoku";
+  }, []);
+
   // Effect that activates at the start and when newSudoku changes
   useEffect(() => {
     // If it's a new sudoku cycle

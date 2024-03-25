@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProfileIssues } from "../../../hooks/useProfileIssues";
 import UnauthorizedAccess from "../../NotFound/AuthError";
 import ErrorMessage from "../../SystemDesign/ErrorMessage";
@@ -17,6 +17,11 @@ export default function IssueProfile() {
   // State to display the form to update or the issue
   const [isUpdate, setIsUpdate] = useState({ isUpdate: false, id: "" });
   const isError = errorAuth.cause !== null; // Auxliar to know if there is an error with the user token
+
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Your Issues and Suggestions!";
+  }, []);
 
   // Component that display the entire corner of issues of user
   return isError ? (

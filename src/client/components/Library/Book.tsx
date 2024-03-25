@@ -32,6 +32,11 @@ export default function Book() {
   const [localError, setLocalError] = useState<string | null>(null);
   const [emptyNotes, setEmptyNotes] = useState(true); // state to see if we have have notes or not
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Update Your Book!";
+  }, []);
+
   // Auxiliar to know if the notes are empty or not
   const isEmptyNotes = useCallback((data: SingleBook) => {
     // Go through the notes, if those don't have text, then don't "exist"

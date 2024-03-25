@@ -5,6 +5,10 @@ import FooterAttribution from "../SystemDesign/FooterAttribution";
 
 export default function NotFound() {
   const navigate = useNavigate();
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Not Found";
+  }, []);
   useEffect(() => {
     setTimeout(() => {
       navigate("/home");

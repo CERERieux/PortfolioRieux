@@ -63,6 +63,10 @@ export default function UnauthorizedAccess({ errorAuth }: Props) {
   const { message, cause } = errorAuth;
   const data = CAUSE_ERROR_DATA[cause as CauseError];
   const navigate = useNavigate();
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Error!";
+  }, []);
   useEffect(() => {
     setTimeout(() => {
       navigate("/home");

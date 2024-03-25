@@ -33,6 +33,11 @@ export function useQuote() {
     });
   };
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Quote Machine";
+  }, []);
+
   // We put an useEffect that only runs on the mount of the component
   // It invokes the function that fetches the data only once
   useEffect(getQuotes, []);

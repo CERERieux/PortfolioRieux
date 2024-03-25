@@ -128,7 +128,7 @@ export default function CreateExForm({
         </TitleInput>
         <Input
           type="text"
-          name="description"
+          name="DescriptionCreateNote"
           value={description}
           onChange={handleDescription}
           lineStyle={true}

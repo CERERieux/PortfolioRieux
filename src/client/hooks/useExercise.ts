@@ -53,6 +53,11 @@ export function useExercise() {
     enabled: validFetch && enableSearch,
   });
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Your Notes!";
+  }, []);
+
   // Effect to reset the state of the search and be able to fetch data again if needed
   useEffect(() => {
     // If the fetch was successful, reset the search

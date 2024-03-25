@@ -45,6 +45,11 @@ export default function Library() {
   const idOpen = "openLibraryDialog"; // Auxiliar for the id of the Add book Dialog
   const idDialogDelete = "DeleteLibraryDialog"; // Auxiliar for the id of the Delete book Dialog
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Your Library!";
+  }, []);
+
   // Effect that activates each time data changes
   useEffect(() => {
     // Will assign to the state the data when data exist

@@ -69,6 +69,11 @@ export default function MyProfile() {
   const [action, setAction] = useState<null | string>(null);
   const [localError, setLocalError] = useState<null | string>(null);
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "My Profile";
+  }, []);
+
   // Effect that activates each time update is done
   useEffect(() => {
     // If update is completed

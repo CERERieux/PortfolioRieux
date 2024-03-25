@@ -5,6 +5,7 @@ import RedirectLoginHome from "./RedirectLoginHome";
 import LoginViewHandler from "./LoginViewHandler";
 import useLogin from "../../hooks/useLogin";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
+import { useEffect } from "react";
 
 export default function Login() {
   const { action, error, token } = useUser();
@@ -12,6 +13,11 @@ export default function Login() {
   const mainColor = view
     ? "bg-gradient-to-t from-lime-400 to-lime-50 from-10%"
     : "bg-gradient-to-t from-cyan-400 to-cyan-50 from-10%";
+
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Login to Access my Services";
+  }, []);
 
   return (
     <main

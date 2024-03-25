@@ -9,6 +9,7 @@ import ExternalBookList from "./ExternalBookList";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
 import FooterAttributionMultiple from "../SystemDesign/FooterAttributionMultiple";
 import { ATTRIBUTION_PFP } from "../MyProfile/MyProfile";
+import { useEffect } from "react";
 
 export default function ExternalProfile() {
   const { id } = useParams(); // Get the ID from the parameters
@@ -17,6 +18,11 @@ export default function ExternalProfile() {
   const { getExternalUserBooks } = useBooks({ externalUser }); // And the books
   const books = getExternalUserBooks.data;
   const errorBooks = getExternalUserBooks.error;
+
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = `${externalUser}'s Profile`;
+  }, []);
 
   // Return the profile of the user
   return (

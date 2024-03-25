@@ -15,6 +15,11 @@ export default function ShortenerUrl() {
   const bgStyle =
     "rounded-lg border border-x-2 border-y-2 border-slate-50 bg-black/70";
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Shortener URL";
+  }, []);
+
   useEffect(() => {
     setTimeout(() => {
       setOpacity("opacity-100 translate-x-0");

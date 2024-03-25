@@ -1,4 +1,4 @@
-import { type ChangeEvent, useState, useCallback } from "react";
+import { type ChangeEvent, useState, useCallback, useEffect } from "react";
 import type { Mode, TranslateData, TranslateResult } from "../types";
 import debounce from "just-debounce-it";
 
@@ -10,6 +10,11 @@ export function useTranslator() {
   const [userInput, setUserInput] = useState("");
   const [error, setError] = useState("");
   const [translation, setTranslation] = useState("");
+
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Translator English USA <-> English UK";
+  }, []);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;

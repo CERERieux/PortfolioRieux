@@ -99,6 +99,10 @@ export default function Calculator() {
   };
 
   useEffect(() => {
+    document.title = "Calculator";
+  }, []);
+
+  useEffect(() => {
     document.addEventListener("keydown", handleKeydownEvent);
     return () => {
       document.removeEventListener("keydown", handleKeydownEvent);

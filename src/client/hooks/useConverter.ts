@@ -1,4 +1,4 @@
-import { type FormEvent, useState, type ChangeEvent } from "react";
+import { type FormEvent, useState, type ChangeEvent, useEffect } from "react";
 import { convertUnit } from "../services/converter";
 
 export default function useConverter() {
@@ -6,6 +6,10 @@ export default function useConverter() {
   const [userUnit, setUserUnit] = useState("l");
   const [conversion, setConversion] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    document.title = "Unit Converter";
+  }, []);
 
   const handleConversion = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

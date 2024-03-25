@@ -1,4 +1,4 @@
-import { useState } from "react"; // React hook that let us store the state of a part of a component
+import { useEffect, useState } from "react"; // React hook that let us store the state of a part of a component
 import { SoundButton } from "./SoundButton"; // Our component that shows a button that plays a sound
 import { SOUND_NAMES } from "./soundHub"; // A dictionary that give us the name of the mp3 to play
 import CustomBackground from "../SystemDesign/CustomBackground";
@@ -8,6 +8,12 @@ import SimpleNavMenu from "../Menu/SimpleNavMenu";
 export default function DrumMachine() {
   // We start the state of the component as empty, it will show later the name of the mp3 file that was played
   const [display, setDisplay] = useState("");
+
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Drum Machine";
+  }, []);
+
   return (
     <CustomBackground
       bgImg="before:bg-[url('/DrumboxBG.webp')] before:opacity-50"

@@ -23,6 +23,11 @@ export default function Url() {
   const isError = errorAuth.cause !== null; // Auxiliar to be clearer on display condition at the start
   const idOpen = "OpenCreateUserLinkDialog"; // Auxiliar for id of the button that open a dialog
 
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Your Short Links!";
+  }, []);
+
   // Effect that activates when user remove an url from the table
   useEffect(() => {
     // Check if removal was completed

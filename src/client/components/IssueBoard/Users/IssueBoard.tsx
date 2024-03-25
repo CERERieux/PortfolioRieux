@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useIssues } from "../../../hooks/useIssues";
 import { isAxiosError } from "axios";
 import IssueFormDialog from "./IssueFormDialog";
@@ -20,6 +20,11 @@ export default function IssueBoard() {
   const [localError, setLocalError] = useState<null | string>(null);
   const [action, setAction] = useState<null | string>(null);
   const idOpen = "idOpenDialogCreateIssue"; // Auxiliar to give an ID to the button that open the dialog to create an issue
+
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Corner of Issues & Suggestions";
+  }, []);
 
   // Return the component that display all the funcionality of Corner of Issues and Suggestions
   return (

@@ -4,8 +4,14 @@ import SimpleNavMenu from "./SimpleNavMenu";
 import ReactIcon from "../Icons/ReactIcon";
 import Express from "../Icons/Express";
 import WindowPreview from "../SystemDesign/WindowPreview";
+import FooterAttribution from "../SystemDesign/FooterAttribution";
+import { useEffect } from "react";
 
 export default function MenuDemos() {
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Demos";
+  }, []);
   return (
     <div className="relative flex h-full w-full flex-col items-center gap-8 overflow-y-auto bg-slate-800 px-8 py-4">
       <div className="absolute bottom-0 left-0 right-0 top-0 flex h-full w-full flex-col items-center gap-8 overflow-y-auto bg-slate-800 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] px-8 py-4">
@@ -130,6 +136,11 @@ export default function MenuDemos() {
           better apps.)
         </p>
       </div>
+      <FooterAttribution
+        placeRef="Ibelick"
+        urlRef="https://bg.ibelick.com/"
+        whatIs="Background made by "
+      />
     </div>
   );
 }

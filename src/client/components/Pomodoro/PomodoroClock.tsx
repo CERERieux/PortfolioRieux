@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useTimerClock } from "../../hooks/useTimerClock";
 import { CLOCKMODES, useClockStore } from "../../store/clock";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
@@ -21,6 +22,11 @@ export default function PomodoroClock() {
     clockMode === CLOCKMODES.SESSION
       ? "bg-[url('/office.webp')]"
       : "bg-[url('/forest.webp')]";
+
+  // Use effect to change the title of the page
+  useEffect(() => {
+    document.title = "Pomodoro Clock";
+  }, []);
 
   return (
     <>
