@@ -31,7 +31,7 @@ export default function LogInForm({ loginUser }: Props) {
       setId("");
       setPassword("");
       setTimeout(() => {
-        navigate("/home");
+        navigate("/my-profile");
       }, 4000);
     }
   };

@@ -20,9 +20,9 @@ export default function useLogin() {
       ) {
         logoffUser(); // Logout user to remove token
       } else if (token !== "") {
-        // If user is logged in and it's valid, redirect to home
+        // If user is logged in and it's valid, redirect to their profile
         setTimeout(() => {
-          navigate("/home");
+          navigate("/my-profile");
         }, 1000);
       }
     };

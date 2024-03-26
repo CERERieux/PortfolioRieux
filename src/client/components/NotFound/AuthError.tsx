@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { CauseError, ErrorAuth } from "../../types";
 import FooterAttribution from "../SystemDesign/FooterAttribution";
 import CustomBackground from "../SystemDesign/CustomBackground";
+import { useUser } from "../../store/user";
 
 interface Props {
   errorAuth: ErrorAuth;
@@ -61,6 +62,7 @@ const CAUSE_ERROR_DATA = {
 
 export default function UnauthorizedAccess({ errorAuth }: Props) {
   const { message, cause } = errorAuth;
+  const { logoffUser } = useUser();
   const data = CAUSE_ERROR_DATA[cause as CauseError];
   const navigate = useNavigate();
   // Use effect to change the title of the page
@@ -68,6 +70,10 @@ export default function UnauthorizedAccess({ errorAuth }: Props) {
     document.title = "Error!";
   }, []);
   useEffect(() => {
+    // If the cause it's the expired token, then logoff user
+    if (cause === "ExpiredToken") {
+      logoffUser();
+    }
     setTimeout(() => {
       navigate("/home");
     }, 5000);
