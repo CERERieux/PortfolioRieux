@@ -34,7 +34,7 @@ export default function Book() {
 
   // Use effect to change the title of the page
   useEffect(() => {
-    document.title = "Update Your Book!";
+    document.title = "Book - Library";
   }, []);
 
   // Auxiliar to know if the notes are empty or not

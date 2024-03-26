@@ -47,7 +47,7 @@ export default function Library() {
 
   // Use effect to change the title of the page
   useEffect(() => {
-    document.title = "Your Library!";
+    document.title = "Library - Code Dandelion";
   }, []);
 
   // Effect that activates each time data changes

@@ -71,7 +71,7 @@ export default function MyProfile() {
 
   // Use effect to change the title of the page
   useEffect(() => {
-    document.title = "My Profile";
+    document.title = "Profile - Code Dandelion";
   }, []);
 
   // Effect that activates each time update is done

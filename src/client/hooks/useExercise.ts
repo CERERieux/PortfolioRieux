@@ -55,7 +55,7 @@ export function useExercise() {
 
   // Use effect to change the title of the page
   useEffect(() => {
-    document.title = "Your Notes!";
+    document.title = "Notes - Code Dandelion";
   }, []);
 
   // Effect to reset the state of the search and be able to fetch data again if needed

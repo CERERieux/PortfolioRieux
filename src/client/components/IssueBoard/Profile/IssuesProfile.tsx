@@ -20,7 +20,7 @@ export default function IssueProfile() {
 
   // Use effect to change the title of the page
   useEffect(() => {
-    document.title = "Your Issues and Suggestions!";
+    document.title = "Issues & Suggestions - Code Dandelion";
   }, []);
 
   // Component that display the entire corner of issues of user

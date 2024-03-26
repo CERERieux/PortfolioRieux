@@ -21,7 +21,7 @@ export default function ExternalProfile() {
 
   // Use effect to change the title of the page
   useEffect(() => {
-    document.title = `${externalUser}'s Profile`;
+    document.title = `${externalUser}'s Profile - Code Dandelion`;
   }, []);
 
   // Return the profile of the user
