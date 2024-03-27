@@ -10,7 +10,7 @@ export function useCloseNavButton() {
 
   const handleOpacity = () => {
     if (opacity.includes("opacity-0")) {
-      setOpacity("opacity-100 z-30");
+      setOpacity("opacity-100 z-50");
     } else setOpacity("opacity-0 -z-10");
   };
   return { opacity, handleOpacity };
