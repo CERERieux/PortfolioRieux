@@ -1,5 +1,6 @@
 import { useState } from "react";
 import WindowPreview from "../SystemDesign/WindowPreview";
+import ArrowRight from "../Icons/ArrowRight";
 
 interface CarrouselProps {
   children: React.ReactNode;
@@ -34,7 +35,7 @@ export default function Carrousel({
           handleImgIndex(-1);
         }}
       >
-        {"<"}
+        <ArrowRight size="22" styles="rotate-180" />
       </button>
       <WindowPreview
         imgAltText={imgAltText[imgIndex]}
@@ -50,7 +51,7 @@ export default function Carrousel({
           handleImgIndex(1);
         }}
       >
-        {">"}
+        <ArrowRight size="22" />
       </button>
     </article>
   );
