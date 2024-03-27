@@ -18,7 +18,7 @@ export default function Anchor({
     <a
       href={href}
       target="_blank"
-      rel="noreferrer"
+      rel="noreferrer noopener"
       className={`${color} underline visited:text-purple-400 ${activeColor}`}
     >
       {children}
