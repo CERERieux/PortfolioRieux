@@ -93,7 +93,7 @@ export default function LibraryForm({
   };
   // function to handle the submit of the new book
   const handleBookSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent the default behaviour
+    e.preventDefault(); // Prevent the default behavior
     // If the title isn't empty and it wasn't closed by the Cancel button
     if (title !== "" && !isBtnClosed) {
       createNewBook({ title, status }); // Create the book
@@ -145,7 +145,7 @@ export default function LibraryForm({
             <option value="Plan to Read">Plan to Read</option>
             <option value="Current Reading">Current Reading</option>
             <option value="Completed">Completed</option>
-            <option value="Dropped/Unfinish">Dropped/Unfinish</option>
+            <option value="Dropped/Unfinish">Dropped/Unfinished</option>
           </SelectInput>
         </LabelForm>
         <div className="flex w-full gap-2">

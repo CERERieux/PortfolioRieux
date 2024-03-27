@@ -154,7 +154,7 @@ export function calculatorInputLogic() {
         }
       } else if (type === TYPE_INPUT.OPERATOR) {
         // If the type is an operator, we do next, since minus operator acts a bit different than
-        // the others, we need to treat it diferent due it also can be a prefix for numbers (-x)
+        // the others, we need to treat it different due it also can be a prefix for numbers (-x)
         if (OPERATOR_NO_START.includes(id)) {
           // We need to avoid user can input 2 operators in a row like */, *+, /+, etc
           if (SIMPLE_OPERATOR.includes(lastDisplayChar)) {

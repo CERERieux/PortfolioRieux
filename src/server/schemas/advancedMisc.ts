@@ -63,11 +63,11 @@ export const ERROR_BOARD = {
 };
 
 export const ACTION_BOARD = {
-  DELETE_THREAD_SUCCESS: "Your thread was sucessfully deleted",
-  DELETE_REPLY_SUCCESS: "Your reply was sucessfully deleted",
-  REPORT_REPLY_SUCCESS: "Your reply report was sucessfully sent to our servers",
+  DELETE_THREAD_SUCCESS: "Your thread was successfully deleted",
+  DELETE_REPLY_SUCCESS: "Your reply was successfully deleted",
+  REPORT_REPLY_SUCCESS: "Your reply report was successfully sent to our servers",
   REPORT_THREAD_SUCCESS:
-    "Your thread report was sucessfully sent to our servers",
+    "Your thread report was successfully sent to our servers",
 };
 
 const clientSchema = new Schema<IClientStock>({

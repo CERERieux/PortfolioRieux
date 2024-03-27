@@ -37,7 +37,7 @@ const IMG_DEMO_PROJECTS = [
 const IMG_ALT_DEMO_PROJECTS = [
   "Image of the menu of all the project demos",
   "Image of a Pomodoro Clock in a desktop display",
-  "Preview of UK-USA translator, a bit similar in appareance to Google translator",
+  "Preview of UK-USA translator, a bit similar in appearance to Google translator",
   "Preview of a Markdown Parser",
   "Preview of a calculator",
 ];
@@ -138,7 +138,7 @@ export default function ProjectList() {
         <ReactIcon width="40" height="36" />
         <Express size="40" isblackBG />
         <p className="text-pretty pl-4 text-sm">
-          Here you can find some of the execises I did for the FreeCodeCamp
+          Here you can find some of the exercises I did for the FreeCodeCamp
           certifications with some modifications and styles added. <br />
           From the ones I think are the best to show, whether it&apos;s for the
           style or utility, like the Pomodoro Clock or the Translator between UK

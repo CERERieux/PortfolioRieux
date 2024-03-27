@@ -97,7 +97,7 @@ export default function LogList({
   const [statusUpdate, setStatusUpdate] = useState<StatusEx>("Pending");
   // Function that filter the exercises depending on user data
   const filterData = useCallback(
-    // It will debouce it to only do this after 300ms from user stop interacting
+    // It will debounce it to only do this after 300ms from user stop interacting
     debounce(
       ({
         statusFilter,
@@ -175,7 +175,7 @@ export default function LogList({
         setLocalError(error.response?.data.error);
       } else {
         // If it was an error I can't cover, show a generic message
-        setLocalError("Something went wront at updating your exercise...");
+        setLocalError("Something went wrong at updating your exercise...");
       }
       // For 3 seconds
       setTimeout(() => {

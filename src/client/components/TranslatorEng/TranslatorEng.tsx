@@ -39,7 +39,7 @@ export default function TranslatorEng() {
           </p>
           <p className="max-w-[600px] self-start text-pretty">
             In the bottom part of the page, you can find some examples to
-            illustrate what I&apos;m reffering to. This translator use a list of
+            illustrate what I&apos;m referring to. This translator use a list of
             words from both type of English. <br /> So if there is a strange
             word and this translator can&apos;t cover it, then maybe it&apos;s a
             new word or something you will need to ask in another part to know

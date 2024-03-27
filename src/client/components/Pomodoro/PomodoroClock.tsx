@@ -61,7 +61,7 @@ export default function PomodoroClock() {
               In the case of this clock, you can put{" "}
               <span className="text-red-600">work</span> and{" "}
               <span className="text-blue-600">short breaks</span> sessions of 60
-              minutes at maximun and 1 minute at minimum. <br />
+              minutes at maximum and 1 minute at minimum. <br />
               An alarm will be set off when a session ends, to indicate you that
               you can start work again, or take a small break from your
               activity!

@@ -17,7 +17,7 @@ export const ERROR_ISSUES = {
   MISSING_ID: "Missing _id",
   MISSING_UPDATE_DATA: "No update field(s) sent",
   NOT_FOUND: "Issue not found, revise if the ID you put is correct.",
-  NOT_ISSUES_FIND: "Couldn't find any issues or sugerences",
+  NOT_ISSUES_FIND: "Couldn't find any issues or suggestions",
 };
 
 export const ERROR_BOOKS = {

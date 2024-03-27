@@ -21,7 +21,7 @@ export default function SinglePublicIssue({
   issue,
   updated,
 }: SingleIssueProps) {
-  // Show the article that is inside of the list itemn with the issue info
+  // Show the article that is inside of the list item with the issue info
   return (
     <article className="flex w-full flex-col justify-center gap-1 px-4">
       <h2 className="-ml-4 text-xl first-letter:text-2xl first-letter:text-lime-300">

@@ -406,7 +406,7 @@ export async function deleteExercise(_id: string) {
     return { error: ERROR_EXERCISE.PROBLEM_DELETE, category: "extracker" };
   });
   const resultAction = {
-    action: `The exercise ${_id} was sucessfully deleted.`,
+    action: `The exercise ${_id} was successfully deleted.`,
   };
   // Return an object with the confirmation that exercise was deleted
   return resultAction;

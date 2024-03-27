@@ -24,7 +24,7 @@ export function SoundButton({ id, sound, setDisplay }: Props) {
     setDisplay(sound);
   };
 
-  // Function that mangaes the "keydown" event
+  // Function that manages the "keydown" event
   const handleKeyDown = (e: KeyboardEvent) => {
     // If user pressed a key that matches an ID button, we play the corresponding sound
     if (e.key.toUpperCase() === id) {

@@ -91,7 +91,7 @@ export default function BookAside({
 
   // Effect that activates when user updates a book
   useEffect(() => {
-    // If the update was com plete, we need to see if there was an error
+    // If the update was complete, we need to see if there was an error
     if (updateDataBook.isSuccess) {
       // If it was a success, then
       if (!("error" in updateDataBook.data)) {
@@ -252,7 +252,7 @@ export default function BookAside({
               <option value="Plan to Read">Plan to Read</option>
               <option value="Current Reading">Current Reading</option>
               <option value="Completed">Completed</option>
-              <option value="Dropped/Unfinish">Dropped/Unfinish</option>
+              <option value="Dropped/Unfinish">Dropped/Unfinished</option>
             </SelectInput>
           </LabelForm>
           <LabelForm style="[&_span]:w-2/5">

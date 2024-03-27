@@ -35,7 +35,7 @@ export default function SingleIssue({
   const handleViewUpdate = () => {
     setIsUpdate({ isUpdate: true, id });
   };
-  // Show the article that is inside of the list itemn with the issue info
+  // Show the article that is inside of the list item with the issue info
   return (
     <article className="relative flex flex-col justify-center gap-1 px-4">
       <h2 className="text-center text-xl first-letter:text-2xl first-letter:text-blue-500">

@@ -65,7 +65,7 @@ export default function ShortenerUrl() {
           do any way of tracking with this tool. <br />I only did it because I
           thought would be nice to learn how to do my personal shortener link
           and use it from time to time. <br />
-          Remeber to be careful with links on internet! <br />
+          Remember to be careful with links on internet! <br />
         </p>
       </header>
       <SimpleNavMenu />

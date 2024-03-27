@@ -34,7 +34,7 @@ export default function Markdown() {
     hide === "hidden" ? "h-full shadow-none" : "h-2/5 md:h-3/5";
   const idBtnOpen = "DeleteContentBtn";
   const idBtnClose = "CancelDeleteBtn";
-  const idDialog = "MarkdonwDialog";
+  const idDialog = "MarkdownDialog";
 
   const closeDialogDelete = () => {
     const dialogMarkdown = document.getElementById(
@@ -77,9 +77,9 @@ export default function Markdown() {
           <section className="relative flex w-fit justify-center gap-2">
             <h1 className="font-sketch text-2xl">Markdown parser</h1>
             <OpenInfo
-              idClose="CloseDialogInfoPomodoroClock"
-              idDialog="DialogForInfoPomodoroClock"
-              idOpen="OpenDialogInfoPomodoroClock"
+              idClose="CloseDialogInfoMarkdownParser"
+              idDialog="DialogForInfoMarkdownParser"
+              idOpen="OpenDialogInfoMarkdownParser"
               posScreen="top-0 -right-12"
             >
               <h3 className="text-lg text-red-600">What is Markdown?</h3>

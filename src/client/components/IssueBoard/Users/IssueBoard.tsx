@@ -26,7 +26,7 @@ export default function IssueBoard() {
     document.title = "Corner of Issues & Suggestions";
   }, []);
 
-  // Return the component that display all the funcionality of Corner of Issues and Suggestions
+  // Return the component that display all the functionality of Corner of Issues and Suggestions
   return (
     <main className="flex h-full w-full flex-col items-center gap-6 overflow-y-auto bg-gradient-to-t from-slate-700 to-slate-900 to-70% px-6 py-4 text-slate-50">
       {error !== null && isAxiosError(error) && (
@@ -65,7 +65,7 @@ export default function IssueBoard() {
           id={idOpen}
         >
           <AddMessage />
-          Add New Issue or Suggerence
+          Add New Issue or Suggestion
         </Button>
         <Button
           color="bg-slate-300 text-black border-slate-50 hover:bg-cyan-600 hover:border-slate-700"

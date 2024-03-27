@@ -137,7 +137,7 @@ export default function IssueFormDialog({
     >
       <article className="relative flex h-full w-full flex-col gap-4">
         <TitleForm firstColor="first-letter:text-lime-500">
-          Send me your sugerence or issue here!
+          Send me your suggestion or issue here!
         </TitleForm>
         <Form submitFn={handleNewIssue}>
           <LabelForm>
