@@ -83,7 +83,7 @@ export default function Sudoku() {
             </ul>
             <p className="max-w-[600px] self-start text-pretty">
               You win if you can fill the 9x9 grid with 0 errors! <br />
-              There are 6 different puzzles and 1 is picked randomly. You can
+              There are 7 different puzzles and 1 is picked randomly. You can
               use the options on the left to interact with the game. <br />
             </p>
             <p className="max-w-[600px] text-pretty text-lime-600">

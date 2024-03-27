@@ -6,6 +6,7 @@ import Express from "../Icons/Express";
 import WindowPreview from "../SystemDesign/WindowPreview";
 import FooterAttribution from "../SystemDesign/FooterAttribution";
 import { useEffect } from "react";
+import Anchor from "../SystemDesign/Anchor";
 
 export default function MenuDemos() {
   // Use effect to change the title of the page
@@ -19,12 +20,17 @@ export default function MenuDemos() {
         <h1 className="z-20 text-3xl text-white first-letter:text-4xl">
           Projects
         </h1>
-        <p className="mb-2 w-full text-pretty text-sm text-lime-100 md:w-3/4">
-          (In fact, all the sections in this portfolio are FCC certificate
-          exercises, except for the home page. <br />I modified them enough to
-          be able to use them as 1 &quot;system&quot;, I wanted to include them
-          to show that after all the learning where you only do small programs,
-          you could make something nice with them. <br />
+        <p className="mb-2 w-full text-pretty text-center text-amber-100 md:w-3/4">
+          Thanks for checking my demos if you do! <br /> And if you have a
+          recommendation or issue, remember you can post it in the Corner of
+          Issues & Suggestions.
+        </p>
+        <p className="w-full text-pretty text-sm text-slate-100 md:w-3/4">
+          (All the sections in this portfolio are FCC certificate exercises,
+          except for the home page. <br />I modified them enough to be able to
+          use them as 1 &quot;system&quot;, I wanted to include them to show
+          that after all the learning where you only do small programs, you
+          could make something nice with them. <br />
           For it I decided to do my portfolio like this, where you can have an
           account with 1 library, notes, short links and post your
           recommendations or issues with the whole app. <br />
@@ -35,10 +41,11 @@ export default function MenuDemos() {
           better apps, like the anonymous board where anyone can post anything
           in some boards.)
         </p>
-        <p className="mb-2 w-full text-pretty text-center text-amber-100 md:w-3/4">
-          Thanks for checking my demos if you do! <br /> And if you have a
-          recommendation or issue, remember you can post it in the Corner of
-          Issues & Suggestions.
+        <p className="my-2 rounded-md bg-stone-700/50 px-6 py-2 text-xl text-slate-100 backdrop-blur-sm">
+          You can check my{" "}
+          <Anchor href="https://www.freecodecamp.org/fccfddb4901-2002-40f4-837f-b5d33cfbddc5">
+            FCC certifications here!
+          </Anchor>
         </p>
         <main className="flex h-fit w-full flex-wrap justify-around gap-8">
           <WindowPreview
@@ -125,6 +132,7 @@ export default function MenuDemos() {
         placeRef="Ibelick"
         urlRef="https://bg.ibelick.com/"
         whatIs="Background made by "
+        mx="md:mx-auto z-30"
       />
     </div>
   );

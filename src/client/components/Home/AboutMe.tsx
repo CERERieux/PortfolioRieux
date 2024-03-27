@@ -40,7 +40,7 @@ export default function AboutMe() {
         I don&apos;t possess any professional experience, but{" "}
         <span className="text-lime-300">
           I feel confident enough in my abilities to think that I&apos;ll be
-          able to help in a company to reach the goals through my efforts.
+          able to help in a company to reach their goals through my efforts.
         </span>
         <br />
         I think this after doing my portfolio and looking back at the school

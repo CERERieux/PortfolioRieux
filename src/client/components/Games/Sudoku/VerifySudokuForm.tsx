@@ -77,6 +77,7 @@ export default function VerifySudokuForm({
               value={coord}
               size={2}
               max={2}
+              autoComplete="off"
             />
           </LabelForm>
           <LabelForm>
@@ -91,6 +92,7 @@ export default function VerifySudokuForm({
               value={numberVerify}
               size={1}
               max={1}
+              autoComplete="off"
             />
           </LabelForm>
           <Button

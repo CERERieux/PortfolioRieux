@@ -161,8 +161,8 @@ export default function ProjectList() {
             Corner of Issues & Suggestions
           </Link>
         </span>
-        . <br /> You can find it in the menu or clicking in the link of this
-        paragraph.
+        . <br /> You can find it in the menu at the top right or clicking in the
+        link of this paragraph.
       </p>
     </>
   );
