@@ -1,11 +1,13 @@
 interface NodeIconSize {
   width?: string;
   height?: string;
+  styles?: string;
 }
 
 export default function NodeIcon({
   height = "292",
   width = "256",
+  styles,
 }: NodeIconSize) {
   return (
     <svg
@@ -13,6 +15,8 @@ export default function NodeIcon({
       xmlnsXlink="http://www.w3.org/1999/xlink"
       width={height}
       height={width}
+      className={styles}
+      viewBox="0 0 256 292"
     >
       <defs>
         <linearGradient

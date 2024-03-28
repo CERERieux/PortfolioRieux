@@ -1,12 +1,15 @@
 interface ReactRouterSize {
   width?: string;
   height?: string;
+  isBlackBG?: boolean;
 }
 
 export default function ReactRouter({
   height = "61",
   width = "94",
+  isBlackBG = false,
 }: ReactRouterSize) {
+  const fillColor = !isBlackBG ? "#121212" : "#dedede";
   return (
     <svg
       width={width}
@@ -21,15 +24,15 @@ export default function ReactRouter({
       />
       <path
         d="M28.1997 40.7739C22.7285 40.7739 18.2656 36.3027 18.2656 30.8213C18.2656 25.3399 22.7285 20.8687 28.1997 20.8687C33.6709 20.8687 38.1338 25.3399 38.1338 30.8213C38.1338 36.2983 33.6665 40.7739 28.1997 40.7739Z"
-        fill="#121212"
+        fill={fillColor}
       />
       <path
         d="M9.899 61C4.43661 60.9868 -0.0130938 56.498 2.89511e-05 51.0122C0.0132099 45.5353 4.4936 41.0773 9.96914 41.0948C15.4359 41.108 19.8856 45.5968 19.8681 51.0825C19.8549 56.5551 15.3745 61.0131 9.899 61Z"
-        fill="#121212"
+        fill={fillColor}
       />
       <path
         d="M83.7137 60.9998C78.2339 61.0304 73.7361 56.5901 73.7052 51.122C73.6747 45.632 78.1068 41.1258 83.5646 41.0949C89.0444 41.0643 93.5423 45.5046 93.5731 50.9727C93.6036 56.4583 89.1716 60.9689 83.7137 60.9998Z"
-        fill="#121212"
+        fill={fillColor}
       />
     </svg>
   );
