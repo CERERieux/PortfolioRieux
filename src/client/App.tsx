@@ -99,8 +99,8 @@ export default function App() {
         </Route>
         {/* <Route path="/documentation" element={<Home />}></Route> */}
         <Route path={`/${import.meta.env.VITE_ROUTE_ADMIN}/admin`}>
-          <Route index element={<AdminMainMenu />}></Route>
-          <Route path="login" element={<AdminLogin />}></Route>
+          <Route index element={<AdminLogin />}></Route>
+          <Route path="menu" element={<AdminMainMenu />}></Route>
           <Route path="anonboard" element={<AdminBoards />}></Route>
           <Route path="users" element={<AdminPanel />}></Route>
           <Route path=":user/data" element={<UserDataAdmin />}></Route>
