@@ -5,6 +5,7 @@ import PortfolioHeader from "./PortfolioHeader";
 import AboutMe from "./AboutMe";
 import LocalNavPortfolio from "./LocalNavPortfolio";
 import PortfolioFooter from "./PortfolioFooter";
+import Technology from "./Technology";
 
 export default function Home() {
   const [opacityHeader, setOpacityHeader] = useState(
@@ -29,8 +30,8 @@ export default function Home() {
           <main className="mt-20 flex w-full flex-col items-start justify-center gap-4 px-8">
             <ProjectList />
             <AboutMe />
+            <Technology />
             <PortfolioFooter />
-            {/** tech tal vez y el badge de disponibilidad y el coso de redireccionar al repo de git */}
           </main>
         </div>
       </div>
