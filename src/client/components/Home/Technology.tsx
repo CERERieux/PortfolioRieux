@@ -15,7 +15,7 @@ import JWTIcon from "../Icons/JWTIcon";
 
 export default function Technology() {
   return (
-    <section className="mt-4 flex w-full flex-col gap-4 px-6 py-3 lg:mt-8 lg:w-3/5 lg:self-center">
+    <section className="object-to-observe techObserve mt-4 flex w-full flex-col gap-4 px-6 py-3 transition-all duration-500 lg:mt-8 lg:w-3/5 lg:self-center">
       <h3 className="flex w-full items-center justify-center gap-2 text-xl text-red-300 lg:justify-start">
         <PencilCode size="26" /> Tools I can use.
       </h3>
@@ -61,7 +61,7 @@ export default function Technology() {
           />{" "}
           Mongoose
         </li>
-        <li className="w-18 -ml-7 flex flex-col items-center justify-center gap-2 text-sm">
+        <li className="w-18 flex flex-col items-center justify-center gap-2 text-sm">
           <ReactQuery height="40" width="38" /> React Query
         </li>
         <li className="w-18 flex flex-col items-center justify-center gap-2 text-sm">

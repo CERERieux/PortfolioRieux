@@ -3,7 +3,7 @@ import UserIcon from "../Icons/UserIcon";
 export default function AboutMe() {
   return (
     <article
-      className="mt-4 flex w-full flex-col gap-4 px-6 py-3 lg:mt-8 lg:w-3/5 lg:self-center"
+      className="object-to-observe aboutMeObserve mt-4 flex w-full flex-col gap-4 px-6 py-3 transition-all duration-500  lg:mt-8 lg:w-3/5 lg:self-center"
       id="AboutMe"
     >
       <h3 className="flex w-full items-center justify-center gap-2 text-xl text-lime-200 lg:justify-start">

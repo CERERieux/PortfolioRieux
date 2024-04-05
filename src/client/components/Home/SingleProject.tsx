@@ -8,6 +8,7 @@ interface SingleProjectProps {
   imgAltText: string;
   titleWindow: string;
   toRedirect: string;
+  list?: string;
 }
 
 export default function SingleProject({
@@ -17,9 +18,12 @@ export default function SingleProject({
   imgAltText,
   titleWindow,
   toRedirect,
+  list = "listObserve",
 }: SingleProjectProps) {
   return (
-    <section className="flex w-full flex-wrap items-center justify-center gap-4 py-2 text-black">
+    <section
+      className={`object-to-observe ${list} flex w-full flex-wrap items-center justify-center gap-4 py-2  text-black transition-all duration-500`}
+    >
       <WindowPreview
         imgPreview={imgPreview}
         imgAltText={imgAltText}

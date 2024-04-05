@@ -46,7 +46,7 @@ export default function ProjectList() {
   return (
     <>
       <h2
-        className="flex items-center gap-2 self-center text-3xl text-amber-200 lg:self-start lg:pl-20"
+        className="object-to-observe titleObserve flex items-center gap-2 self-center text-3xl text-amber-200 transition-all duration-500 lg:self-start lg:pl-20"
         id="PortfolioProjectList"
       >
         <ScriptIcon size="32" styles="text-purple-200" />
@@ -58,6 +58,7 @@ export default function ProjectList() {
         titleArticle="Code Dandelion"
         titleWindow="Code Dandelion"
         toRedirect="/login"
+        list="titleObserve"
       >
         <TypeScript size="40" />
         <Tailwind width="40" height="24" />
@@ -151,7 +152,7 @@ export default function ProjectList() {
           introduction can be enough. <br />
         </p>
       </SingleProjectCarrousel>
-      <p className="mt-2 self-center text-pretty pl-4 text-sm text-yellow-200">
+      <p className="object-to-observe aboutMeObserve mt-4 self-center text-pretty pl-4 text-sm text-yellow-200 transition-all duration-500">
         I invite you to check some of my projects above. <br /> If you already
         did, thank you. I appreciate the opportunity you are giving me by doing
         so! <br /> Oh! If you have a recommendation or issue, remember you can

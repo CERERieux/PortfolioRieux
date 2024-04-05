@@ -10,14 +10,106 @@ import Technology from "./Technology";
 export default function Home() {
   const [opacityHeader, setOpacityHeader] = useState(
     "opacity-0 -translate-x-32",
+  ); // State for the animation at the top
+
+  // Observer for the elements at the top that aren't the header
+  const observerTitle = new IntersectionObserver(
+    entries => {
+      // For each element
+      entries.forEach(entry => {
+        // If the element isn't visible, set the class "object-to-observe"
+        if (!entry.isIntersecting)
+          entry.target.classList.add("object-to-observe");
+        else {
+          // If the element is visible, set the class "slide-left" and remove "object-to-observe"
+          entry.target.classList.remove("object-to-observe");
+          entry.target.classList.toggle("slide-left", entry.isIntersecting);
+        }
+      });
+    },
+    { threshold: 0.4 },
+  );
+  // Observer for the elements in the projects list
+  const observerList = new IntersectionObserver(
+    entries => {
+      // For each element
+      entries.forEach(entry => {
+        // If the element isn't visible, set the class "object-to-observe"
+        if (!entry.isIntersecting)
+          entry.target.classList.add("object-to-observe");
+        else {
+          // If the element is visible, set the class "slide-left" and remove "object-to-observe"
+          entry.target.classList.remove("object-to-observe");
+          entry.target.classList.toggle("slide-left", entry.isIntersecting);
+        }
+      });
+    },
+    { threshold: 0.5 },
+  );
+  // Observer for the element About Me
+  const observerAboutMe = new IntersectionObserver(
+    entries => {
+      // For each element
+      entries.forEach(entry => {
+        // If the element isn't visible, set the class "object-to-observe"
+        if (!entry.isIntersecting)
+          entry.target.classList.add("object-to-observe");
+        else {
+          // If the element is visible, set the class "slide-left" and remove "object-to-observe"
+          entry.target.classList.remove("object-to-observe");
+          entry.target.classList.toggle("slide-left", entry.isIntersecting);
+        }
+      });
+    },
+    { threshold: 0.5 },
+  );
+  // Observer for the element Technology
+  const observerTech = new IntersectionObserver(
+    entries => {
+      // For each element
+      entries.forEach(entry => {
+        // If the element isn't visible, set the class "object-to-observe"
+        if (!entry.isIntersecting)
+          entry.target.classList.add("object-to-observe");
+        else {
+          // If the element is visible, set the class "slide-left" and remove "object-to-observe"
+          entry.target.classList.remove("object-to-observe");
+          entry.target.classList.toggle("slide-left", entry.isIntersecting);
+        }
+      });
+    },
+    { threshold: 0.4 },
   );
 
+  // Use effect to change title
   useEffect(() => {
     document.title =
       "Erik's Portfolio - Jr. Full Stack Developer and Programmer";
     setTimeout(() => {
       setOpacityHeader("opacity-100 translate-x-0");
     }, 100);
+  }, []);
+
+  // Use effect to observe elements
+  useEffect(() => {
+    // Get the elements to observe through its class
+    const titleToObserve = document.querySelectorAll(".titleObserve");
+    const listToObserve = document.querySelectorAll(".listObserve");
+    const aboutMeToObserve = document.querySelectorAll(".aboutMeObserve");
+    const techToObserve = document.querySelectorAll(".techObserve");
+    // And to each observer, give those elements
+    titleToObserve.forEach(element => {
+      observerTitle.observe(element);
+    });
+    listToObserve.forEach(element => {
+      observerList.observe(element);
+    });
+    aboutMeToObserve.forEach(element => {
+      observerAboutMe.observe(element);
+    });
+    techToObserve.forEach(element => {
+      observerTech.observe(element);
+    });
   }, []);
 
   return (

@@ -8,6 +8,7 @@ interface SingleProjectCarrouselProps {
   imgAltText: string[];
   titleWindow: string;
   toRedirect: string;
+  list?: string;
 }
 
 export default function SingleProjectCarrousel({
@@ -17,9 +18,12 @@ export default function SingleProjectCarrousel({
   imgAltText,
   titleWindow,
   toRedirect,
+  list = "listObserve",
 }: SingleProjectCarrouselProps) {
   return (
-    <section className="flex w-full flex-wrap items-center justify-center gap-4 py-2">
+    <section
+      className={`object-to-observe ${list} flex w-full flex-wrap items-center justify-center gap-4 py-2 transition-all duration-500`}
+    >
       <Carrousel
         images={images}
         imgAltText={imgAltText}
