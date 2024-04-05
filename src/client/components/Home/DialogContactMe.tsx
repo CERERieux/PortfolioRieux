@@ -35,8 +35,8 @@ export default function DialogContactMe({ idOpen }: DialogContactMeProps) {
           I prefer this way than doing a personalized form. <br />I think it can
           be easier to contact me and for me to know that someone is trying to
           reach out to me. <br />
-          I&apos;ll contact you back as soon as I can! And thanks for vising my
-          portfolio.
+          I&apos;ll contact you back as soon as I can! And thanks for check out
+          my portfolio.
         </p>
         <Button
           color="bg-yellow-200 border-yellow-500 hover:bg-yellow-600 hover:border-yellow-300 shadow-md shadow-yellow-700 hover:shadow-sm active:bg-slate-600 active:border-slate-50 active:shadow-none"
