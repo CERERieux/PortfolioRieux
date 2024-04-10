@@ -12,12 +12,14 @@ import ReactRouter from "../Icons/ReactRouter";
 import TypeScript from "../Icons/TypeScript";
 import Tailwind from "../Icons/Tailwind";
 import JWTIcon from "../Icons/JWTIcon";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function Technology() {
+  const text = useLanguage({ project: "HomeMisc" });
   return (
     <section className="object-to-observe techObserve mt-4 flex w-full flex-col gap-4 px-6 py-3 transition-all duration-500 lg:mt-8 lg:w-3/5 lg:self-center">
       <h3 className="flex w-full items-center justify-center gap-2 text-xl text-red-300 lg:justify-start">
-        <PencilCode size="26" /> Tools I can use.
+        <PencilCode size="26" /> {text[0]}
       </h3>
       <ul className="flex w-full flex-wrap items-center justify-around gap-20 rounded-lg bg-slate-700/20 px-10 py-4 shadow-inner shadow-white/40">
         <li className="flex w-11 flex-col items-center justify-center gap-2">
@@ -68,7 +70,7 @@ export default function Technology() {
           <ReactRouter height="40" width="30" isBlackBG /> React Router
         </li>
         <li className="w-18 flex flex-col items-center justify-center gap-2 text-sm italic text-yellow-300">
-          And trying to learn more!
+          {text[1]}
         </li>
       </ul>
     </section>

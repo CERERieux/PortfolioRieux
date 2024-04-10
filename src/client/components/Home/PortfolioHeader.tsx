@@ -1,3 +1,4 @@
+import { useLanguage } from "../../hooks/useLanguage";
 import GithubIcon from "../Icons/GithubIcon";
 import LinkedInIcon from "../Icons/LinkedInIcon";
 import Mail from "../Icons/Mail";
@@ -10,6 +11,7 @@ interface PortfolioHeaderProps {
 export default function PortfolioHeader({
   opacityHeader,
 }: PortfolioHeaderProps) {
+  const text = useLanguage({ project: "Home" });
   return (
     <header
       className={`relative flex w-full flex-col items-center justify-center gap-4 px-4 py-2  md:flex-row md:flex-wrap ${opacityHeader} transition-all duration-1000 ease-out`}
@@ -22,12 +24,10 @@ export default function PortfolioHeader({
         />
       </div>
       <section className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-balance text-center text-4xl">
-          Welcome, I&apos;m Erik Rodriguez!
-        </h1>
+        <h1 className="text-balance text-center text-4xl">{text[0]}</h1>
         <p className="text-balance text-center text-xl">
           <span className="text-purple-200">Jr. Full Stack Developer.</span>{" "}
-          <span className="text-lime-200">From Mexico, Mexico City.</span>
+          <span className="text-lime-200">{text[1]}</span>
         </p>
         <div className="flex w-2/3 flex-wrap items-center justify-center gap-6">
           <Pill to="https://www.linkedin.com/in/erik-r-b36447184/">

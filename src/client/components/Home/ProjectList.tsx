@@ -9,6 +9,7 @@ import Express from "../Icons/Express";
 import MongoDB from "../Icons/MongoDB";
 import ReactQuery from "../Icons/ReactQuery";
 import ReactRouter from "../Icons/ReactRouter";
+import { useLanguage } from "../../hooks/useLanguage";
 
 const IMG_CODE_DANDELION = [
   "ProfilePreview.webp",
@@ -43,6 +44,7 @@ const IMG_ALT_DEMO_PROJECTS = [
 ];
 
 export default function ProjectList() {
+  const text = useLanguage({ project: "Home" });
   return (
     <>
       <h2
@@ -50,7 +52,7 @@ export default function ProjectList() {
         id="PortfolioProjectList"
       >
         <ScriptIcon size="32" styles="text-purple-200" />
-        Projects
+        {text[2]}
       </h2>
       <SingleProjectCarrousel
         images={IMG_CODE_DANDELION}
@@ -67,42 +69,25 @@ export default function ProjectList() {
         <MongoDB height="40" width="20" />
         <ReactQuery height="40" width="36" />
         <ReactRouter height="30" width="40" />
-        <p className="text-pretty pl-4 text-sm">
-          This project gives you a small space where you can share a bit about
-          yourself to other people! <br /> I could say it&apos;s like a demo for
-          a simple system where users can review books (or anything) that they
-          have read. When you visit a profile, you can see what books this user
-          have in their library and their bio (if they have share anything).{" "}
-          <br /> As user, aside from your library, you can have your personal
-          notes, look the short links you have created through my Shortener URL
-          and check the issues or suggestions that you have made in a personal
-          space. <br />
-          <span className="italic text-lime-100">
-            (You need to create an account, but you only need an username and a
-            password, no email or that kind of data!)
-          </span>
+        <p className="whitespace-pre-wrap text-pretty pl-4 text-sm">
+          {text[3]}
+          <span className="italic text-lime-100">{text[4]}</span>
         </p>
       </SingleProjectCarrousel>
       <SingleProject
         imgPreview="ShortenerPreview.webp"
         imgAltText="Image of an app that makes short links from the user input."
-        titleWindow="Shortener URL"
+        titleWindow={text[5]}
         toRedirect="/shortener-url"
-        titleArticle="Shortener URL"
+        titleArticle={text[5]}
       >
         <TypeScript size="40" />
         <Tailwind width="40" height="24" />
         <ReactIcon width="40" height="36" />
         <Express size="40" isblackBG />
         <MongoDB height="40" width="20" />
-        <p className="text-pretty pl-4 text-sm">
-          This project let you create short links! <br />
-          You enter your long link and I will give you an 8 character string.{" "}
-          <br />
-          If you have an account and you are logged in, your short link will be
-          saved into your account, you do not have to worry about it if you
-          forget.
-          <br /> <br /> You can find more info in the page.
+        <p className="whitespace-pre-wrap text-pretty pl-4 text-sm">
+          {text[6]}
         </p>
       </SingleProject>
       <SingleProject
@@ -116,54 +101,31 @@ export default function ProjectList() {
         <Tailwind width="40" height="24" />
         <ReactIcon width="40" height="36" />
         <Express size="40" isblackBG />
-        <p className="text-pretty pl-4 text-sm">
-          A Sudoku game! <br />
-          At the start, you get 1 random puzzle out of 7, the difficulty can
-          vary, maybe you get an easy 1, maybe you get the hardest from the 7.
-          Give it a try and test your luck and mind! <br />
-          For more, you can press the button at the top. It contains more info
-          about the game, like the rules. <br />
-          <br />
-          Good luck and have fun!
+        <p className="whitespace-pre-wrap text-pretty pl-4 text-sm">
+          {text[7]}
         </p>
       </SingleProject>
       <SingleProjectCarrousel
         images={IMG_DEMO_PROJECTS}
         imgAltText={IMG_ALT_DEMO_PROJECTS}
-        titleArticle="Demo Projects"
-        titleWindow="Demo Projects"
+        titleArticle={text[8]}
+        titleWindow={text[8]}
         toRedirect="/demo"
       >
         <TypeScript size="40" />
         <Tailwind width="40" height="24" />
         <ReactIcon width="40" height="36" />
         <Express size="40" isblackBG />
-        <p className="text-pretty pl-4 text-sm">
-          Here you can find some of the exercises I did for the FreeCodeCamp
-          certifications with some modifications and styles added. <br />
-          From the ones I think are the best to show, whether it&apos;s for the
-          style or utility, like the Pomodoro Clock or the Translator between UK
-          English and USA English. <br />
-          To the simpler ones, like just a machine that display quotes that I
-          get from an API. <br />
-          You can see what main tools I used for each demo when you hover the
-          preview window. <br />I thought in putting a description for each
-          demo, but I think the title of each exercise and this little
-          introduction can be enough. <br />
+        <p className="whitespace-pre-wrap text-pretty pl-4 text-sm">
+          {text[9]}
         </p>
       </SingleProjectCarrousel>
-      <p className="object-to-observe aboutMeObserve mt-4 self-center text-pretty pl-4 text-sm text-yellow-200 transition-all duration-500">
-        I invite you to check some of my projects above. <br /> If you already
-        did, thank you. I appreciate the opportunity you are giving me by doing
-        so! <br /> Oh! If you have a recommendation or issue, remember you can
-        post it in the{" "}
+      <p className="object-to-observe aboutMeObserve mt-4 self-center whitespace-pre-wrap text-pretty pl-4 text-sm text-yellow-200 transition-all duration-500">
+        {text[10]}
         <span className="text-sky-300 underline">
-          <Link to="/issues-and-suggestions">
-            Corner of Issues & Suggestions
-          </Link>
+          <Link to="/issues-and-suggestions">{text[11]}</Link>
         </span>
-        . <br /> You can find it in the menu at the top right or clicking in the
-        link of this paragraph.
+        {text[12]}
       </p>
     </>
   );

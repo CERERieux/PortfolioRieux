@@ -27,19 +27,19 @@ export default function MenuDemos() {
         </p>
         <p className="w-full text-pretty text-sm text-slate-100 md:w-3/4">
           (All the sections in this portfolio are FCC certificate exercises,
-          except for the home page. <br />I modified them enough to be able to
-          use them as 1 &quot;system&quot;, I wanted to include them to show
-          that after all the learning where you only do small programs, you
-          could make something nice with them. <br />
+          except for the home page and the user system. <br />I modified them
+          enough to be able to use them as 1 &quot;system&quot;, I wanted to
+          include them to show that after all the learning where you only do
+          small programs, you could make something nice with them. <br />
           For it I decided to do my portfolio like this, where you can have an
           account with 1 library, notes, short links and post your
           recommendations or issues with the whole app. <br />
           Also a game that you can play and a very few demos that you really
           could use for personal use. <br />I decided to omit some exercises,
-          because in the long run, I didn&apos;t wanted to moderate the content
-          that users could post. I prefer to use that time to learn more and do
-          better apps, like the anonymous board where anyone can post anything
-          in some boards.)
+          like the anonymous board where anyone can post anything in some
+          threads, because in the long run, I didn&apos;t wanted to moderate the
+          content that users could post. I prefer to use that time to learn more
+          and do better apps.)
         </p>
         <p className="my-2 rounded-md bg-stone-700/50 px-6 py-2 text-xl text-slate-100 backdrop-blur-sm">
           You can check my{" "}

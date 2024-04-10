@@ -66,7 +66,7 @@ export default function FormUrlAll({
   return (
     <Form submitFn={handleSubmit} mdMedia="">
       <TitleForm firstColor="first-letter:text-amber-500 first-letter:text-2xl">
-        Add a new link to the table.
+        Enter your link here!
       </TitleForm>
       <LabelForm>
         <TitleInput firstColor="first-letter:text-amber-500 first-letter:text-xl w-32">
