@@ -2,12 +2,14 @@ import Button from "../SystemDesign/Button";
 import ArrowRight from "../Icons/ArrowRight";
 import TableAll from "../Icons/TableAll";
 import RedirectButton from "../SystemDesign/RedirectButton";
+import { useLanguage } from "../../hooks/useLanguage";
 
 interface SubMenuGameProps {
   setMenu: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function SubMenuGame({ setMenu }: SubMenuGameProps) {
+  const titles = useLanguage({ project: "GameMenuTitles" });
   const handleMenu = () => {
     setMenu("MainMenu");
   };
@@ -17,7 +19,7 @@ export default function SubMenuGame({ setMenu }: SubMenuGameProps) {
         colorCover="hover:bg-lime-100 hover:border-lime-400"
         toRedirect="/games/sudoku"
       >
-        <TableAll size="32" /> Sudoku
+        <TableAll size="32" /> {titles[0]}
       </RedirectButton>
 
       <Button
@@ -26,7 +28,7 @@ export default function SubMenuGame({ setMenu }: SubMenuGameProps) {
         textHover={false}
         onClick={handleMenu}
       >
-        <ArrowRight styles="rotate-180" size="32" /> Back
+        <ArrowRight styles="rotate-180" size="32" /> {titles[1]}
       </Button>
     </>
   );

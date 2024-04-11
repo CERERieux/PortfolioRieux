@@ -7,6 +7,7 @@ import TitleForm from "../SystemDesign/TitleForm";
 import TitleInput from "../SystemDesign/TitleInput";
 import type { ShortUrlResult } from "../../types";
 import axios from "axios";
+import { useLanguage } from "../../hooks/useLanguage";
 
 interface FormUrlAllProps {
   token: string;
@@ -21,6 +22,7 @@ export default function FormUrlAll({
   setOriginalUrl,
   token,
 }: FormUrlAllProps) {
+  const text = useLanguage({ project: "Shortener" });
   const [userUrl, setUserUrl] = useState(""); // STate to handle user link
   // Auxliar function to save user input into state
   const handleUserInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +68,7 @@ export default function FormUrlAll({
   return (
     <Form submitFn={handleSubmit} mdMedia="">
       <TitleForm firstColor="first-letter:text-amber-500 first-letter:text-2xl">
-        Enter your link here!
+        {text[12]}
       </TitleForm>
       <LabelForm>
         <TitleInput firstColor="first-letter:text-amber-500 first-letter:text-xl w-32">
@@ -83,10 +85,10 @@ export default function FormUrlAll({
         />
       </LabelForm>
       <Button
-        color="bg-blue-300 border-blue-500 hover:bg-lime-700 hover:border-lime-300"
+        color="bg-blue-400 border-blue-500 hover:bg-lime-700 hover:border-lime-300"
         xSize="w-32"
       >
-        Create!
+        {text[13]}
       </Button>
     </Form>
   );

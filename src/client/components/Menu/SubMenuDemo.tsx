@@ -9,12 +9,14 @@ import ClockIcon from "../Icons/ClockIcon";
 import Transform from "../Icons/Transform";
 import World from "../Icons/World";
 import RedirectButton from "../SystemDesign/RedirectButton";
+import { useLanguage } from "../../hooks/useLanguage";
 
 interface SubMenuDemoProps {
   setMenu: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
+  const titles = useLanguage({ project: "DemoMenuTitles" });
   const handleMenu = () => {
     setMenu("MainMenu");
   };
@@ -25,7 +27,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         toRedirect="/demo"
         needPad={false}
       >
-        <SubMenu size="32" /> Projects Menu
+        <SubMenu size="32" /> {titles[0]}
       </RedirectButton>
 
       <RedirectButton
@@ -33,7 +35,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         toRedirect="/demo/pomodoro"
         needPad={false}
       >
-        <ClockIcon size="32" /> Pomodoro Clock
+        <ClockIcon size="32" /> {titles[1]}
       </RedirectButton>
 
       <RedirectButton
@@ -41,7 +43,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         toRedirect="/demo/translate-eng"
         needPad={false}
       >
-        <World size="32" /> UK-USA Translator
+        <World size="32" /> {titles[2]}
       </RedirectButton>
 
       <RedirectButton
@@ -49,7 +51,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         toRedirect="/demo/markdown"
         needPad={false}
       >
-        <MarkdownIcon size="32" /> Markdown
+        <MarkdownIcon size="32" /> {titles[3]}
       </RedirectButton>
 
       <RedirectButton
@@ -57,7 +59,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         toRedirect="/demo/calculator"
         needPad={false}
       >
-        <CalculatorIcon size="32" /> Calculator
+        <CalculatorIcon size="32" /> {titles[4]}
       </RedirectButton>
 
       <RedirectButton
@@ -65,7 +67,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         toRedirect="/demo/converter"
         needPad={false}
       >
-        <Transform size="32" /> Unit Converter
+        <Transform size="32" /> {titles[5]}
       </RedirectButton>
 
       <RedirectButton
@@ -73,7 +75,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         toRedirect="/demo/drum-machine"
         needPad={false}
       >
-        <DialPad size="32" /> Drum Machine
+        <DialPad size="32" /> {titles[6]}
       </RedirectButton>
 
       <RedirectButton
@@ -81,7 +83,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         toRedirect="/demo/quote"
         needPad={false}
       >
-        <Quote size="32" /> Quote Machine
+        <Quote size="32" /> {titles[7]}
       </RedirectButton>
 
       <Button
@@ -90,7 +92,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
         textHover={false}
         onClick={handleMenu}
       >
-        <ArrowRight styles="rotate-180" size="32" /> Back
+        <ArrowRight styles="rotate-180" size="32" /> {titles[8]}
       </Button>
     </>
   );

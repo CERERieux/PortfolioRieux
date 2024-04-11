@@ -4,6 +4,7 @@ import FormUrlAll from "./FormUrlAll";
 import CustomBackground from "../SystemDesign/CustomBackground";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
 import { SHORTURL } from "../Url/Url";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function ShortenerUrl() {
   const [shortUrl, setShortUrl] = useState(""); // State to save the short url if adding was successful
@@ -14,6 +15,7 @@ export default function ShortenerUrl() {
   // Auxiliar to give style to almost all the boxes
   const bgStyle =
     "rounded-lg border border-x-2 border-y-2 border-slate-50 bg-black/70";
+  const text = useLanguage({ project: "Shortener" });
 
   // Use effect to change the title of the page
   useEffect(() => {
@@ -30,46 +32,38 @@ export default function ShortenerUrl() {
   return (
     <CustomBackground
       bgImg="before:bg-[url('/bgLinks.webp')] before:opacity-90"
-      styles="flex h-full w-full flex-col items-center justify-start gap-8 px-4 py-2 font-digitalDisplay overflow-y-auto text-slate-50"
+      styles="flex h-full w-full flex-col items-center justify-start gap-6 px-4 py-2 font-digitalDisplay overflow-y-auto text-slate-50"
     >
       <h1
         className={`text-center text-3xl first-letter:text-4xl first-letter:text-yellow-200`}
       >
-        Shortener URL
+        {text[0]}
       </h1>
       <header
-        className={`h-[230px] rounded-lg border border-slate-300 bg-black/50 p-4 text-sm backdrop-blur-sm transition-all ${opacity} duration-1000 ease-in-out`}
+        className={`rounded-lg border border-slate-300 bg-black/50 p-4 text-sm backdrop-blur-sm transition-all ${opacity} duration-1000 ease-in-out`}
       >
-        <p className="-mt-1 text-center text-yellow-100">
-          <span className="text-base text-sky-200">
-            Welcome to my shortener of links!
-          </span>{" "}
-          <br />
-          Here you can send me your very <i>very</i> long link and I&apos;ll
-          send you in return a short link. <br />
-          The way to use it,{" "}
+        <p className="-mt-1 whitespace-pre-wrap text-center text-yellow-100">
+          <span className="text-base text-sky-200">{text[1]}</span> <br />
+          {text[2]}
+          <i>{text[3]}</i>
+          {text[4]}
           <span className="text-red-100">
-            you have to go to <b className="text-sky-100">{SHORTURL}</b> and add
-            your short Link at the end!
+            {text[5]}
+            <b className="text-sky-100">{SHORTURL}</b>
+            {text[6]}
           </span>
           <br />
-          This way you can share those tedious and long links in a shorter way!
+          {text[7]}
         </p>
-        <p className="mt-2 text-center text-lime-100">
-          Oh! And if you have an account in my portfolio and you are logged in,{" "}
-          <br /> your can view all the short links you have made so you
-          don&apos;t have to remember each one of them!
+        <p className="mt-2 whitespace-pre-wrap text-center text-lime-100">
+          {text[8]}
         </p>
-        <p className="mt-2 text-center text-slate-50">
-          Don&apos;t worry, I don&apos;t collect any personal data or I do not
-          do any way of tracking with this tool. <br />I only did it because I
-          thought would be nice to learn how to do my personal shortener link
-          and use it from time to time. <br />
-          Remember to be careful with links on internet! <br />
+        <p className="mt-2 whitespace-pre-wrap text-center text-slate-50">
+          {text[9]}
         </p>
       </header>
-      <SimpleNavMenu />
-      <section className={`h-1/4 px-8 py-4 ${bgStyle}`}>
+      <SimpleNavMenu positionNav="top-0 right-4 absolute" />
+      <section className={` px-8 py-4 ${bgStyle}`}>
         <FormUrlAll
           setError={setError}
           setShortUrl={setShortUrl}
@@ -80,13 +74,13 @@ export default function ShortenerUrl() {
       {shortUrl !== "" && (
         <article className={`w-full md:w-1/2 ${bgStyle} break-words px-4 py-2`}>
           <h2 className="text-xl first-letter:text-2xl first-letter:text-yellow-200">
-            Short URL:
+            {text[10]}
             <span className="pl-4 text-lg text-lime-400">
               <b>{shortUrl}</b>
             </span>
           </h2>
           <p className="text-sm first-letter:text-lg first-letter:text-yellow-200">
-            Original Url:
+            {text[11]}
             <span className="pl-4 text-lime-400">{originalUrl}</span>
           </p>
         </article>

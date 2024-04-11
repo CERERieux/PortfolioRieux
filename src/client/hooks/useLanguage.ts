@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 import { useSettingStore } from "../store/settingPortfolio";
 
-type Projects = "Home" | "HomeBottom" | "HomeMisc" | "MenuProject";
+type Projects =
+  | "Home"
+  | "HomeBottom"
+  | "HomeMisc"
+  | "MenuProject"
+  | "DemoMenuTitles"
+  | "GameMenuTitles"
+  | "MainMenuTitles"
+  | "ProfileMenuTitles"
+  | "Shortener"
+  | "Sudoku"
+  | "SugAndIssues";
 interface UseLanguageProps {
   project: Projects;
 }
@@ -79,8 +90,66 @@ You can find those at the top of the home page or you can click the following bu
 I think it can be easier to contact me and for me to know that someone is trying to reach out to me.
 I'll contact you back as soon as I can! And thanks for check out my portfolio.`,
       "Close",
+      "Erik's Portfolio - Jr. Full Stack Developer and Programmer",
     ],
-    MenuProject: [],
+    MenuProject: [
+      "Projects",
+      `Thanks for checking my demos if you do!
+And if you have a recommendation or issue, remember you can post it in the Corner of Issues & Suggestions.`,
+      `(All the sections in this portfolio are FCC certificate exercises, except for the home page and the user system.
+I modified them enough to be able to use them as 1 "system", I wanted to include them to show that after all the learning where you only do small programs, you could make something nice with them.
+For it I decided to do my portfolio like this, where you can have an account with 1 library, notes, short links and post your recommendations or issues with the whole app.
+Also a game that you can play and a very few demos that you really could use for personal use. 
+I decided to omit some exercises, like the anonymous board where anyone can post anything in some threads, because in the long run, I didn't wanted to moderate the content that users could post. I prefer to use that time to learn more and do better apps.)`,
+      "You can check my ",
+      "FCC certifications here!",
+    ],
+    DemoMenuTitles: [
+      "Projects Menu",
+      "Pomodoro Clock",
+      "UK-USA Translator",
+      "Markdown Parser",
+      "Calculator",
+      "Unit Converter",
+      "Drum Machine",
+      "Quote Machine",
+      "Back",
+      "Background made by ",
+    ],
+    GameMenuTitles: ["Sudoku", "Back"],
+    MainMenuTitles: [
+      "Home",
+      "Your Profile",
+      "Shortener URL",
+      "Game",
+      "Demo Projects",
+      "Issues & Suggestions",
+      "Log In",
+      "Log Out",
+    ],
+    ProfileMenuTitles: [],
+    Shortener: [
+      "Shortener URL",
+      "Welcome to my shortener of links!",
+      "Here you can send me your very ",
+      "very ",
+      `long link and I'll send you in return a short link.
+The way to use it,`,
+      " you have to go to ",
+      " and add your short Link at the end!",
+      "This way you can share those tedious and long links in a shorter way!",
+      `Oh! And if you have an account in my portfolio and you are logged in,
+your can view all the short links you have made so you don't have to remember each one of them!`,
+      `Don't worry, I don't collect any personal data or I do not do any way of tracking with this tool.
+I only did it because I thought would be nice to learn how to do my personal shortener link and use it from time to time.
+Remember to be careful with links on internet!`,
+      "Short URL",
+      "Original URL",
+      "Enter your link here!",
+      "Create!",
+    ],
+    Sudoku: [],
+    SugAndIssues: [],
   },
   Español: {
     Home: [
@@ -154,8 +223,67 @@ Puedes encontrar esos medios hasta arriba de la página o puedes hacer clic en l
 Pienso que es más fácil contactarme y para mi saber que alguien está tratando de mandarme un mensaje.
 Te responderé lo más rápido que pueda! Y gracias por revisar mi portafolio.`,
       "Cerrar",
+      "Portafolio de Erik - Jr. Full Stack Developer y Programador",
     ],
-    MenuProject: [],
+    MenuProject: [
+      "Proyectos",
+      `¡Gracias de antemano si revisas una de mis demostraciones!
+Si tienes una recomendación o problema, recuerda compartirla en el Rincón de Problemas y Sugerencias.
+Y si el título está en Inglés, entonces no está disponible en Español, como el traductor.`,
+      `(Todas las secciones en este portafolio son certificaciones de FCC, excepto la página inicial y el sistema de cuentas.
+Modifiqué los ejercicios lo suficiente para poder usarlos como 1 “sistema”, quería incluirlos de alguna manera para mostrar que después de hacer ejercicios simples, podrías hacer algo bueno con ellos.
+Por ello decidí hacer mi portafolio de esta manera, donde podrías con una cuenta tener 1 librería, notas, links cortos y compartir tus recomendaciones y problemas con la app en su totalidad.
+También un juego que puedas jugar y algunas demostraciones que sí podrían ser de uso personal.
+Decidí omitir algunos ejercicios de certificación, como un tablero anónimo donde los usuarios pueden publicar lo que sea en hilos, porque a la larga no quería moderar el contenido que los usuarios podrían compartir. Prefiero usar ese tiempo en aprender más y mejorar mi trabajo.)`,
+      "Puedes ver mis ",
+      "certificaciones de FCC aquí!",
+    ],
+    DemoMenuTitles: [
+      "Menu Proyectos",
+      "Reloj Pomodoro",
+      "UK-USA Translator",
+      "Analizador Markdown",
+      "Calculadora",
+      "Convertidor de Unidades",
+      "Drum Machine",
+      "Quote Machine",
+      "Atrás",
+      "Fondo hecho por ",
+    ],
+    GameMenuTitles: ["Sudoku", "Atrás"],
+    MainMenuTitles: [
+      "Inicio",
+      "Tu Perfil",
+      "Acortador de URL",
+      "Juego",
+      "Proyectos Demostración",
+      "Sugerencias y Problemas",
+      "Iniciar Sesión",
+      "Cerrar Sesión",
+    ],
+    ProfileMenuTitles: [],
+    Shortener: [
+      "Acortador de URL",
+      "Bienvenido a mi acortador de links!",
+      "Aquí puedes mandarme tu link muy ",
+      "muy",
+      ` largo y te mandaré de vuelta un link corto.
+La forma de usarlo,`,
+      " tienes que ir a ",
+      " y añadir tu link corto al final!",
+      "De esta forma puedes compartir esos tediosos y largos links en una forma sencilla!",
+      `Oh! Si tienes una cuenta en mi portafolio y estás conectado en ella, 
+      puedes ver todos los links cortos que has creado, así no tienes que acordarte de ellos!`,
+      `No te preocupes, no guardo datos personales o hago algún tipo de rastreo con esta herramienta.
+Solo lo hice porque pensé que sería bueno aprender a hacer mi propio acortador de links y usarlo a veces.
+Recuerda ser cuidadoso con los links que veas en internet!`,
+      "URL Corto",
+      "URL Original",
+      "¡Introduce tu link aquí!",
+      "¡Crear!",
+    ],
+    Sudoku: [],
+    SugAndIssues: [],
   },
 };
 

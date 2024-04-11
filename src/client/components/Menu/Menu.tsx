@@ -3,6 +3,7 @@ import { CloseNavButton } from "../SystemDesign/CloseNavButton";
 import { useUser } from "../../store/user";
 import { Suspense, lazy, useState } from "react";
 import LoadingSpinner from "../NotFound/LoadingSpinner";
+import { useSettingStore } from "../../store/settingPortfolio";
 
 const MainMenu = lazy(() => import("./MainMenu"));
 const SubMenuProfile = lazy(() => import("./SubMenuProfile"));
@@ -18,6 +19,8 @@ export default function Menu({ opacity, handleOpacity }: MenuProps) {
   const { username, logoffUser } = useUser();
   const [menu, setMenu] = useState("MainMenu");
   const navigate = useNavigate();
+  const { i18n } = useSettingStore();
+  const title = i18n === "English" ? "Main Menu" : "Menu Principal";
 
   const handleLogoff = () => {
     logoffUser();
@@ -28,7 +31,7 @@ export default function Menu({ opacity, handleOpacity }: MenuProps) {
     <section
       className={`absolute right-0 top-0 h-full w-full overflow-y-auto bg-gradient-to-b from-slate-100/80 to-slate-950/80 py-8 text-white backdrop-blur-sm md:w-3/5 lg:w-1/2 ${opacity} flex flex-col items-center justify-center gap-4 shadow-xl shadow-black/40 transition-all duration-500 ease-in-out`}
     >
-      <h2 className="text-2xl text-black first-letter:text-3xl">Main Menu</h2>
+      <h2 className="text-2xl text-black first-letter:text-3xl">{title}</h2>
       <Suspense fallback={<LoadingSpinner />}>
         {menu === "MainMenu" ? (
           <MainMenu

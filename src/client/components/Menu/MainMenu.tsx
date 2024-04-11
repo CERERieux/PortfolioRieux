@@ -10,6 +10,7 @@ import Button from "../SystemDesign/Button";
 import ArrowRight from "../Icons/ArrowRight";
 import RedirectButton from "../SystemDesign/RedirectButton";
 import HomeIcon from "../Icons/HomeIcon";
+import { useLanguage } from "../../hooks/useLanguage";
 
 interface MainMenuProps {
   username: string;
@@ -21,13 +22,14 @@ export default function MainMenu({
   handleLogoff,
   setMenu,
 }: MainMenuProps) {
+  const titles = useLanguage({ project: "MainMenuTitles" });
   return (
     <>
       <RedirectButton
         colorCover="hover:bg-sky-200 hover:border-sky-600"
         toRedirect="/home"
       >
-        <HomeIcon size="32" /> Home
+        <HomeIcon size="32" /> {titles[0]}
       </RedirectButton>
       {username !== "" && (
         <Button
@@ -39,7 +41,7 @@ export default function MainMenu({
           }}
         >
           <span className="flex items-center justify-center gap-4">
-            <UserIcon size="32" /> Your Profile
+            <UserIcon size="32" /> {titles[1]}
           </span>
           <ArrowRight size="28" />
         </Button>
@@ -48,7 +50,7 @@ export default function MainMenu({
         colorCover="hover:bg-yellow-100 hover:border-yellow-400"
         toRedirect="/shortener-url"
       >
-        <LinkUrl size="32" /> Shortener URL
+        <LinkUrl size="32" /> {titles[2]}
       </RedirectButton>
       <Button
         color="hover:bg-purple-100 hover:border-purple-400 hover:shadow-md hover:shadow-black/20 "
@@ -59,7 +61,7 @@ export default function MainMenu({
         }}
       >
         <span className="flex items-center justify-center gap-4">
-          <ControlIcon size="32" /> Game
+          <ControlIcon size="32" /> {titles[3]}
         </span>
         <ArrowRight size="28" />
       </Button>
@@ -72,7 +74,7 @@ export default function MainMenu({
         }}
       >
         <span className="flex items-center justify-center gap-4">
-          <PencilCode size="32" /> Demo Projects
+          <PencilCode size="32" /> {titles[4]}
         </span>
         <ArrowRight size="28" />
       </Button>
@@ -80,7 +82,7 @@ export default function MainMenu({
         colorCover="hover:bg-orange-100 hover:border-orange-400"
         toRedirect="/issues-and-suggestions"
       >
-        <AddMessage size="32" /> Issues & Suggestion
+        <AddMessage size="32" /> {titles[5]}
       </RedirectButton>
       {username === "" ? (
         <Link
@@ -93,7 +95,7 @@ export default function MainMenu({
             textHover={false}
             xSize="w-full"
           >
-            <LoginIcon size="32" /> Login
+            <LoginIcon size="32" /> {titles[6]}
           </Button>
         </Link>
       ) : (
@@ -103,7 +105,7 @@ export default function MainMenu({
           textHover={false}
           onClick={handleLogoff}
         >
-          <LogoutIcon size="32" /> Log Out
+          <LogoutIcon size="32" /> {titles[7]}
         </Button>
       )}
     </>
