@@ -221,7 +221,7 @@ export default function BookAside({
   // Component that show both forms on the left/top side of the screen
   return (
     <aside className="flex flex-col items-center justify-center gap-4 md:sticky md:top-0 md:h-full md:w-1/2">
-      <section className="flex w-full flex-col gap-4 rounded-xl bg-slate-50/85 px-4 py-2 shadow-md shadow-black/30 sm:w-4/5 md:h-3/4 md:w-full md:items-center md:justify-center lg:w-4/5">
+      <section className="flex w-full flex-col gap-4 rounded-xl bg-slate-50/85 px-4 py-2 shadow-md shadow-black/30 dark:bg-slate-600/70 dark:text-slate-100 dark:backdrop-blur-sm sm:w-4/5 md:h-3/4 md:w-full md:items-center md:justify-center lg:w-4/5">
         <TitleForm firstColor="first-letter:text-lime-500">
           Update your book!
         </TitleForm>
@@ -290,19 +290,20 @@ export default function BookAside({
               max={2000}
               lineStyle={false}
               placeHolder="Review for this book is empty."
-              extraStyles="text-sm whitespace-pre-wrap"
+              extraStyles="text-sm whitespace-pre-wrap text-black"
             />
           </LabelForm>
           <Button
             color="bg-lime-300 border-lime-500 hover:bg-lime-600 hover:border-lime-300"
             xSize="w-32"
+            extraStyles="dark:bg-lime-600 dark:border-lime-700 dark:hover:bg-lime-300 dark:hover:border-lime-400 dark:hover:text-slate-700"
             disabled={isUpdatePending}
           >
             Update!
           </Button>
         </Form>
       </section>
-      <section className="flex w-2/3 flex-col items-center justify-center rounded-xl bg-slate-50/80 px-4 py-2 shadow-md shadow-black/30 sm:w-1/2 md:h-1/5 md:w-3/4 lg:w-3/5">
+      <section className="flex w-2/3 flex-col items-center justify-center rounded-xl bg-slate-50/80 px-4 py-2 shadow-md shadow-black/30 dark:bg-slate-100/80 sm:w-1/2 md:h-1/5 md:w-3/4 lg:w-3/5">
         <TitleForm firstColor="first-letter:text-sky-500">
           Add a note to your book
         </TitleForm>

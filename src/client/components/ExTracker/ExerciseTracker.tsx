@@ -66,7 +66,7 @@ export default function ExerciseTracker() {
   return errorAuth.cause !== null ? (
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
-    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-gradient-to-b from-sky-100 from-20% to-sky-600 lg:grid lg:grid-cols-4 lg:grid-rows-4 lg:overflow-hidden">
+    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-gradient-to-b from-sky-100 from-20% to-sky-600 dark:from-sky-400 dark:from-0% dark:to-sky-800 lg:grid lg:grid-cols-4 lg:grid-rows-4 lg:overflow-hidden">
       {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
       {errorEx !== null && isAxiosError(errorEx) && (
         <ErrorMessage>Error: {errorEx.response?.data.error}</ErrorMessage>
@@ -99,10 +99,10 @@ export default function ExerciseTracker() {
           newExercise={newExercise}
         />
       </aside>
-      <main className="relative col-span-3 col-start-1 row-span-3 row-start-2 mt-2 flex flex-col gap-4 rounded-lg bg-slate-50 shadow-inner shadow-black/30 lg:overflow-y-auto">
+      <main className="relative col-span-3 col-start-1 row-span-3 row-start-2 mt-2 flex flex-col gap-4 rounded-lg bg-slate-50 shadow-inner shadow-black/30 dark:bg-black/40 lg:overflow-y-auto">
         {data !== undefined ? (
           <>
-            <h2 className="sticky top-0 z-10 pt-2 text-center font-digitalDisplay text-xl backdrop-blur-sm">
+            <h2 className="sticky top-0 z-10 pt-2 text-center font-digitalDisplay text-xl backdrop-blur-sm dark:text-slate-100">
               <span className="text-2xl text-sky-400">
                 {filteredData.length} N
               </span>

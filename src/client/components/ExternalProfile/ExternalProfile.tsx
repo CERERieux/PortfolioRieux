@@ -27,8 +27,8 @@ export default function ExternalProfile() {
   // Return the profile of the user
   return (
     <CustomBackground
-      styles="flex h-full w-full flex-col items-center justify-center gap-10 md:gap-0"
-      bgImg="before:bg-[url('/profileBG.webp')] before:opacity-5 relative"
+      styles="flex h-full w-full flex-col items-center justify-center gap-10 md:gap-0 dark:bg-slate-800/60 dark:text-slate-50"
+      bgImg="before:bg-[url('/profileBG.webp')] before:opacity-5 dark:before:opacity-15 relative"
     >
       {error !== null && isAxiosError(error) && (
         <ErrorMessage>{error.response?.data.error}</ErrorMessage>

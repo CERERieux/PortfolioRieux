@@ -23,16 +23,16 @@ export default function ExternalBookList({ data }: ExternalBookListProps) {
           return (
             <li
               key={id}
-              className={`relative rounded-sm border px-4 py-2 ${COLOR_LIST_BOOK[recText][status]} ${COLOR_LIST_BOOK[status]}`}
+              className={`relative rounded-sm border px-4 py-2 ${COLOR_LIST_BOOK[recText][status]} ${COLOR_LIST_BOOK[status]} dark:bg-transparent/20`}
             >
               <section>
-                <h2 className="text-xl text-blue-800 first-letter:text-2xl first-letter:text-red-400">
+                <h2 className="text-xl text-blue-800 first-letter:text-2xl first-letter:text-red-400 dark:text-blue-100 dark:first-letter:text-yellow-400">
                   {book.title}
                 </h2>
-                <p className="pl-4 text-sm italic first-letter:text-lg first-letter:text-red-400">
+                <p className="pl-4 text-sm italic first-letter:text-lg first-letter:text-red-400 dark:first-letter:text-yellow-400">
                   {status}
                 </p>
-                <p className="pl-4 italic first-letter:text-lg first-letter:text-red-400">
+                <p className="pl-4 italic first-letter:text-lg first-letter:text-red-400 dark:first-letter:text-yellow-400">
                   Review:{" "}
                 </p>
                 <p className="-mt-1 mb-2 whitespace-pre-wrap text-pretty pl-6 text-sm">
@@ -44,7 +44,7 @@ export default function ExternalBookList({ data }: ExternalBookListProps) {
                     `${book.review}`
                   )}
                 </p>
-                <p className="pl-4 text-sm italic first-letter:text-lg first-letter:text-red-400">
+                <p className="pl-4 text-sm italic first-letter:text-lg first-letter:text-red-400 dark:first-letter:text-yellow-400">
                   Recommended:{" "}
                   <span className="pl-2 not-italic">{recText}</span>
                 </p>

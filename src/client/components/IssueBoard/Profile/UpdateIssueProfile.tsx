@@ -139,12 +139,15 @@ export default function UpdateIssueProfile({
   // Component that display the form to update the issue
   return (
     <section className="mx-auto flex flex-col gap-4 md:w-3/5 lg:w-1/2">
-      <TitleForm firstColor="first-letter:text-blue-500">
+      <TitleForm firstColor="first-letter:text-blue-500 dark:first-letter:text-blue-300">
         Enter your update in the fields
       </TitleForm>
       <Form submitFn={handleUpdateIssue} mdMedia="">
         <LabelForm>
-          <TitleInput required firstColor="first-letter:text-blue-500">
+          <TitleInput
+            required
+            firstColor="first-letter:text-blue-500 dark:first-letter:text-blue-300"
+          >
             Project{" "}
           </TitleInput>
           <Input
@@ -157,7 +160,10 @@ export default function UpdateIssueProfile({
           />
         </LabelForm>
         <LabelForm>
-          <TitleInput required firstColor="first-letter:text-blue-500">
+          <TitleInput
+            required
+            firstColor="first-letter:text-blue-500 dark:first-letter:text-blue-300"
+          >
             Title{" "}
           </TitleInput>
           <Input
@@ -171,7 +177,7 @@ export default function UpdateIssueProfile({
         </LabelForm>
         <LabelForm style="justify-center items-center relative mt-6 lg:mt-4">
           <TitleInput
-            firstColor="absolute -top-8 left-4 sm:left-16 md:-left-0 first-letter:text-blue-500 text-sm"
+            firstColor="absolute -top-8 left-4 sm:left-16 md:-left-0 first-letter:text-blue-500 dark:first-letter:text-blue-300 text-sm"
             required
           >
             Description{" "}
@@ -186,7 +192,7 @@ export default function UpdateIssueProfile({
             max={1000}
             lineStyle={false}
             placeHolder="Description of the issue."
-            extraStyles="text-sm whitespace-pre-wrap"
+            extraStyles="text-sm whitespace-pre-wrap dark:text-black"
             required
           />
         </LabelForm>
@@ -194,6 +200,7 @@ export default function UpdateIssueProfile({
           <Button
             color="bg-blue-300 border-blue-500 hover:bg-blue-600 hover:border-blue-300"
             xSize="w-40"
+            extraStyles="dark:bg-blue-600 dark:border-blue-700 dark:hover:bg-blue-300 dark:hover:border-blue-400 dark:hover:text-black"
           >
             Update
           </Button>
@@ -201,6 +208,7 @@ export default function UpdateIssueProfile({
             color="bg-amber-300 border-amber-500 hover:bg-amber-600 hover:border-amber-100"
             xSize="w-40"
             onClick={handleCancel}
+            extraStyles="dark:bg-amber-600 dark:border-amber-700 dark:hover:bg-amber-300 dark:hover:border-amber-400 dark:hover:text-black"
           >
             Cancel
           </Button>

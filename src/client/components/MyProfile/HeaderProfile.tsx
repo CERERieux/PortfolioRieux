@@ -43,7 +43,7 @@ export default function HeaderProfile({
           <Button
             color="bg-blue-300 border-blue-500 hover:bg-blue-600 hover:border-blue-300"
             xSize="w-36"
-            extraStyles="absolute bottom-4 md:bottom-0 shadow-md shadow-black/20 active:shadow-none"
+            extraStyles="absolute bottom-4 md:bottom-0 shadow-md shadow-black/20 active:shadow-none dark:bg-blue-700 dark:border-blue-900 dark:hover:bg-blue-300 dark:hover:border-blue-500 dark:hover:text-slate-800"
             onClick={() => {
               handleViewUpdateProfile(data);
             }}

@@ -160,8 +160,8 @@ export default function Library() {
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
     <CustomBackground
-      bgImg="before:bg-[url('/libraryBG.webp')] before:opacity-30"
-      styles="w-full h-full"
+      bgImg="before:bg-[url('/libraryBG.webp')] before:opacity-30 dark:before:opacity-40"
+      styles="w-full h-full dark:bg-slate-700/60"
     >
       <main className="relative flex h-full w-full flex-col gap-4 overflow-y-auto px-6 py-4">
         <NavMenu />

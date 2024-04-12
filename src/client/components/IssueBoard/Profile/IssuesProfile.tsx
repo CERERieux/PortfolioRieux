@@ -27,7 +27,7 @@ export default function IssueProfile() {
   return isError ? (
     <UnauthorizedAccess errorAuth={errorAuth} />
   ) : (
-    <main className="flex h-full w-full flex-col items-center gap-4 bg-gradient-to-b from-red-700/90 to-red-50 p-4">
+    <main className="flex h-full w-full flex-col items-center gap-4 bg-gradient-to-b from-red-700/90 to-red-50 p-4 dark:to-black/70">
       <h1 className="rounded-sm bg-slate-50/95 px-3 py-1 text-3xl shadow-lg shadow-red-900 first-letter:text-4xl first-letter:text-red-800">
         Your Corner of Issues
       </h1>
@@ -40,7 +40,7 @@ export default function IssueProfile() {
       {data !== undefined ? (
         !("error" in data) ? (
           data.length > 0 ? (
-            <ul className="flex h-full w-full flex-col items-center gap-2 overflow-y-auto rounded-xl bg-slate-50/95 px-4 py-2 shadow-inner shadow-red-900 md:w-3/4 lg:w-2/3">
+            <ul className="flex h-full w-full flex-col items-center gap-2 overflow-y-auto rounded-xl bg-slate-50/95 px-4 py-2 shadow-inner shadow-red-900 dark:bg-gray-700/80 dark:text-slate-100 md:w-3/4 lg:w-2/3">
               {data.map(issue => {
                 const id = issue._id.toString();
                 const created = new Date(issue.created_on).toLocaleDateString();

@@ -129,7 +129,7 @@ export default function BookList({
 
   // A component that returns the list of books
   return (
-    <article className="flex w-full items-center justify-center rounded-md bg-white shadow-inner shadow-black/40 md:h-full md:w-2/3 md:overflow-y-auto">
+    <article className="flex w-full items-center justify-center rounded-md bg-white shadow-inner shadow-black/40 backdrop-blur-sm dark:bg-gray-300/20 dark:text-slate-50 md:h-full md:w-2/3 md:overflow-y-auto">
       {!("error" in dataFiltered) ? (
         <ul className="flex h-full w-full flex-col gap-2 px-6 py-4">
           {dataFiltered.map(book => {
@@ -145,16 +145,16 @@ export default function BookList({
             return (
               <li
                 key={id}
-                className={`relative rounded-sm border px-4 py-2 ${COLOR_LIST_BOOK[recText][status]} ${COLOR_LIST_BOOK[status]}`}
+                className={`relative rounded-sm border px-4 py-2 ${COLOR_LIST_BOOK[recText][status]} ${COLOR_LIST_BOOK[status]} dark:bg-transparent/40`}
               >
                 <section>
-                  <h2 className="text-xl text-blue-500 underline">
+                  <h2 className="text-xl text-blue-500 underline dark:text-blue-200">
                     <Link to={`/my-profile/library/${id}`}>{book.title}</Link>
                   </h2>
-                  <p className="pl-4 text-sm italic first-letter:text-lg first-letter:text-red-400">
+                  <p className="pl-4 text-sm italic first-letter:text-lg first-letter:text-red-400 dark:first-letter:text-yellow-400">
                     {status}
                   </p>
-                  <p className="pl-4 italic first-letter:text-lg first-letter:text-red-400">
+                  <p className="pl-4 italic first-letter:text-lg first-letter:text-red-400 dark:first-letter:text-yellow-400">
                     Review:{" "}
                   </p>
                   <p className="-mt-1 mb-2 whitespace-pre-wrap text-pretty pl-6 text-sm">
@@ -162,12 +162,12 @@ export default function BookList({
                       ? "Review for this book is empty."
                       : `${book.review}`}
                   </p>
-                  <p className="pl-4 text-sm italic first-letter:text-lg first-letter:text-red-400">
+                  <p className="pl-4 text-sm italic first-letter:text-lg first-letter:text-red-400 dark:first-letter:text-yellow-400">
                     Recommended:{" "}
                     <span className="pl-2 not-italic">{recText}</span>
                   </p>
                   <ActionButton
-                    coverColor="bg-slate-200 shadow-slate-100"
+                    coverColor="bg-slate-200 shadow-slate-100 dark:text-slate-700"
                     hoverColor="hover:bg-red-400 hover:shadow-red-400/30 hover:text-white"
                     groupName={["group/delete", "group-hover/delete:block"]}
                     position="top-4 right-4"

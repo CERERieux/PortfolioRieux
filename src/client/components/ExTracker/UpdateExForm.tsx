@@ -79,7 +79,7 @@ export default function UpdateExForm({
   };
   // Component to display
   return (
-    <div className="my-2 flex h-full w-full flex-col items-center justify-center gap-2 rounded-md bg-slate-50 py-2 shadow-inner shadow-black/20 ">
+    <div className="my-2 flex h-full w-full flex-col items-center justify-center gap-2 rounded-md bg-slate-50 py-2 shadow-inner shadow-black/20 dark:bg-transparent/40 dark:text-slate-100">
       <Form
         submitFn={handleUpdateEx}
         style="items-center justify-around lg:justify-around px-2 gap-4 lg:flex-row w-full h-full"
@@ -119,6 +119,7 @@ export default function UpdateExForm({
           color="bg-lime-300 border-lime-500 hover:bg-lime-500 hover:border-lime-700"
           disabled={isUpdating}
           xSize="w-1/3 lg:w-2/5"
+          extraStyles="dark:bg-lime-600 dark:border-lime-700 dark:hover:bg-lime-300 dark:hover:border-lime-400 dark:hover:text-slate-700"
         >
           Make update
         </Button>
@@ -127,6 +128,7 @@ export default function UpdateExForm({
         onClick={cancelUpdate}
         color="bg-amber-200 border-amber-500 hover:bg-amber-500 hover:border-amber-600"
         xSize="w-1/3 lg:w-1/5"
+        extraStyles="dark:bg-amber-600 dark:border-amber-700 dark:hover:bg-amber-300 dark:hover:border-amber-400 dark:hover:text-slate-700"
       >
         Cancel
       </Button>

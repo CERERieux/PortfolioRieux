@@ -17,26 +17,28 @@ export default function BookData({
 }: BookDataProps) {
   const cRecommend =
     data.recommend === undefined
-      ? "text-black"
+      ? "text-black dark:text-white"
       : data.recommend
-      ? "text-sky-500"
-      : "text-red-500"; // Auxiliar to give color to recommendation
+      ? "text-sky-500 dark:text-sky-200"
+      : "text-red-500 dark:text-red-200"; // Auxiliar to give color to recommendation
   // Return the main info that is in the right side
   return (
     <section className="flex flex-col justify-center gap-2">
-      <h2 className="text-pretty text-center font-elegant text-3xl first-letter:text-5xl first-letter:text-red-500">
+      <h2 className="text-pretty text-center font-elegant text-3xl first-letter:text-5xl first-letter:text-red-500 dark:text-slate-100 dark:first-letter:text-yellow-500">
         {data.title}
       </h2>
-      <p className="text-center italic first-letter:text-xl first-letter:text-red-500">
+      <p className="text-center italic first-letter:text-xl first-letter:text-red-500 dark:text-slate-100 dark:first-letter:text-yellow-500">
         {data.status}
       </p>
-      <p className="first-letter:text-xl first-letter:text-red-500">Review: </p>
+      <p className="first-letter:text-xl first-letter:text-red-500 dark:text-slate-100 dark:first-letter:text-yellow-500">
+        Review:{" "}
+      </p>
       <p
-        className={`whitespace-pre-wrap text-pretty border border-black/25 bg-white/70 px-3 py-2 text-sm shadow-sm shadow-black/30`}
+        className={`whitespace-pre-wrap text-pretty border border-black/25 bg-white/70 px-3 py-2 text-sm shadow-sm shadow-black/30 dark:bg-black/20 dark:text-slate-100`}
       >
         {data.review !== "" ? data.review : "You haven't review this book."}
       </p>
-      <p className="first-letter:text-xl first-letter:text-red-500">
+      <p className="first-letter:text-xl first-letter:text-red-500 dark:text-slate-100 dark:first-letter:text-yellow-500">
         Do you recommend it?{" "}
         <span className={`ml-3 text-lg italic underline ${cRecommend}`}>
           {data.recommend === undefined
@@ -46,8 +48,10 @@ export default function BookData({
             : "No"}
         </span>
       </p>
-      <p className="first-letter:text-xl first-letter:text-red-500">Notes: </p>
-      <ul className="mb-6 flex flex-col gap-2 rounded-xl bg-white px-4 py-2 shadow-inner shadow-black/40">
+      <p className="first-letter:text-xl first-letter:text-red-500 dark:text-slate-100 dark:first-letter:text-yellow-500">
+        Notes:{" "}
+      </p>
+      <ul className="mb-6 flex flex-col gap-2 rounded-xl bg-white px-4 py-2 shadow-inner shadow-black/40 dark:bg-black/20 dark:text-slate-100">
         {emptyNotes && "Here will appear the notes you add to your book!"}
         {data.notes.map((note, i) => {
           if (note !== "")
@@ -58,7 +62,7 @@ export default function BookData({
               >
                 {note}
                 <ActionButton
-                  coverColor="bg-slate-200 shadow-slate-100"
+                  coverColor="bg-slate-200 shadow-slate-100 dark:text-slate-800"
                   hoverColor="hover:bg-red-400 hover:shadow-red-400/30 hover:text-white"
                   groupName={["group/delete", "group-hover/delete:block"]}
                   position="top-0.5 right-2"

@@ -18,17 +18,17 @@ import { type IExTracker } from "../../../server/types/basic";
 import debounce from "just-debounce-it";
 
 const COLOR_LIST = {
-  Pending: "first-letter:text-red-700",
+  Pending: "first-letter:text-red-700 dark:first-letter:text-red-300",
   PendingBg:
-    "[background:_linear-gradient(192deg,rgb(252_165_165)_5%,#f8fafc_30%)]",
+    "[background:_linear-gradient(192deg,rgba(252,165,165,.8),rgba(252,165,165,0)_30%)]",
   PendingBorder: "border border-red-300 shadow-red-800/30",
-  Current: "first-letter:text-amber-600",
+  Current: "first-letter:text-amber-600 first-letter:text-amber-300",
   CurrentBg:
-    "[background:_linear-gradient(192deg,rgb(253_230_138)_5%,#f8fafc_30%)]",
+    "[background:_linear-gradient(192deg,rgba(252,211,77,.8),rgba(252,211,77,0)_30%)]",
   CurrentBorder: "border border-amber-300 shadow-amber-800/30",
-  Completed: "first-letter:text-lime-700",
+  Completed: "first-letter:text-lime-700 dark:first-letter:text-lime-300",
   CompletedBg:
-    "[background:_linear-gradient(192deg,rgb(217_249_157)_5%,#f8fafc_30%)]",
+    "[background:_linear-gradient(192deg,rgba(190,242,100,.8),rgba(190,242,100,0)_30%)]",
   CompletedBorder: "border border-lime-300 shadow-lime-800/30",
 };
 
@@ -246,7 +246,7 @@ export default function LogList({
           return (
             <li
               key={id}
-              className={`${color} ${border} rounded-md px-4 py-2 shadow-lg`}
+              className={`${color} ${border} rounded-md px-4 py-2 shadow-lg dark:bg-transparent/40 dark:text-slate-100`}
             >
               {!(isUpdate.isUpdate && id === isUpdate.id) ? (
                 <article className="relative">
@@ -268,7 +268,7 @@ export default function LogList({
                   />
                   <ActionButton
                     onClick={handleUpdateChange}
-                    coverColor="bg-slate-200 shadow-slate-100"
+                    coverColor="bg-slate-200 shadow-slate-100 dark:text-slate-900"
                     hoverColor="hover:bg-blue-200 hover:shadow-blue-400/30 hover:text-blue-600"
                     groupName={["group/update", "group-hover/update:block"]}
                     position="right-12 bottom-2"

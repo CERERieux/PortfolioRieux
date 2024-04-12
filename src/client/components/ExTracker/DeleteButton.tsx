@@ -19,7 +19,7 @@ export default function DeleteButton({
     <ActionButton
       onClick={handleDelete}
       disabled={isDeleting}
-      coverColor="bg-slate-200 shadow-slate-100"
+      coverColor="bg-slate-200 shadow-slate-100 dark:text-slate-900"
       hoverColor="hover:bg-red-100 hover:shadow-red-400/30 hover:text-red-500"
       groupName={["group/delete", "group-hover/delete:block"]}
       position="right-0 bottom-2"
