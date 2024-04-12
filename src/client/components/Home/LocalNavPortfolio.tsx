@@ -30,7 +30,7 @@ export default function LocalNavPortfolio() {
           className="flex w-20 justify-center rounded-r-xl border border-r-0 border-black px-2 py-1 transition-all hover:bg-sky-500 hover:text-white"
           onClick={changeLanguage}
         >
-          {i18n === "English" ? "Español" : "English"}
+          {i18n === "English" ? "A Español" : "To English"}
         </button>
       </nav>
       <DialogContactMe idOpen="OpenDialogContactPortfolio" />

@@ -4,6 +4,7 @@ import { useUser } from "../../store/user";
 import { Suspense, lazy, useState } from "react";
 import LoadingSpinner from "../NotFound/LoadingSpinner";
 import { useSettingStore } from "../../store/settingPortfolio";
+import ButtonEnEs from "./ButtonEnEs";
 
 const MainMenu = lazy(() => import("./MainMenu"));
 const SubMenuProfile = lazy(() => import("./SubMenuProfile"));
@@ -48,6 +49,7 @@ export default function Menu({ opacity, handleOpacity }: MenuProps) {
         )}
       </Suspense>
       <CloseNavButton handleOpacity={handleOpacity} bgColor="bg-white" />
+      <ButtonEnEs />
     </section>
   );
 }
