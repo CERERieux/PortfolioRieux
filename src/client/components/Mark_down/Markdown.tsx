@@ -1,3 +1,4 @@
+import { useLanguage } from "../../hooks/useLanguage";
 import { useMarkdown } from "../../hooks/useMarkdown"; // Our custom hook that manages the users input and translate it
 import Expand from "../Icons/Expand";
 import Minimize from "../Icons/Minimize";
@@ -35,6 +36,7 @@ export default function Markdown() {
   const idBtnOpen = "DeleteContentBtn";
   const idBtnClose = "CancelDeleteBtn";
   const idDialog = "MarkdownDialog";
+  const text = useLanguage({ project: "Markdown" });
 
   const closeDialogDelete = () => {
     const dialogMarkdown = document.getElementById(
@@ -56,66 +58,61 @@ export default function Markdown() {
           idClose={idBtnClose}
         >
           <article>
-            <p>Are you sure do you want to delete the content?</p>
+            <p>{text[0]}</p>
             <div className="mt-2 flex w-full items-center justify-center gap-2">
               <Button
                 color="border-amber-600 bg-amber-200 hover:border-amber-300 hover:bg-amber-500"
                 id={idBtnClose}
               >
-                Cancel
+                {text[1]}
               </Button>
               <Button
                 color="border-red-600 bg-red-300 hover:border-red-300 hover:bg-red-500"
                 onClick={closeDialogDelete}
               >
-                Delete
+                {text[2]}
               </Button>
             </div>
           </article>
         </Dialog>
         <section className="w-full bg-white px-4 py-2 shadow-md md:w-1/3">
           <section className="relative flex w-fit justify-center gap-2">
-            <h1 className="font-sketch text-2xl">Markdown parser</h1>
+            <h1 className="font-sketch text-2xl">{text[3]}</h1>
             <OpenInfo
               idClose="CloseDialogInfoMarkdownParser"
               idDialog="DialogForInfoMarkdownParser"
               idOpen="OpenDialogInfoMarkdownParser"
               posScreen="top-0 -right-12"
             >
-              <h3 className="text-lg text-red-600">What is Markdown?</h3>
+              <h3 className="text-lg text-red-600">{text[4]}</h3>
               <p className="max-w-[600px] self-start text-pretty">
-                Markdown is a <em>lightweight markup language</em> that you can
-                use to add formatting elements to plaintext text documents.{" "}
-                <br /> <em>Created by John Gruber in 2004</em>, Markdown is now
-                one of the world&apos;s most popular markup languages.
+                {text[5]}
+                <em>{text[6]}</em>
+                {text[7]}
+                <br /> <em>{text[8]}</em>
+                {text[9]}
               </p>
               <p className="max-w-[600px] self-start text-pretty">
-                <span className="text-red-500">
-                  I left you an example of how to use Markdown in the text area
-                  located on the top of the screen and how the result looks like
-                  in the preview under it!
-                </span>{" "}
+                <span className="text-red-500">{text[10]}</span> <br />
+                {text[11]}
+                <span className="text-lime-500">{text[12]}</span>
+                {text[13]}
                 <br />
-                You can expand the preview zone with the{" "}
-                <span className="text-lime-500">green button</span> located on
-                the right side of the screen. <br />
-                If you want start a clean document, just delete the content with
-                the <span className="text-amber-500">yellow button</span>, after
-                confirm that you want to delete the content, the text area will
-                be clean and ready to display your inputs! <br />
-                Or you can edit the current example.
+                {text[14]}
+                <span className="text-amber-500">{text[15]}</span>
+                {text[16]}
+                <br />
+                {text[17]}
               </p>
             </OpenInfo>
           </section>
-          <p className="text-pretty">
-            Enter your content in the next area, the results will be shown below
-          </p>
+          <p className="text-pretty">{text[18]}</p>
           <div className="flex w-full items-center justify-center">
             <button
               className="my-1 rounded-full border border-amber-600 bg-amber-200 px-4 py-1 hover:bg-red-400 hover:text-slate-50"
               id={idBtnOpen}
             >
-              Delete Content
+              {text[19]}
             </button>
           </div>
         </section>
@@ -137,14 +134,14 @@ export default function Markdown() {
           {size === "min" ? (
             <>
               <p className="absolute -left-14 bottom-3 hidden rounded-md bg-black/60 px-1 text-[10px] text-white group-hover/expand:block">
-                Expand
+                {text[20]}
               </p>
               <Expand styles={"text-white"} />
             </>
           ) : (
             <>
               <p className="absolute -left-14 bottom-3 hidden rounded-md bg-black/60 px-1 text-[10px] text-white group-hover/expand:block">
-                Minimize
+                {text[21]}
               </p>
               <Minimize styles={"text-white"} />
             </>
