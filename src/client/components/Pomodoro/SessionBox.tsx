@@ -1,4 +1,5 @@
 import { CLOCKMODES, useClockStore } from "../../store/clock";
+import { useSettingStore } from "../../store/settingPortfolio";
 import MiniButton from "../SystemDesign/MiniButton";
 import NumericInput from "./InputTime";
 
@@ -36,6 +37,7 @@ export default function SessionBox({
   const valueInput = mode === CLOCKMODES.SESSION ? valueSession : valueBreak;
   const setValue =
     mode === CLOCKMODES.SESSION ? setValueSession : setValueBreak;
+  const { i18n } = useSettingStore();
 
   // A function that is responsible to increase the break period when user interact with the clock
   const handleIncrementTimer = () => {
@@ -50,7 +52,11 @@ export default function SessionBox({
   return (
     <section className="flex h-48 w-2/3 flex-col items-center justify-center gap-2 py-2 md:h-full">
       <h4 className="mx-1 text-center font-elegant text-3xl md:text-4xl">
-        {mode} Length
+        {i18n === "English"
+          ? `${mode} Length`
+          : mode === "Session"
+          ? "Trabajo"
+          : "Descanso"}
       </h4>
 
       <div className="relative h-1/3 w-full md:h-1/6">
@@ -67,7 +73,7 @@ export default function SessionBox({
                 required
                 styles="h-6 w-16 border-slate-50/70 bg-gray-600 font-digitalDisplay text-sm text-white shadow-md shadow-black/50"
               />
-              minutes
+              {i18n === "English" ? "minutes" : "minutos"}
             </label>
             <p className="absolute top-9 rounded-sm bg-red-200/40 px-2 text-center font-digitalDisplay text-xs text-red-800 md:top-10">
               {error}
@@ -77,7 +83,7 @@ export default function SessionBox({
               disabled={isRunning || error !== null}
               onClick={setEditing}
             >
-              Set
+              {i18n === "English" ? "Set" : "Poner"}
             </MiniButton>
           </div>
         ) : (
@@ -86,7 +92,7 @@ export default function SessionBox({
               <span className="text-lg text-red-500">
                 <b>{currentTime}</b>
               </span>{" "}
-              Minute
+              Minut{i18n === "English" ? "e" : "o"}
               {mode === CLOCKMODES.BREAKTIME ? pluralBreak : pluralSession}
             </p>
             <div className="relative flex w-full justify-center gap-2 px-4">
@@ -101,12 +107,11 @@ export default function SessionBox({
                 disabled={isRunning}
                 onClick={setEditing}
               >
-                Set Manually
+                {i18n === "English" ? "Set Manually" : "Poner Manual"}
               </MiniButton>
             </div>
           </>
         )}
-        {/*  */}
       </div>
     </section>
   );

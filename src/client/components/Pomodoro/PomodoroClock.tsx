@@ -6,6 +6,7 @@ import OpenInfo from "../SystemDesign/OpenInfo";
 import FooterSession from "./FooterSession";
 import SessionBox from "./SessionBox";
 import Timer from "./Timer";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function PomodoroClock() {
   const {
@@ -17,7 +18,7 @@ export default function PomodoroClock() {
     setEditingSession,
   } = useClockStore();
   const { clockReset, pausePlayClock, clockRunning } = useTimerClock();
-
+  const text = useLanguage({ project: "PomClock" });
   const mainBG =
     clockMode === CLOCKMODES.SESSION
       ? "bg-[url('/office.webp')]"
@@ -36,7 +37,7 @@ export default function PomodoroClock() {
       >
         <section className="relative flex w-fit justify-center gap-2">
           <h1 className="mb-6 rounded-2xl bg-slate-50/80 px-4 pb-2 pt-1 font-digitalDisplay text-4xl text-black/85 shadow-lg shadow-black md:text-5xl">
-            Pomodoro Clock
+            {text[0]}
           </h1>
           <OpenInfo
             idClose="CloseDialogInfoPomodoroClock"
@@ -44,27 +45,31 @@ export default function PomodoroClock() {
             idOpen="OpenDialogInfoPomodoroClock"
             posScreen="top-4 -right-12"
           >
-            <h3 className="text-lg text-lime-600">What is a Pomodoro Clock?</h3>
+            <h3 className="text-lg text-lime-600">{text[1]}</h3>
             <p className="max-w-[600px] self-start text-pretty">
-              More than a clock, it&apos;s a technique!
+              {text[2]}
               <br />
-              <em>Developed by Francesco Cirillo</em> in the late 1980s, the
-              Pomodoro technique is a <em>time management method</em> where it
-              uses a kitchen timer to break{" "}
-              <span className="text-red-600">work</span> into intervals,
-              typically <span className="text-red-600">25 minutes</span> in
-              length, separated by{" "}
-              <span className="text-blue-600">short breaks</span>, typically{" "}
-              <span className="text-blue-600">5–10 minutes</span> in length.
+              <em>{text[3]}</em>
+              {text[4]}
+              <em>{text[5]}</em>
+              {text[6]}
+              <span className="text-red-600">{text[7]}</span>
+              {text[8]}
+              <span className="text-red-600">{text[9]}</span>
+              {text[10]}
+              <span className="text-blue-600">{text[11]}</span>
+              {text[12]}
+              <span className="text-blue-600">{text[13]}</span>
+              {text[14]}
             </p>
             <p className="max-w-[600px] self-start text-pretty">
-              In the case of this clock, you can put{" "}
-              <span className="text-red-600">work</span> and{" "}
-              <span className="text-blue-600">short breaks</span> sessions of 60
-              minutes at maximum and 1 minute at minimum. <br />
-              An alarm will be set off when a session ends, to indicate you that
-              you can start work again, or take a small break from your
-              activity!
+              {text[15]}
+              <span className="text-red-600">{text[7]}</span>
+              {text[16]}
+              <span className="text-blue-600">{text[11]}</span>
+              {text[17]}
+              <br />
+              {text[18]}
             </p>
           </OpenInfo>
         </section>
@@ -90,8 +95,7 @@ export default function PomodoroClock() {
           />
           {clockRunning && (
             <p className="absolute bottom-0 font-digitalDisplay text-sm text-amber-800 md:bottom-4">
-              You need to pause the clock if you want to modify the session
-              length.{" "}
+              {text[19]}
             </p>
           )}
         </div>

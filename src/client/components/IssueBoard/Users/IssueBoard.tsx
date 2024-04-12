@@ -11,6 +11,7 @@ import SinglePublicIssue from "./SinglePublicIssue";
 import FilterOptions from "../../Icons/FilterOptions";
 import { useCloseNavButton } from "../../SystemDesign/CloseNavButton";
 import SimpleNavMenu from "../../Menu/SimpleNavMenu";
+import { useLanguage } from "../../../hooks/useLanguage";
 
 export default function IssueBoard() {
   const { data, error, addIssue, searchOptions, getNewSearch, addUserIssue } =
@@ -20,6 +21,7 @@ export default function IssueBoard() {
   const [localError, setLocalError] = useState<null | string>(null);
   const [action, setAction] = useState<null | string>(null);
   const idOpen = "idOpenDialogCreateIssue"; // Auxiliar to give an ID to the button that open the dialog to create an issue
+  const text = useLanguage({ project: "SugAndIssues" });
 
   // Use effect to change the title of the page
   useEffect(() => {
@@ -35,20 +37,12 @@ export default function IssueBoard() {
       {localError !== null && <ErrorMessage>{localError}</ErrorMessage>}
       {action !== null && <ActionMessage>{action}</ActionMessage>}
       <h1 className="text-center font-sketch text-3xl first-letter:text-4xl first-letter:text-cyan-300">
-        Corner of Issues and Suggestions
+        {text[0]}
       </h1>
-      <p className="text-balance text-sm text-lime-200">
-        This is a place where you can send me your recommendations or complaints
-        about my portfolio! <br />
-        Something in the visual interface bothers you? Send your comment. <br />
-        There is a bug or an error that you found while using my portfolio? Let
-        me know and I&apos;ll try to fix it as quickly as possible. <br />
-        Do you have an idea that you think will be great to add? Post it here.{" "}
-        <br />
-        Do not doubt to send your issue or suggestion, it&apos;s very likely I
-        will read it. And thanks for reading and using this app if you do!
+      <p className="whitespace-pre-wrap text-balance text-sm text-lime-200">
+        {text[1]}
       </p>
-      <SimpleNavMenu positionNav="top-0 right-4" />
+      <SimpleNavMenu positionNav="top-0 right-4 absolute" />
       <IssueFormDialog
         addIssue={addIssue}
         addUserIssue={addUserIssue}
@@ -65,7 +59,7 @@ export default function IssueBoard() {
           id={idOpen}
         >
           <AddMessage />
-          Add New Issue or Suggestion
+          {text[2]}
         </Button>
         <Button
           color="bg-slate-300 text-black border-slate-50 hover:bg-cyan-600 hover:border-slate-700"
@@ -75,7 +69,7 @@ export default function IssueBoard() {
           onClick={handleOpacity}
         >
           <FilterOptions />
-          Filter
+          {text[3]}
         </Button>
       </div>
       <FilterIssues
@@ -114,8 +108,7 @@ export default function IssueBoard() {
                 })
               ) : (
                 <h2 className="text-center font-sketch text-xl underline first-letter:text-2xl first-letter:text-red-200">
-                  There is no issue or suggestion that coincide with your
-                  search!
+                  {text[4]}
                 </h2>
               )}
             </ul>
@@ -127,7 +120,7 @@ export default function IssueBoard() {
         )
       ) : (
         <p className="text-center font-sketch text-xl first-letter:text-2xl">
-          Loading
+          {text[5]}
         </p>
       )}
     </main>

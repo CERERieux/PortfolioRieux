@@ -8,6 +8,7 @@ import ErrorMessage from "../../SystemDesign/ErrorMessage";
 import GridSudoku from "./GridSudoku";
 import AsideSudoku from "./AsideSudoku";
 import OpenInfo from "../../SystemDesign/OpenInfo";
+import { useLanguage } from "../../../hooks/useLanguage";
 
 export default function Sudoku() {
   const {
@@ -19,6 +20,7 @@ export default function Sudoku() {
     sudokuString,
   } = useSudokuStore(); // Get the info needed from the store
   const [newSudoku, setNewSudoku] = useState(true); // Auxiliar flag to get new sudoku when needed
+  const text = useLanguage({ project: "Sudoku" });
 
   // Use effect to change the title of the page
   useEffect(() => {
@@ -69,26 +71,17 @@ export default function Sudoku() {
             idOpen="OpenDialogInfoPomodoroClock"
             posScreen="top-1.5 -right-12"
           >
-            <h3 className="text-lg text-red-600">Sudoku Rules</h3>
+            <h3 className="text-lg text-red-600">{text[0]}</h3>
             <ul className="w-full *:pl-2">
-              <li>- You only can enter 1 number per square.</li>
-              <li>- Numbers only can go from 1 to 9.</li>
-              <li>
-                - Do not repeat the same number in a column, a row and an area
-              </li>
-              <li className="ml-2 text-sm">
-                (Areas are squares of 3x3, in this case, each area have an
-                unique color to easily spot them. )
-              </li>
+              <li>{text[1]}</li>
+              <li>{text[2]}</li>
+              <li>{text[3]}</li>
+              <li className="ml-2 text-sm">{text[4]}</li>
             </ul>
-            <p className="max-w-[600px] self-start text-pretty">
-              You win if you can fill the 9x9 grid with 0 errors! <br />
-              There are 7 different puzzles and 1 is picked randomly. You can
-              use the options on the left to interact with the game. <br />
+            <p className="max-w-[600px] self-start whitespace-pre-wrap text-pretty">
+              {text[5]}
             </p>
-            <p className="max-w-[600px] text-pretty text-lime-600">
-              Good luck and have fun!
-            </p>
+            <p className="max-w-[600px] text-pretty text-lime-600">{text[6]}</p>
           </OpenInfo>
         </section>
       </header>

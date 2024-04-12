@@ -9,6 +9,8 @@ import DateInput from "../../SystemDesign/DateInput";
 import debounce from "just-debounce-it";
 import Button from "../../SystemDesign/Button";
 import { CloseNavButton } from "../../SystemDesign/CloseNavButton";
+import { useLanguage } from "../../../hooks/useLanguage";
+import { useSettingStore } from "../../../store/settingPortfolio";
 
 interface FilterIssuesProps {
   opacity: string;
@@ -53,6 +55,9 @@ export default function FilterIssues({
   const [createdBy, setCreatedBy] = useState("");
   const [createdOn, setCreatedOn] = useState("");
   const [updatedOn, setUpdatedOn] = useState("");
+  const textFiller = useLanguage({ project: "SugAndIssues" });
+  const { i18n } = useSettingStore();
+  const ml = i18n === "English" ? "-ml-[4.5rem]" : "-ml-3";
   // Auxiliar function to debounce user filter, each 300ms after user stop will call the filter
   const filterInfo = useCallback(
     debounce(
@@ -139,7 +144,7 @@ export default function FilterIssues({
       className={`absolute right-0 top-0 h-full w-full bg-cyan-700/70 backdrop-blur-sm md:w-1/2 lg:w-1/3 ${opacity} flex flex-col items-center justify-center gap-4 shadow-xl shadow-black/40 transition-all duration-500 ease-in-out`}
     >
       <TitleForm firstColor="first-letter:text-lime-300 font-sketch">
-        Filter
+        {textFiller[3]}
       </TitleForm>
       <div className="flex h-3/4 w-full flex-col items-center justify-around gap-4 [&_span]:w-1/4 [&_span]:text-right [&_span]:md:w-1/5">
         <LabelForm>
@@ -154,7 +159,7 @@ export default function FilterIssues({
           />
         </LabelForm>
         <LabelForm>
-          <TitleInput>Project</TitleInput>
+          <TitleInput>{textFiller[6]}</TitleInput>
           <Input
             name="FilterPublicIssuesByProject"
             type="text"
@@ -165,7 +170,7 @@ export default function FilterIssues({
           />
         </LabelForm>
         <LabelForm>
-          <TitleInput>Title</TitleInput>
+          <TitleInput>{textFiller[7]}</TitleInput>
           <Input
             name="FilterPublicIssuesByTitle"
             type="text"
@@ -176,7 +181,7 @@ export default function FilterIssues({
           />
         </LabelForm>
         <LabelForm>
-          <TitleInput>Description</TitleInput>
+          <TitleInput>{textFiller[8]}</TitleInput>
           <Input
             name="FilterPublicIssuesByDescription"
             type="text"
@@ -187,7 +192,7 @@ export default function FilterIssues({
           />
         </LabelForm>
         <LabelForm>
-          <TitleInput>Created By</TitleInput>
+          <TitleInput>{textFiller[9]}</TitleInput>
           <Input
             name="FilterPublicIssuesByCreator"
             type="text"
@@ -197,8 +202,8 @@ export default function FilterIssues({
             extraStyles="border-b-slate-200 focus:border-b-cyan-200"
           />
         </LabelForm>
-        <LabelForm style="items-center justify-center -ml-[4.5rem]">
-          <TitleInput>Status</TitleInput>
+        <LabelForm style={`items-center justify-center ${ml}`}>
+          <TitleInput>{textFiller[10]}</TitleInput>
           <SelectInput
             name="FilterPublicIssuesByStatus"
             value={status}
@@ -206,16 +211,16 @@ export default function FilterIssues({
             lineStyle
             extraStyles="border-b-slate-200 focus:border-b-cyan-200 *:bg-slate-700"
           >
-            <option value="Any">Any</option>
-            <option value="Pending">Pending</option>
-            <option value="Read">Read</option>
-            <option value="Trying to fix">Trying to fix</option>
-            <option value="Completed">Completed</option>
-            <option value="Ignored">Ignored</option>
+            <option value="Any">{textFiller[11]}</option>
+            <option value="Pending">{textFiller[12]}</option>
+            <option value="Read">{textFiller[13]}</option>
+            <option value="Trying to fix">{textFiller[14]}</option>
+            <option value="Completed">{textFiller[15]}</option>
+            <option value="Ignored">{textFiller[16]}</option>
           </SelectInput>
         </LabelForm>
         <LabelForm style="items-center justify-center -ml-16">
-          <TitleInput>Created On</TitleInput>
+          <TitleInput>{textFiller[17]}</TitleInput>
           <DateInput
             name="FilterPublicIssuesByCreationDate"
             value={createdOn}
@@ -227,7 +232,7 @@ export default function FilterIssues({
           />
         </LabelForm>
         <LabelForm style="items-center justify-center -ml-16">
-          <TitleInput>Updated On</TitleInput>
+          <TitleInput>{textFiller[18]}</TitleInput>
           <DateInput
             name="FilterPublicIssuesByUpdateDate"
             value={updatedOn}
@@ -245,7 +250,7 @@ export default function FilterIssues({
           extraStyles="active:shadow-none text-black shadow-md shadow-black/20"
           onClick={resetFilter}
         >
-          Reset Filter
+          {textFiller[19]}
         </Button>
       </div>
     </section>

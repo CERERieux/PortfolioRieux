@@ -1,4 +1,6 @@
 import type { IIssueTracker } from "../../../../server/types/advanced";
+import { useLanguage } from "../../../hooks/useLanguage";
+import { useSettingStore } from "../../../store/settingPortfolio";
 
 interface SingleIssueProps {
   issue: IIssueTracker;
@@ -15,12 +17,25 @@ const COLOR_STATUS = {
   Ignored: "text-slate-400",
 };
 
+function getStatusSpanish(text: string[], status: string) {
+  if (status === "Pending") return text[12];
+  else if (status === "Read") return text[13];
+  else if (status === "Trying to fix") return text[14];
+  else if (status === "Completed") return text[15];
+  else if (status === "Ignored") return text[16];
+}
+
 export default function SinglePublicIssue({
   created,
   id,
   issue,
   updated,
 }: SingleIssueProps) {
+  const text = useLanguage({ project: "SugAndIssues" });
+  const { i18n } = useSettingStore();
+  const atWord = i18n === "English" ? "at" : "el";
+  const status =
+    i18n === "Español" ? getStatusSpanish(text, issue.status) : issue.status;
   // Show the article that is inside of the list item with the issue info
   return (
     <article className="flex w-full flex-col justify-center gap-1 px-4">
@@ -28,22 +43,22 @@ export default function SinglePublicIssue({
         {issue.project}
       </h2>
       <p className="text-lg first-letter:text-lime-300">
-        Status:{" "}
+        {text[10]}:{" "}
         <span
           className={`text-base ${
             COLOR_STATUS[issue.status as keyof typeof COLOR_STATUS]
           }`}
         >
-          {issue.status}
+          {status}
         </span>
       </p>
       <h3 className="text-xl first-letter:text-lime-300">
-        Issue: <span className="text-base underline">{issue.title}</span>
+        {text[20]}: <span className="text-base underline">{issue.title}</span>
       </h3>
       <p className="ml-4 text-sm">{issue.text}</p>
       <p className="left-16 text-end text-xs first-letter:text-lime-300">
-        Created by {issue.created_by}, at {created}{" "}
-        {issue.created_on !== issue.updated_on && `| Updated on: ${updated}`}
+        {text[9]} {issue.created_by}, {atWord} {created}{" "}
+        {issue.created_on !== issue.updated_on && `${text[18]} ${updated}`}
       </p>
       <p className="text-end text-xs first-letter:text-lime-300">ID: {id}</p>
     </article>

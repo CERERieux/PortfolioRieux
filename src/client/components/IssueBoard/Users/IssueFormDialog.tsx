@@ -11,6 +11,7 @@ import type { UseMutationResult } from "@tanstack/react-query";
 import type { IIssueTracker } from "../../../../server/types/advanced";
 import type { CreateIssueHook, CreateIssueService } from "../../../types";
 import { isAxiosError } from "axios";
+import { useLanguage } from "../../../hooks/useLanguage";
 
 interface IssueFormDialogProps {
   setAction: React.Dispatch<React.SetStateAction<string | null>>;
@@ -48,6 +49,7 @@ export default function IssueFormDialog({
   // 2 id auxiliar for the dialog, id for the cancel button and the dialog itself
   const idClose = "idCloseDialogCreateIssue";
   const idDialog = "idDialogCreatePublicIssue";
+  const textFiller = useLanguage({ project: "SugAndIssuesMisc" });
   // Effect that activates when an issue is created
   useEffect(() => {
     // If the issue created was completed and user isn't creating a new one then
@@ -64,9 +66,7 @@ export default function IssueFormDialog({
         setText("");
         setLocalError(null); // Remove the local error if there is one
         // And show that the issue was created, for 3s
-        setAction(
-          "Your issue/suggestion was sent successfully! I'll try to read it, later!",
-        );
+        setAction(textFiller[0]);
         setTimeout(() => {
           setAction(null);
         }, 3000);
@@ -116,7 +116,7 @@ export default function IssueFormDialog({
       addUserIssue({ project, text, title }); // And create the issue
     } else if (!closeByBtn) {
       // If it wasn't closed by the button but any field is missing, then show an error for 3s
-      setLocalError("Please don't leave required fields empty.");
+      setLocalError(textFiller[1]);
       setTimeout(() => {
         setLocalError(null);
       }, 3000);
@@ -137,7 +137,7 @@ export default function IssueFormDialog({
     >
       <article className="relative flex h-full w-full flex-col gap-4">
         <TitleForm firstColor="first-letter:text-lime-500">
-          Send me your suggestion or issue here!
+          {textFiller[2]}
         </TitleForm>
         <Form submitFn={handleNewIssue}>
           <LabelForm>
@@ -145,7 +145,7 @@ export default function IssueFormDialog({
               firstColor="first-letter:text-lime-500 text-sm"
               required
             >
-              Project
+              {textFiller[3]}
             </TitleInput>
             <Input
               name="PublicIssueProjectName"
@@ -162,7 +162,7 @@ export default function IssueFormDialog({
               firstColor="first-letter:text-lime-500 text-sm"
               required
             >
-              Title
+              {textFiller[4]}
             </TitleInput>
             <Input
               name="PublicIssueTitleName"
@@ -179,7 +179,7 @@ export default function IssueFormDialog({
               firstColor="absolute -top-8 left-0 first-letter:text-lime-500 text-sm"
               required
             >
-              Description{" "}
+              {textFiller[5]}{" "}
             </TitleInput>
             <TextArea
               cols={50}
@@ -193,7 +193,7 @@ export default function IssueFormDialog({
               required
               extraStyles="text-sm bg-slate-500 text-slate-100"
               newCycle={addIssue.isPending}
-              placeHolder="Description of your issue or suggestion here!"
+              placeHolder={textFiller[10]}
             />
           </LabelForm>
           <div className="mt-2 flex items-center justify-center gap-2">
@@ -202,7 +202,7 @@ export default function IssueFormDialog({
               xSize="w-32"
               extraStyles="text-black"
             >
-              Send it!
+              {textFiller[6]}
             </Button>
             <Button
               color="bg-amber-300 border-amber-500 hover:bg-red-600 hover:border-red-700"
@@ -211,15 +211,13 @@ export default function IssueFormDialog({
               xSize="w-32"
               extraStyles="text-black"
             >
-              Cancel
+              {textFiller[7]}
             </Button>
           </div>
         </Form>
-        <p className="text-pretty text-xs italic">
-          <span className="text-blue-500">Note: </span>
-          Issues sent only can be deleted by me. And only I can update its
-          status. <br />
-          Have in mind this when you send your issue or suggestion!
+        <p className="whitespace-pre-wrap text-pretty text-xs italic">
+          <span className="text-blue-500">{textFiller[8]} </span>
+          {textFiller[9]}
         </p>
       </article>
     </Dialog>

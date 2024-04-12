@@ -23,25 +23,34 @@ interface SudokuState {
 }
 
 export const useSudokuStore = create<SudokuState>((set, get) => ({
-  answer: "", // Auxiliar to save the answer of the current sudoku
-  action: null, // Auxliar to display messages of success
-  conflicts: null, // Auxiliar to display conflicts in case of validate a coordinate
-  currentSudoku: Math.floor(Math.random() * 7), // Auxiliar to get a sudoku from backend
-  isSolveAuto: false, // Auxiliar to see if user clicked on the button that solves the sudoku
-  localError: null, // Auxliar to display messages of errors
-  sudokuString: "", // Auxiliar to save the sudoku as string and be able to send it to the backend
-  sudokuBackup: "", // Auxiliar to reset the sudoku to the initial state
+  answer: "", // Auxiliary to save the answer of the current sudoku
+  action: null, // Auxiliary to display messages of success
+  conflicts: null, // Auxiliary to display conflicts in case of validate a coordinate
+  currentSudoku: Math.floor(Math.random() * 7), // Auxiliary to get a sudoku from backend
+  isSolveAuto: false, // Auxiliary to see if user clicked on the button that solves the sudoku
+  localError: null, // Auxiliary to display messages of errors
+  sudokuString: "", // Auxiliary to save the sudoku as string and be able to send it to the backend
+  sudokuBackup: "", // Auxiliary to reset the sudoku to the initial state
   validCoord: null, // Boolean to display if user value is valid at 1 coordinate
   validSudoku: false, // Boolean to display if sudoku is valid or not, by default is not because it's incomplete
 
   /** Function to see if user filled the sudoku correctly or not */
   checkSudoku: () => {
     const { answer, sudokuString, isSolveAuto } = get(); // Get the user answer and the correct answer
+    const lang = localStorage.getItem("Language");
+    const textAction =
+      lang === "Español"
+        ? "¡Felicidades, resolviste este Sudoku!"
+        : "Congratulations, you solved this sudoku!";
+    const textError =
+      lang === "Español"
+        ? "Parece que hay un error en tu respuesta. ¡Intenta de nuevo!"
+        : "Looks like there is an error in your answer! Try again.";
     // If those are the same, show a message to display it
     if (answer === sudokuString) {
       if (!isSolveAuto)
         set({
-          action: "Congratulations, you solved this sudoku!",
+          action: textAction,
           validSudoku: true,
           localError: null,
         });
@@ -49,7 +58,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
       // If not are the same, then show an "error" to let know user there is something wrong
       set({
         action: null,
-        localError: "Looks like there is an error in your answer! Try again.",
+        localError: textError,
       });
       // For 3s
       setTimeout(() => {
@@ -101,6 +110,11 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
   resolveSudoku: async () => {
     const { sudokuBackup } = get(); // Get the sudoku
     const solution = await SudokuService.solveSudoku(sudokuBackup); // And solve it
+    const lang = localStorage.getItem("Language");
+    const text =
+      lang === "Español"
+        ? "¡La solución de este Sudoku es esta!"
+        : "The solution to the current Sudoku is this!";
     // If there is an error, display it for 3 seconds
     if ("error" in solution) {
       set({ localError: solution.error, action: null });
@@ -116,7 +130,7 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
         validCoord: null,
         validSudoku: true,
         sudokuString: solution.solution,
-        action: "The solution to the current sudoku is this!",
+        action: text,
       });
       setTimeout(() => {
         set({ action: null });
@@ -166,9 +180,11 @@ export const useSudokuStore = create<SudokuState>((set, get) => ({
   /** Function to return the sudoku to its initial state */
   restartSudoku: () => {
     const { sudokuBackup } = get();
+    const lang = localStorage.getItem("Language");
+    const text = lang === "Español" ? "¡Sudoku reiniciado!" : "Sudoku reset!";
     set({
       sudokuString: sudokuBackup,
-      action: "Sudoku reseted!",
+      action: text,
     });
     setTimeout(() => {
       set({ action: null });

@@ -1,3 +1,4 @@
+import { useLanguage } from "../../../hooks/useLanguage";
 import { useSudokuStore } from "../../../store/sudoku";
 import Button from "../../SystemDesign/Button";
 import Dialog from "../../SystemDesign/Dialog";
@@ -16,6 +17,7 @@ export default function DialogSudoku({
   const idCloseSolution = "CloseDialogGiveSolutionSudoku";
   const idDialogReset = "DialogQuestionResetBaseSudoku";
   const idCloseReset = "CloseDialogResetBaseSudoku";
+  const text = useLanguage({ project: "Sudoku" });
 
   // Auxliar to give the solution of the sudoku to the user
   const giveSolution = () => {
@@ -44,21 +46,21 @@ export default function DialogSudoku({
         idOpen={idOpenSolution}
       >
         <section className="flex h-full w-full flex-col items-center justify-center gap-4">
-          <h2>Are you sure do you want the answer of this Sudoku?</h2>
+          <h2>{text[22]}</h2>
           <div className="flex w-full justify-center gap-4">
             <Button
               color="bg-yellow-200 border-yellow-500 hover:bg-yellow-600 hover:border-yellow-300 shadow-md shadow-yellow-700 hover:shadow-sm active:bg-slate-600 active:border-slate-50 active:shadow-none"
               xSize="w-40"
               id={idCloseSolution}
             >
-              Cancel
+              {text[23]}
             </Button>
             <Button
               color="bg-sky-200 border-sky-500 hover:bg-sky-600 hover:border-sky-300 shadow-md shadow-sky-700 hover:shadow-sm active:bg-slate-600 active:border-slate-50 active:shadow-none"
               xSize="w-40"
               onClick={giveSolution}
             >
-              Solve
+              {text[24]}
             </Button>
           </div>
         </section>
@@ -70,21 +72,21 @@ export default function DialogSudoku({
         idOpen={idOpenReset}
       >
         <section className="flex h-full w-full flex-col items-center justify-center gap-4">
-          <h2>Are you sure do you want to reset this Sudoku?</h2>
+          <h2>{text[25]}</h2>
           <div className="flex w-full justify-center gap-4">
             <Button
               color="bg-yellow-200 border-yellow-500 hover:bg-yellow-600 hover:border-yellow-300 shadow-md shadow-yellow-700 hover:shadow-sm active:bg-slate-600 active:border-slate-50 active:shadow-none"
               xSize="w-40"
               id={idCloseReset}
             >
-              Cancel
+              {text[23]}
             </Button>
             <Button
               color="bg-red-200 border-red-500 hover:bg-red-600 hover:border-red-300 shadow-md shadow-red-700 hover:shadow-sm active:bg-slate-600 active:border-slate-50 active:shadow-none"
               xSize="w-40"
               onClick={resetSudoku}
             >
-              Reset
+              {text[26]}
             </Button>
           </div>
         </section>

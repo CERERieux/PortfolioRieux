@@ -1,3 +1,4 @@
+import { useSettingStore } from "../../store/settingPortfolio";
 import InfoIcon from "../Icons/InfoIcon";
 import ActionButton from "./ActionButton";
 import Button from "./Button";
@@ -18,6 +19,9 @@ export default function OpenInfo({
   idOpen,
   posScreen = "top-1/3 -right-12",
 }: OpenInfoProps) {
+  const { i18n } = useSettingStore();
+  const closeWord = i18n === "English" ? "Close" : "Cerrar";
+  const moreInfo = i18n === "English" ? "More Info" : "Más  Info";
   return (
     <>
       <ActionButton
@@ -25,7 +29,7 @@ export default function OpenInfo({
         hoverColor="hover:bg-blue-400 hover:shadow-blue-400/30 hover:text-white"
         groupName={["group/delete", "group-hover/delete:block"]}
         position={posScreen}
-        tooltipText="More Info"
+        tooltipText={moreInfo}
         tooltipPos="-left-4 -bottom-5 -right-4"
         id={idOpen}
       >
@@ -44,7 +48,7 @@ export default function OpenInfo({
             xSize="w-40"
             id={idClose}
           >
-            Close
+            {closeWord}
           </Button>
         </article>
       </Dialog>

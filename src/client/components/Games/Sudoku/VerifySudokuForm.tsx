@@ -7,10 +7,23 @@ import TitleForm from "../../SystemDesign/TitleForm";
 import LabelForm from "../../SystemDesign/LabelForm";
 import Input from "../../SystemDesign/Input";
 import { CloseNavButton } from "../../SystemDesign/CloseNavButton";
+import { useLanguage } from "../../../hooks/useLanguage";
+import { useSettingStore } from "../../../store/settingPortfolio";
 
 interface VerifySudokuFormProps {
   handleOpacity: () => void;
   opacity: string;
+}
+
+function getSpanish(conflicts: string[] | null) {
+  if (conflicts === null) return conflicts;
+  const spanishConflicts = conflicts.map(conflict => {
+    if (conflict === "row") return "fila";
+    if (conflict === "column") return "columna";
+    if (conflict === "region") return "región";
+    return "";
+  });
+  return spanishConflicts;
 }
 
 export default function VerifySudokuForm({
@@ -22,20 +35,20 @@ export default function VerifySudokuForm({
   const [coord, setCoord] = useState(""); // State to save the coordinate
   const [numberVerify, setNumberVerify] = useState(""); // State to save the value to verify
   const [errorForm, setErrorForm] = useState<string | null>(null); // State to display an error when form is filled
+  const text = useLanguage({ project: "Sudoku" });
+  const { i18n } = useSettingStore();
+  const currentConflict =
+    i18n === "Español" ? getSpanish(conflicts) : conflicts;
   // Auxiliar function that handle the submit of the form
   const handleVerify = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent to submit it
     const newCoord = coord.toUpperCase(); // Get the coordinate with the format we want
     // If the input of user don't fullfil the patter of a coordinate, show an error
     if (!/^[A-I][1-9]$/.test(newCoord)) {
-      setErrorForm(
-        "Please ensure that the coordinate is a valid one. Example: A1, B3, I9, etc.",
-      );
+      setErrorForm(text[11]);
     } else if (!/^[1-9]$/.test(numberVerify)) {
       // Same with the value
-      setErrorForm(
-        "Please, only put valid values in the number field. Example: 1,4,5,9.",
-      );
+      setErrorForm(text[12]);
     } else {
       // If both values are good, verify the input and set the local error to null
       verifyInput(numberVerify, newCoord as "^[A-I][0-9]$");
@@ -58,16 +71,14 @@ export default function VerifySudokuForm({
       <div className="h-60 w-full">
         <Form submitFn={handleVerify}>
           <TitleForm firstColor="first-letter:text-blue-300">
-            Verify a Coordinate
+            {text[13]}
           </TitleForm>
-          <p className="w-fit text-balance px-6 text-center text-sm italic text-blue-200">
-            This only verify if the input you want to do is valid in the current
-            Sudoku! <br />
-            It doesn&#39;t reveal if it&apos;s actually correct or not.
+          <p className="w-fit whitespace-pre-wrap text-balance px-6 text-center text-sm italic text-blue-200">
+            {text[14]}
           </p>
           <LabelForm>
             <TitleInput firstColor="first-letter:text-blue-300" required>
-              Coordinate
+              {text[15]}
             </TitleInput>
             <Input
               lineStyle
@@ -82,7 +93,7 @@ export default function VerifySudokuForm({
           </LabelForm>
           <LabelForm>
             <TitleInput firstColor="first-letter:text-blue-300" required>
-              Number
+              {text[16]}
             </TitleInput>
             <Input
               lineStyle
@@ -100,7 +111,7 @@ export default function VerifySudokuForm({
             xSize="w-40"
             extraStyles="text-black"
           >
-            Verify Coordinate
+            {text[17]}
           </Button>
         </Form>
       </div>
@@ -114,23 +125,22 @@ export default function VerifySudokuForm({
       {validCoord != null && (
         <section className="absolute bottom-16 w-full px-6 text-black">
           <h4 className="first-letter:text-lg first-letter:text-blue-500">
-            Result:{" "}
+            {text[18]}:{" "}
             <span
               className={`${
                 validCoord ? "text-green-600" : "text-red-600"
               } text-sm italic underline`}
             >
-              {validCoord ? "It's a valid value" : "Invalid value"}
+              {validCoord ? text[19] : text[20]}
             </span>
           </h4>
-          {conflicts != null && (
+          {currentConflict != null && (
             <>
               <h5 className="text-sm first-letter:text-base first-letter:text-blue-500">
-                Your input conflict in the next area
-                {conflicts.length > 1 && "s"}:
+                {text[21]}:
               </h5>
               <ul className="pl-6 *:list-inside *:list-disc *:text-sm *:text-red-600">
-                {conflicts.map((conflict, i) => {
+                {currentConflict.map((conflict, i) => {
                   return <li key={i}>{conflict}</li>;
                 })}
               </ul>

@@ -3,6 +3,7 @@ import { useCloseNavButton } from "../../SystemDesign/CloseNavButton";
 import Button from "../../SystemDesign/Button";
 import VerifySudokuForm from "./VerifySudokuForm";
 import DialogSudoku from "./DialogSudoku";
+import { useLanguage } from "../../../hooks/useLanguage";
 
 interface AsideSudokuProps {
   setNewSudoku: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,6 +15,7 @@ export default function AsideSudoku({ setNewSudoku }: AsideSudokuProps) {
   // 2 IDs for the 2 dialogs we need to show depending on 2 actions
   const idOpenSolution = "OpenDialogGiveSolutionSudoku";
   const idOpenReset = "OpenDialogResetBaseSudoku";
+  const text = useLanguage({ project: "Sudoku" });
   // Auxiliar to restart the game
   const restartGame = () => {
     resetGame();
@@ -30,7 +32,7 @@ export default function AsideSudoku({ setNewSudoku }: AsideSudokuProps) {
         id={idOpenSolution}
         disabled={validSudoku}
       >
-        Solve
+        {text[7]}
       </Button>
       <Button
         color="bg-amber-200 border-amber-500 hover:bg-amber-600 hover:border-amber-300 shadow-md shadow-amber-700 hover:shadow-sm active:bg-slate-600 active:border-slate-50 active:shadow-none"
@@ -38,14 +40,14 @@ export default function AsideSudoku({ setNewSudoku }: AsideSudokuProps) {
         disabled={validSudoku || opacity.includes("opacity-100")}
         onClick={handleOpacity}
       >
-        Verify Coordinate
+        {text[8]}
       </Button>
       <Button
         color="bg-emerald-200 border-emerald-500 hover:bg-emerald-600 hover:border-emerald-300 shadow-md shadow-emerald-700 hover:shadow-sm active:bg-slate-600 active:border-slate-50 active:shadow-none"
         xSize="w-40"
         onClick={restartGame}
       >
-        New Sudoku
+        {text[9]}
       </Button>
       <Button
         color="bg-red-200 border-red-500 hover:bg-red-700 hover:border-red-300 shadow-md shadow-red-700 hover:shadow-sm active:bg-slate-600 active:border-slate-50 active:shadow-none"
@@ -53,7 +55,7 @@ export default function AsideSudoku({ setNewSudoku }: AsideSudokuProps) {
         id={idOpenReset}
         disabled={validSudoku}
       >
-        Reset
+        {text[10]}
       </Button>
     </aside>
   );
