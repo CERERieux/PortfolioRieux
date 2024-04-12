@@ -6,12 +6,14 @@ import Book from "../Icons/Book";
 import Button from "../SystemDesign/Button";
 import ArrowRight from "../Icons/ArrowRight";
 import RedirectButton from "../SystemDesign/RedirectButton";
+import { useLanguage } from "../../hooks/useLanguage";
 
 interface SubMenuProfileProps {
   setMenu: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function SubMenuProfile({ setMenu }: SubMenuProfileProps) {
+  const text = useLanguage({ project: "ProfileMenuTitles" });
   const handleMenu = () => {
     setMenu("MainMenu");
   };
@@ -21,35 +23,35 @@ export default function SubMenuProfile({ setMenu }: SubMenuProfileProps) {
         colorCover="hover:bg-purple-100 hover:border-purple-400"
         toRedirect="/my-profile"
       >
-        <SubMenu size="32" /> Profile Menu
+        <SubMenu size="32" /> {text[0]}
       </RedirectButton>
 
       <RedirectButton
         colorCover="hover:bg-lime-100 hover:border-lime-400"
         toRedirect="/my-profile/library"
       >
-        <Book size="32" /> Library
+        <Book size="32" /> {text[1]}
       </RedirectButton>
 
       <RedirectButton
         colorCover="hover:bg-sky-100 hover:border-sky-400"
         toRedirect="/my-profile/notes"
       >
-        <Note size="32" /> Notes
+        <Note size="32" /> {text[2]}
       </RedirectButton>
 
       <RedirectButton
         colorCover="hover:bg-yellow-100 hover:border-yellow-400"
         toRedirect="/my-profile/urls"
       >
-        <LinkUrl size="32" /> URLs
+        <LinkUrl size="32" /> {text[3]}
       </RedirectButton>
 
       <RedirectButton
         colorCover="hover:bg-orange-100 hover:border-orange-400"
         toRedirect="/my-profile/issues"
       >
-        <AddMessage size="32" /> Issues
+        <AddMessage size="32" /> {text[4]}
       </RedirectButton>
 
       <Button
@@ -58,7 +60,7 @@ export default function SubMenuProfile({ setMenu }: SubMenuProfileProps) {
         textHover={false}
         onClick={handleMenu}
       >
-        <ArrowRight styles="rotate-180" size="32" /> Back
+        <ArrowRight styles="rotate-180" size="32" /> {text[5]}
       </Button>
     </>
   );

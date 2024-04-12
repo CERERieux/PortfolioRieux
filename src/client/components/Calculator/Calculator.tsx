@@ -4,8 +4,10 @@ import { CalculatorButton } from "./CalculatorButton";
 import { calculatorInputLogic } from "./calculatorLogic";
 import SimpleNavMenu from "../Menu/SimpleNavMenu";
 import OpenInfo from "../SystemDesign/OpenInfo";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function Calculator() {
+  const text = useLanguage({ project: "Calculator" });
   const { display, log, power } = useCalculatorStore();
   const { handleOperationInput, disableBackButton } = calculatorInputLogic();
   const styleDisplay = power
@@ -115,42 +117,45 @@ export default function Calculator() {
       <main className="mx-auto flex max-w-screen-lg flex-col items-center">
         <section className="relative flex w-fit justify-center gap-2">
           <h2 className="pb-3 pt-6 font-logCalculator text-3xl text-slate-100">
-            Calculator
+            {text[0]}
           </h2>
           <OpenInfo
             idClose="CloseDialogInfoCalc"
             idDialog="DialogForInfoCalc"
             idOpen="OpenDialogInfoCalc"
           >
-            <h3 className="text-lg text-blue-600">
-              This calculator is a simple one, but you can control it with the
-              keyboard!
-            </h3>
-            <p className="self-start text-red-700">Controls:</p>
+            <h3 className="text-lg text-blue-600">{text[1]}</h3>
+            <p className="self-start text-red-700">{text[2]}</p>
             <ul className="h-40 w-full *:pl-2 *:text-sm">
               <li>
-                - Use <em className="text-red-600">Space</em> key to turn ON the
-                calculator.
+                {text[3]}
+                <em className="text-red-600">{text[4]}</em>
+                {text[5]}
               </li>
               <li>
-                - Use any <em className="text-red-600">Numerical Key</em> for
-                digits from 0 to 9 .
+                {text[6]}
+                <em className="text-red-600">{text[7]}</em>
+                {text[8]}
               </li>
               <li>
-                - Use <em className="text-red-600">Backspace</em> key to delete
-                your last input.
+                {text[3]}
+                <em className="text-red-600">{text[9]}</em>
+                {text[10]}
               </li>
               <li>
-                - Use <em className="text-red-600">Esc</em> key to reset the
-                display.
+                {text[3]}
+                <em className="text-red-600">{text[11]}</em>
+                {text[12]}
               </li>
               <li>
-                - Use <em className="text-red-600">Symbol Keys</em> for
-                operations (., +, -, *, /).
+                {text[3]}
+                <em className="text-red-600">{text[13]}</em>
+                {text[14]}
               </li>
               <li>
-                - Use <em className="text-red-600">Enter</em> key to get the
-                result of your operation.
+                {text[3]}
+                <em className="text-red-600">{text[15]}</em>
+                {text[16]}
               </li>
             </ul>
           </OpenInfo>
@@ -158,9 +163,7 @@ export default function Calculator() {
         <div className="mt-6 flex min-w-full flex-col items-center justify-between gap-12 md:flex-row md:px-7">
           <div className="grid w-[400px] grid-cols-4 gap-3 rounded-xl border-4 border-slate-800 bg-slate-700 px-5 pb-8 pt-6 shadow-2xl md:max-w-md">
             <div className={`${styleDisplay} transition-colors`}>
-              <p className="">
-                {power ? display : "Turn ON the calculator to use"}
-              </p>
+              <p className="">{power ? display : text[17]}</p>
             </div>
             <div className="col-span-4 mx-1 grid w-full grid-cols-4 gap-1">
               <section className="col-span-4 flex items-center justify-between gap-1 ">
@@ -274,7 +277,7 @@ export default function Calculator() {
             </div>
           </div>
           <section className="w-full max-w-md rounded-sm border border-slate-300 bg-slate-100 p-6 text-end transition-all md:basis-2/4 lg:basis-3/5">
-            <h3 className="text-left">Log:</h3>
+            <h3 className="text-left">{text[18]}</h3>
             <ul>
               {log.map((operation, i) => (
                 <li key={i}>{operation}</li>

@@ -16,7 +16,8 @@ type Projects =
   | "SugAndIssuesMisc"
   | "PomClock"
   | "Markdown"
-  | "Calculator";
+  | "Calculator"
+  | "Converter";
 interface UseLanguageProps {
   project: Projects;
 }
@@ -131,7 +132,17 @@ I decided to omit some exercises, like the anonymous board where anyone can post
       "Log In",
       "Log Out",
     ],
-    ProfileMenuTitles: [],
+    ProfileMenuTitles: [
+      "Profile Menu",
+      "Library",
+      "Notes",
+      "URLs",
+      "Issues",
+      "Back",
+      "Looks like this user hasn't put any book in their library.",
+      "Loading user library...",
+      "Loading user...",
+    ],
     Shortener: [
       "Shortener URL",
       "Welcome to my shortener of links!",
@@ -272,8 +283,70 @@ Have in mind this when you send your issue or suggestion!`,
       "Delete Content",
       "Expand",
       "Minimize",
+      `# Markdown Parser
+## A preview of what you can do with Markdown!
+
+You can put a link that send you to a Youtube video: [OMORI - Forest Frenzy](https://www.youtube.com/watch?v=r4XqG6nnvkY).
+(**Note:** This link will not open a new window...)  
+
+You can put a bit of code, look: \`let x = 9\`.
+
+\`\`\`
+// You can also do a multi-line code:
+function anotherExample(firstLine, lastLine) {
+    if (firstLine == '\`\`\`' && lastLine == '\`\`\`') {
+        return multiLineCode;
+    }
+}
+\`\`\`
+
+An unordered list item:
+- Flowers
+- Sugar
+  - Brown
+  - Refined
+  - Colored
+- Eggs
+
+An ordered list item:
+1. Please break the egg and separate the yolk.
+2. Mix with flour until you have a solid dough.
+
+A blockquote:
+>A person who never made a mistake never tried anything new 
+*-Albert Einstein*
+
+An image of mountains:
+![The Everest](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg/1024px-Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg)*A stunning view of a mountain.*`,
     ],
-    Calculator: [],
+    Calculator: [
+      "Calculator",
+      "This calculator is a simple one, but you can control it with the keyboard!",
+      "Controls:",
+      "- Use ",
+      "Space",
+      " key to turn ON the calculator.",
+      "- Use any ",
+      "Numerical Key",
+      " for digits from 0 to 9.",
+      "Backspace",
+      " key to delete your last input.",
+      "Esc",
+      " key to reset the display.",
+      "Symbol Keys",
+      " for operations (., +, -, *, /).",
+      "Enter",
+      " key to get the result of your operation.",
+      "Turn ON the calculator to use",
+      "Log:",
+    ],
+    Converter: [
+      "What do you want to convert to?",
+      "(If input is left empty, it will be taken as the base unit.)",
+      "Convert",
+      "Result:",
+      "Your result will be shown here!",
+    ],
   },
   Español: {
     Home: [
@@ -283,8 +356,10 @@ Have in mind this when you send your issue or suggestion!`,
       `Este proyecto te da un pequeño espacio donde puedes compartir un poco sobre ti a otra gente!
 
 Podría decir que es como una demostración para un sistema simple, donde los usuarios pueden compartir sus reseñas de libros (o cosas en general) que hayan leído. Cuando visitas un perfil, puedes ver las reseñas de los libros que el usuario ha compartido, y un poco sobre la persona (si esta ha compartido algo).
-Como usuario, además de tu librería, puedes tener notas personales, mirar los links cortos que has creado a través de mi Acortador de URL y revisar los problemas o sugerencias que has hecho, en un espacio personal.`,
-      "(Necesitarás crear una cuenta, pero solo necesitas un nombre de usuario y una contraseña, no email o ese tipo de información!)",
+Como usuario, además de tu librería, puedes tener notas personales, mirar los links cortos que has creado a través de mi Acortador de URL y revisar los problemas o sugerencias que has hecho, en un espacio personal. 
+`,
+      `(Necesitarás crear una cuenta, pero solo necesitas un nombre de usuario y una contraseña, no email o ese tipo de información!) 
+(Solo disponible en Inglés.)`,
       "Acortador de URL",
       `Este proyecto te permite crear links cortos!
 Tu ingresas tu link largo y te daré una cadena de 8 caracteres.
@@ -385,7 +460,17 @@ Decidí omitir algunos ejercicios de certificación, como un tablero anónimo do
       "Iniciar Sesión",
       "Cerrar Sesión",
     ],
-    ProfileMenuTitles: [],
+    ProfileMenuTitles: [
+      "Menu Perfil",
+      "Librería",
+      "Notas",
+      "URLs",
+      "Problemas",
+      "Atrás",
+      "Parece que esta persona no tiene libros en la Librería.",
+      "Cargando Librería",
+      "Loading perfil...",
+    ],
     Shortener: [
       "Acortador de URL",
       "Bienvenido a mi acortador de links!",
@@ -527,8 +612,77 @@ Y soy el único que puede actualizar el estado de la petición.
       "Borrar Contenido",
       "Expandir",
       "Minimizar",
+      `# Analizador Markdown
+## Un adelanto de lo que puedes hacer con Markdown!
+
+
+Puedes poner un link que te redirige a un video de Youtube: [OMORI - Forest Frenzy](https://www.youtube.com/watch?v=r4XqG6nnvkY).
+(**Nota:** Este link no abrirá una ventana nueva...)  
+
+
+Puedes poner un poco de código, mira: \`let x = 9\`.
+
+
+\`\`\`
+// También puedes poner múltiples líneas de código:
+function otroEjemplo(primeraLinea, ultimaLinea) {
+    if (primeraLinea == '\`\`\`' && ultimaLinea == '\`\`\`') {
+        return codigoMultilinea;
+    }
+}
+\`\`\`
+
+
+Una lista desordenada de objetos:
+- Flores
+- Azúcar
+  - Café
+  - Refinada
+  - Coloreada
+- Huevos
+
+
+Una lista ordenada de objetos:
+1. Por favor rompa el huevo y separe la yema.
+2. Mezcle con harina hasta que obtenga una masa sólida.
+
+
+Una cita:
+>Una persona que nunca ha cometido un error nunca ha intentado algo nuevo
+*-Albert Einstein*
+
+
+Una imagen de montañas:
+![The Everest](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg/1024px-Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg)*Una hermosa vista de una montaña.*`,
     ],
-    Calculator: [],
+    Calculator: [
+      "Calculadora",
+      "Esta es una calculadora simple, pero puedes controlarla con el teclado!",
+      "Controles:",
+      "- Usa la tecla ",
+      "Espacio",
+      " para encender la calculadora.",
+      "- Usa cualquier ",
+      "Tecla Numérica",
+      " para los números de 0 a 9.",
+      "Retroceder",
+      " para borrar el último símbolo.",
+      "Escape",
+      " para reiniciar la pantalla de la calculadora.",
+      "con los símbolos",
+      " “.” , “+”, ”-”, ”*”, ”/” para las operaciones.",
+      "Enter",
+      " para obtener el resultado de tu operación.",
+      "Prende la calculadora para usarla.",
+      "Historial:",
+    ],
+    Converter: [
+      "¿Qué quieres convertir?",
+      "(Si el espacio se queda vacío, se tomará la unidad 1 como base)",
+      "Convertir",
+      "Resultado:",
+      "¡Tu resultado será mostrado aquí!",
+    ],
   },
 };
 
