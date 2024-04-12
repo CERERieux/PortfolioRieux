@@ -1,5 +1,5 @@
 import { marked } from "marked"; // Library that translate text to HTML
-import { useEffect, useState } from "react"; // Function to save our App state
+import { useEffect, useRef, useState } from "react"; // Function to save our App state
 import { sanitizeInput } from "../utils/sanitize";
 import { useLanguage } from "./useLanguage";
 
@@ -15,20 +15,25 @@ export function useMarkdown() {
   const sample = useLanguage({ project: "Markdown" })[22];
   const [markdown, setMarkdown] = useState(""); // Our initial state is the example markdown
   const [size, setSize] = useState<"min" | "max">("min");
+  const modified = useRef(false);
 
   // Use effect to change the title of the page
   useEffect(() => {
     document.title = "Markdown Parser";
   }, []);
+  // Use effect to set the example to user depending on what language they are
   useEffect(() => {
-    setMarkdown(sample);
+    // Only do it when user haven't modify it
+    if (!modified.current) setMarkdown(sample);
   }, [sample]);
 
   const handleEditorChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMarkdown(e.target.value); // Each time the user changes the textarea in the app, we save the change
+    if (!modified.current) modified.current = true; // Indicate user modified the markdown
   };
   const deleteContent = () => {
     setMarkdown("");
+    if (!modified.current) modified.current = true; // Indicate user modified the markdown
   };
   const changeCurrentSize = () => {
     if (size === "min") setSize("max");
