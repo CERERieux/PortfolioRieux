@@ -6,7 +6,7 @@ module.exports = {
     "./index.html",
     "./src/client/**/*.{js,ts,jsx,tsx}"
   ],
-  darkMode: "class",
+  darkMode: "selector",
   theme: {
     extend: {
       fontFamily: {

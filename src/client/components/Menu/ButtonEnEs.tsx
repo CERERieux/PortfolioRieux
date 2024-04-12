@@ -3,7 +3,7 @@ import { useSettingStore } from "../../store/settingPortfolio";
 export default function ButtonEnEs() {
   const { i18n, changeLanguage } = useSettingStore();
   return (
-    <div className="absolute top-4 mx-auto text-sm text-slate-50">
+    <div className="absolute top-3 mx-auto text-sm text-slate-50">
       <label className="relative inline-flex cursor-pointer items-center">
         <input
           type="checkbox"

@@ -5,6 +5,7 @@ import { Suspense, lazy, useState } from "react";
 import LoadingSpinner from "../NotFound/LoadingSpinner";
 import { useSettingStore } from "../../store/settingPortfolio";
 import ButtonEnEs from "./ButtonEnEs";
+import DarkLightButton from "./DarkLightButton";
 
 const MainMenu = lazy(() => import("./MainMenu"));
 const SubMenuProfile = lazy(() => import("./SubMenuProfile"));
@@ -30,9 +31,11 @@ export default function Menu({ opacity, handleOpacity }: MenuProps) {
 
   return (
     <section
-      className={`absolute right-0 top-0 h-full w-full overflow-y-auto bg-gradient-to-b from-slate-100/80 to-slate-950/80 py-8 text-white backdrop-blur-sm md:w-3/5 lg:w-1/2 ${opacity} flex flex-col items-center justify-center gap-4 shadow-xl shadow-black/40 transition-all duration-500 ease-in-out`}
+      className={`absolute right-0 top-0 h-full w-full overflow-y-auto bg-gradient-to-b from-slate-100/80 to-slate-950/80 py-8 text-white backdrop-blur-sm dark:from-slate-500/80 dark:to-black/90 dark:to-85% md:w-3/5 lg:w-1/2 ${opacity} flex flex-col items-center justify-center gap-4 shadow-xl shadow-black/40 transition-all duration-500 ease-in-out`}
     >
-      <h2 className="text-2xl text-black first-letter:text-3xl">{title}</h2>
+      <h2 className="text-2xl text-black first-letter:text-3xl dark:text-slate-200">
+        {title}
+      </h2>
       <Suspense fallback={<LoadingSpinner />}>
         {menu === "MainMenu" ? (
           <MainMenu
@@ -50,6 +53,7 @@ export default function Menu({ opacity, handleOpacity }: MenuProps) {
       </Suspense>
       <CloseNavButton handleOpacity={handleOpacity} bgColor="bg-white" />
       <ButtonEnEs />
+      <DarkLightButton />
     </section>
   );
 }
