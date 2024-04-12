@@ -18,7 +18,7 @@ export default function PortfolioHeader({
     >
       <div className="mx-2 mt-2 flex h-32 w-32 items-center justify-center">
         <img
-          src={`/type-img-2.webp`}
+          src={`/Erik.webp`}
           alt="A photo from the creator of this portfolio"
           className="max-h-full max-w-full rounded-full"
         />
