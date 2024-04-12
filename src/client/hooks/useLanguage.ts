@@ -31,7 +31,8 @@ const TEXT_FILLER = {
       `This project gives you a small space where you can share a bit about yourself to other people!
 
 I could say it's like a demo for a simple system where users can share review books (or anything) that they have read. When you visit a profile, you can see what books this user have in their library and their bio (if they have share anything).
-As user, aside from your library, you can have your personal notes, look the short links you have created through my Shortener URL and check the issues or suggestions that you have made, in a personal space.`,
+As user, aside from your library, you can have your personal notes, look the short links you have created through my Shortener URL and check the issues or suggestions that you have made, in a personal space.
+`,
       "(You need to create an account, but you only need an username and a password, no email or that kind of data!)",
       "Shortener URL",
       `This project let you create short links!
@@ -342,7 +343,7 @@ An image of mountains:
     ],
     Converter: [
       "What do you want to convert to?",
-      "(If input is left empty, it will be taken as the base unit.)",
+      "(If input is left empty, it will take '1' as the base unit.)",
       "Convert",
       "Result:",
       "Your result will be shown here!",
@@ -430,7 +431,7 @@ Te responderé lo más rápido que pueda! Y gracias por revisar mi portafolio.`,
 Si tienes una recomendación o problema, recuerda compartirla en el Rincón de Problemas y Sugerencias.
 Y si el título está en Inglés, entonces no está disponible en Español, como el traductor.`,
       `(Todas las secciones en este portafolio son certificaciones de FCC, excepto la página inicial y el sistema de cuentas.
-Modifiqué los ejercicios lo suficiente para poder usarlos como 1 “sistema”, quería incluirlos de alguna manera para mostrar que después de hacer ejercicios simples, podrías hacer algo bueno con ellos.
+Modifiqué los ejercicios lo suficiente para poder usarlos como 1 “sistema”, quería incluirlos de alguna manera para mostrar que después de hacer ejercicios pequeños, podrías hacer algo bueno con ellos.
 Por ello decidí hacer mi portafolio de esta manera, donde podrías con una cuenta tener 1 librería, notas, links cortos y compartir tus recomendaciones y problemas con la app en su totalidad.
 También un juego que puedas jugar y algunas demostraciones que sí podrían ser de uso personal.
 Decidí omitir algunos ejercicios de certificación, como un tablero anónimo donde los usuarios pueden publicar lo que sea en hilos, porque a la larga no quería moderar el contenido que los usuarios podrían compartir. Prefiero usar ese tiempo en aprender más y mejorar mi trabajo.)`,
