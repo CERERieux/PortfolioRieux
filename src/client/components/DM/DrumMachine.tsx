@@ -17,7 +17,7 @@ export default function DrumMachine() {
   return (
     <CustomBackground
       bgImg="before:bg-[url('/DrumboxBG.webp')] before:opacity-50"
-      styles="w-full h-full"
+      styles="w-full h-full dark:bg-stone-700/70"
     >
       <SimpleNavMenu />
       <main className="grid h-full w-full grid-cols-1 place-items-center">

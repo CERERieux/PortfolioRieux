@@ -200,7 +200,7 @@ export default function UpdateIssueProfile({
           <Button
             color="bg-blue-300 border-blue-500 hover:bg-blue-600 hover:border-blue-300"
             xSize="w-40"
-            extraStyles="dark:bg-blue-600 dark:border-blue-700 dark:hover:bg-blue-300 dark:hover:border-blue-400 dark:hover:text-black"
+            extraStyles="dark:text-black"
           >
             Update
           </Button>
@@ -208,7 +208,7 @@ export default function UpdateIssueProfile({
             color="bg-amber-300 border-amber-500 hover:bg-amber-600 hover:border-amber-100"
             xSize="w-40"
             onClick={handleCancel}
-            extraStyles="dark:bg-amber-600 dark:border-amber-700 dark:hover:bg-amber-300 dark:hover:border-amber-400 dark:hover:text-black"
+            extraStyles="dark:text-black"
           >
             Cancel
           </Button>

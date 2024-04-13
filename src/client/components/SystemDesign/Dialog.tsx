@@ -86,7 +86,7 @@ export default function Dialog({
   return (
     <dialog
       id={idDialog}
-      className={`rounded-xl px-6 py-4 shadow-lg shadow-black/40 backdrop:bg-gradient-to-b ${COLOR_BACK[colorBg]} focus:flex ${extraStyles}`}
+      className={`rounded-xl px-6 py-4 shadow-lg shadow-black/40 backdrop:bg-gradient-to-b ${COLOR_BACK[colorBg]} focus:flex ${extraStyles} dark:bg-gray-700 dark:text-slate-200 [&_button]:text-black`}
     >
       {children}
     </dialog>

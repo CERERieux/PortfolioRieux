@@ -62,6 +62,7 @@ export default function ProfileUpdateForm({
             onChange={handleAboutMe}
             lineStyle={false}
             max={500}
+            extraStyles="dark:bg-stone-800"
           ></TextArea>
         </LabelForm>
         <LabelForm style="items-center">
@@ -71,6 +72,7 @@ export default function ProfileUpdateForm({
             value={imgProfile}
             onChange={handleProfileImg}
             lineStyle
+            extraStyles="dark:*:text-black"
           >
             <option value="type-img-1">Image 1</option>
             <option value="type-img-2">Image 2</option>
@@ -87,14 +89,14 @@ export default function ProfileUpdateForm({
             }}
             color="bg-yellow-300 border-yellow-500 hover:bg-yellow-600 hover:border-yellow-300"
             xSize="w-40"
-            extraStyles="shadow-md shadow-black/20 active:shadow-none"
+            extraStyles="shadow-md shadow-black/20 active:shadow-none dark:text-black"
           >
             Cancel
           </Button>
           <Button
             color="bg-blue-300 border-blue-500 hover:bg-blue-600 hover:border-blue-300"
             xSize="w-40"
-            extraStyles="shadow-md shadow-black/20 active:shadow-none"
+            extraStyles="shadow-md shadow-black/20 active:shadow-none dark:text-black"
           >
             Update profile!
           </Button>

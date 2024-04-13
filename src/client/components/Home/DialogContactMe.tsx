@@ -19,7 +19,7 @@ export default function DialogContactMe({ idOpen }: DialogContactMeProps) {
       idOpen={idOpen}
     >
       <section className="flex flex-col items-center justify-center gap-4">
-        <h4 className="text-xl text-red-500">{text[8]}</h4>
+        <h4 className="text-xl text-red-500 dark:text-red-300">{text[8]}</h4>
         <p className="whitespace-pre-wrap text-pretty">{text[9]}</p>
         <div className="flex w-full flex-wrap items-center justify-center gap-6">
           <Pill
@@ -34,7 +34,7 @@ export default function DialogContactMe({ idOpen }: DialogContactMeProps) {
           >
             <Mail
               size="20"
-              styles="text-black group-hover:text-white group-active:text-black"
+              styles="text-black group-hover:text-white group-active:text-black dark:text-white"
             />{" "}
             ecerikrodriguez@outlook.com
           </Pill>

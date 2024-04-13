@@ -201,12 +201,14 @@ export default function NumberBox({
   ) : (
     <div className="relative h-10 w-10">
       {"ABCDEFGHI".includes(coordLetter) && (
-        <p className="absolute -left-4 bottom-2 text-2xl sm:-left-6">
+        <p className="absolute -left-4 bottom-2 text-2xl sm:-left-6 dark:text-white">
           {letter}
         </p>
       )}
       {"123456789".includes(coordNumber) && (
-        <p className="absolute -top-9 left-3.5 text-2xl">{number}</p>
+        <p className="absolute -top-9 left-3.5 text-2xl dark:text-white">
+          {number}
+        </p>
       )}
       <input
         type="text"

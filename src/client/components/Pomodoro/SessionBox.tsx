@@ -75,7 +75,7 @@ export default function SessionBox({
               />
               {i18n === "English" ? "minutes" : "minutos"}
             </label>
-            <p className="absolute top-9 rounded-sm bg-red-200/40 px-2 text-center font-digitalDisplay text-xs text-red-800 md:top-10">
+            <p className="absolute top-9 rounded-sm bg-red-200/40 px-2 text-center font-digitalDisplay text-xs text-red-800 md:top-10 dark:bg-red-700/40 dark:text-red-200">
               {error}
             </p>
             <MiniButton
@@ -89,7 +89,7 @@ export default function SessionBox({
         ) : (
           <>
             <p className="text-center">
-              <span className="text-lg text-red-500">
+              <span className="text-lg text-red-500 dark:text-red-400">
                 <b>{currentTime}</b>
               </span>{" "}
               Minut{i18n === "English" ? "e" : "o"}

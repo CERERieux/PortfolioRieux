@@ -115,7 +115,7 @@ export default function LibraryForm({
       idDialog={idDialog}
       idOpen={idOpen}
       idClose={idClose}
-      colorBg="greenWhite"
+      colorBg="greenBlack"
     >
       <Form submitFn={handleBookSubmit}>
         <TitleForm firstColor="first-letter:text-lime-500">

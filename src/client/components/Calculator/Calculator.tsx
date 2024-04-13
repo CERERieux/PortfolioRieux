@@ -112,7 +112,7 @@ export default function Calculator() {
   }, [display, log, power]);
 
   return (
-    <div className="h-full w-full bg-gradient-to-b from-slate-900">
+    <div className="h-full w-full bg-gradient-to-b from-slate-900 dark:from-black dark:to-slate-600">
       <SimpleNavMenu />
       <main className="mx-auto flex max-w-screen-lg flex-col items-center">
         <section className="relative flex w-fit justify-center gap-2">
@@ -124,45 +124,51 @@ export default function Calculator() {
             idDialog="DialogForInfoCalc"
             idOpen="OpenDialogInfoCalc"
           >
-            <h3 className="text-lg text-blue-600">{text[1]}</h3>
-            <p className="self-start text-red-700">{text[2]}</p>
+            <h3 className="text-lg text-blue-600 dark:text-blue-100">
+              {text[1]}
+            </h3>
+            <p className="self-start text-red-700 dark:text-red-300">
+              {text[2]}
+            </p>
             <ul className="h-40 w-full *:pl-2 *:text-sm">
               <li>
                 {text[3]}
-                <em className="text-red-600">{text[4]}</em>
+                <em className="text-red-600 dark:text-red-300">{text[4]}</em>
                 {text[5]}
               </li>
               <li>
                 {text[6]}
-                <em className="text-red-600">{text[7]}</em>
+                <em className="text-red-600 dark:text-red-300">{text[7]}</em>
                 {text[8]}
               </li>
               <li>
                 {text[3]}
-                <em className="text-red-600">{text[9]}</em>
+                <em className="text-red-600 dark:text-red-300">{text[9]}</em>
                 {text[10]}
               </li>
               <li>
                 {text[3]}
-                <em className="text-red-600">{text[11]}</em>
+                <em className="text-red-600 dark:text-red-300">{text[11]}</em>
                 {text[12]}
               </li>
               <li>
                 {text[3]}
-                <em className="text-red-600">{text[13]}</em>
+                <em className="text-red-600 dark:text-red-300">{text[13]}</em>
                 {text[14]}
               </li>
               <li>
                 {text[3]}
-                <em className="text-red-600">{text[15]}</em>
+                <em className="text-red-600 dark:text-red-300">{text[15]}</em>
                 {text[16]}
               </li>
             </ul>
           </OpenInfo>
         </section>
         <div className="mt-6 flex min-w-full flex-col items-center justify-between gap-12 md:flex-row md:px-7">
-          <div className="grid w-[400px] grid-cols-4 gap-3 rounded-xl border-4 border-slate-800 bg-slate-700 px-5 pb-8 pt-6 shadow-2xl md:max-w-md">
-            <div className={`${styleDisplay} transition-colors`}>
+          <div className="grid w-[400px] grid-cols-4 gap-3 rounded-xl border-4 border-slate-800 bg-slate-700 px-5 pb-8 pt-6 shadow-2xl md:max-w-md dark:bg-slate-600 dark:shadow-white/20">
+            <div
+              className={`${styleDisplay} border shadow-inner shadow-black/70 transition-colors dark:border-black`}
+            >
               <p className="">{power ? display : text[17]}</p>
             </div>
             <div className="col-span-4 mx-1 grid w-full grid-cols-4 gap-1">
@@ -276,7 +282,7 @@ export default function Calculator() {
               </section>
             </div>
           </div>
-          <section className="w-full max-w-md rounded-sm border border-slate-300 bg-slate-100 p-6 text-end transition-all md:basis-2/4 lg:basis-3/5">
+          <section className="w-full max-w-md rounded-sm border border-slate-300 bg-slate-100 p-6 text-end transition-all md:basis-2/4 lg:basis-3/5 dark:bg-slate-700 dark:text-slate-100">
             <h3 className="text-left">{text[18]}</h3>
             <ul>
               {log.map((operation, i) => (

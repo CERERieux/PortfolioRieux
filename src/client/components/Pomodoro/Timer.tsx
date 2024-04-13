@@ -30,7 +30,7 @@ export default function Timer({
       </h4>
       <p className="">
         {i18n === "English" ? "Time Left: " : "Tiempo Restante: "}
-        <span className="text-lg text-blue-600">
+        <span className="text-lg text-blue-600 dark:text-blue-300">
           <b>{time}</b>
         </span>
       </p>

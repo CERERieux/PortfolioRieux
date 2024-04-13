@@ -13,9 +13,9 @@ export default function TranslatorEng() {
   const ukFlag = "bg-[url('/UKFlag.svg')]";
 
   return (
-    <main className="relative flex h-full w-full flex-col place-items-center gap-6 overflow-y-auto bg-slate-50 py-6">
+    <main className="relative flex h-full w-full flex-col place-items-center gap-6 overflow-y-auto bg-slate-50 py-6 dark:bg-black/60">
       <section className="relative flex w-fit justify-center gap-2">
-        <h2 className="text-xl">
+        <h2 className="text-xl dark:text-slate-100">
           Translator{" "}
           <span className="font-comic text-xl uppercase">American</span> -{" "}
           <span className="font-elegant text-3xl">British</span>
@@ -26,7 +26,7 @@ export default function TranslatorEng() {
           idOpen="OpenDialogInfoPomodoroClock"
           posScreen="top-0 -right-12"
         >
-          <h3 className="text-lg text-amber-600">
+          <h3 className="text-lg text-amber-600 dark:text-amber-300">
             What purpose this translator have?
           </h3>
           <p className="max-w-[600px] self-start text-pretty">
@@ -47,7 +47,7 @@ export default function TranslatorEng() {
             <br /> In case the sentence is normal, this will not translate and
             say that all is okay. Otherwise, you will get a translation.
           </p>
-          <p className="max-w-[600px] self-start text-pretty text-blue-600">
+          <p className="max-w-[600px] self-start text-pretty text-blue-600 dark:text-lime-200">
             Instructions:
           </p>
           <ul className="h-20 w-full *:pl-2 *:text-sm md:h-16">
@@ -69,7 +69,7 @@ export default function TranslatorEng() {
           checked={mode !== AME_TO_BRIT}
           onChange={handleMode}
         />
-        <div className="flex h-6 w-[11.05rem] justify-between rounded-full bg-gray-200 pl-2.5 pr-[1.3rem] *:z-10 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-[5.4rem] after:rounded-full after:border after:border-gray-300 after:bg-slate-50 after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full [&:nth-child(1)]:[&_p]:opacity-100 peer-checked:[&:nth-child(1)]:[&_p]:opacity-60 [&:nth-child(2)]:[&_p]:opacity-60 peer-checked:[&:nth-child(2)]:[&_p]:opacity-100">
+        <div className="flex h-6 w-[11.05rem] justify-between rounded-full bg-gray-200 pl-2.5 pr-[1.3rem] *:z-10 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-[5.4rem] after:rounded-full after:border after:border-gray-300 after:bg-slate-50 after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:after:bg-slate-500 dark:peer-focus:ring-blue-300 [&:nth-child(1)]:[&_p]:opacity-100 peer-checked:[&:nth-child(1)]:[&_p]:opacity-60 [&:nth-child(2)]:[&_p]:opacity-60 peer-checked:[&:nth-child(2)]:[&_p]:opacity-100">
           <p className="">American</p>
           <p className="">British</p>
         </div>
@@ -84,9 +84,9 @@ export default function TranslatorEng() {
             mode === AME_TO_BRIT ? usaFlag : ukFlag
           } shadow-sm lg:w-[49%]`}
         >
-          <div className="h-full w-full bg-gradient-to-r from-transparent to-white to-30% px-4 pt-3">
+          <div className="h-full w-full bg-gradient-to-r from-transparent to-white to-30% px-4 pt-3 dark:to-stone-600">
             <label className="flex flex-col gap-4">
-              <span className="ml-40 text-pretty px-2 py-1 lg:ml-48">
+              <span className="ml-40 text-pretty px-2 py-1 lg:ml-48 dark:text-slate-100">
                 Introduce the {mode === AME_TO_BRIT ? "american " : "british "}
                 sentence you want to translate
                 {mode === AME_TO_BRIT ? " (to british)" : " (to american)"}:
@@ -96,7 +96,7 @@ export default function TranslatorEng() {
                 value={userInput}
                 onChange={handleInput}
                 name="translator"
-                className="form-input mx-4 border-gray-300 bg-white/80"
+                className="form-input mx-4 border-gray-300 bg-white/80 py-1 dark:bg-stone-800/80 dark:text-white"
                 autoComplete="off"
               />
             </label>
@@ -112,22 +112,22 @@ export default function TranslatorEng() {
             mode !== AME_TO_BRIT ? usaFlag : ukFlag
           } lg:w-[49%]`}
         >
-          <div className="flex h-full w-full flex-col gap-2 bg-gradient-to-l from-transparent to-white to-30% px-5 py-8 shadow-sm">
-            <h3 className="text-lg">Translated text:</h3>
+          <div className="flex h-full w-full flex-col gap-2 bg-gradient-to-l from-transparent to-white to-30% px-5 py-8 shadow-sm dark:to-stone-600">
+            <h3 className="text-lg dark:text-slate-200">Translated text:</h3>
             {translation !== "" ? (
               <p
-                className="mx-3 border border-gray-300 bg-gradient-to-l from-white/85 from-10% px-4 py-1 [-webkit-text-stroke:0.05px_white] lg:my-4 [&_span]:text-lime-600"
+                className="mx-3 border border-gray-300 bg-gradient-to-l from-white/85 from-10% px-4 py-1 [-webkit-text-stroke:0.05px_white] lg:my-4 dark:from-stone-800/80 dark:to-stone-800/80 dark:text-white [&_span]:text-lime-600"
                 dangerouslySetInnerHTML={{ __html: sanitizeInput(translation) }}
               ></p>
             ) : (
-              <p className="mx-3 border border-gray-300 bg-gradient-to-l from-white/85 from-10% px-4 py-1 text-slate-500 [-webkit-text-stroke:0.05px_white] lg:my-4 ">
+              <p className="mx-3 border border-gray-300 bg-gradient-to-l from-white/85 from-10% px-4 py-1 text-slate-500 [-webkit-text-stroke:0.05px_white] lg:my-4 dark:from-stone-800/80 dark:to-stone-800/80 dark:text-white">
                 Your result will be shown here!
               </p>
             )}
           </div>
         </section>
         <article className="order-2 h-1/3 w-full px-2 md:px-4 lg:order-none">
-          <h3 className="mb-2 bg-gradient-to-r from-zinc-800 pl-3 italic text-slate-50">
+          <h3 className="mb-2 bg-gradient-to-r from-zinc-800 pl-3 italic text-slate-50 dark:from-purple-300 dark:text-black">
             Examples:
           </h3>
           <div className="flex flex-col justify-around gap-4 pl-3 md:flex-row">
@@ -135,7 +135,7 @@ export default function TranslatorEng() {
               <h4 className="mb-1 bg-gradient-to-r from-amber-200 pl-3">
                 American to British
               </h4>
-              <ul className="list-inside text-pretty px-2 text-sm [list-style-type:'-_'] *:[&_span]:text-lime-600">
+              <ul className="list-inside text-pretty px-2 text-sm [list-style-type:'-_'] dark:text-slate-200 *:[&_span]:text-lime-600 dark:*:[&_span]:text-lime-300">
                 <li>
                   Mangoes are my favorite fruit. <b className="text-lg"> → </b>{" "}
                   Mangoes are my{" "}
@@ -166,7 +166,7 @@ export default function TranslatorEng() {
               <h4 className="mb-1 bg-gradient-to-r from-amber-200 pl-3">
                 British to American
               </h4>
-              <ul className="list-inside text-pretty px-2 text-sm [list-style-type:'-_'] *:[&_span]:text-lime-600">
+              <ul className="list-inside text-pretty px-2 text-sm [list-style-type:'-_'] dark:text-slate-200 *:[&_span]:text-lime-600 dark:*:[&_span]:text-lime-300">
                 <li>
                   We watched the footie match for a while.{" "}
                   <b className="text-lg"> → </b> We watched the{" "}

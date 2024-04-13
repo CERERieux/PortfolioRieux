@@ -54,7 +54,7 @@ export default function Sudoku() {
 
   return (
     <CustomBackground
-      bgImg="before:bg-[url('/SudokuBG.webp')] before:opacity-80"
+      bgImg="before:bg-[url('/SudokuBG.webp')] before:opacity-80 dark:bg-black/50"
       styles="w-full h-full flex flex-col items-center gap-6 py-4 pb-8 md:pb-4 px-8 overflow-y-auto"
     >
       {action !== null && <ActionMessage>{action}</ActionMessage>}
@@ -62,7 +62,7 @@ export default function Sudoku() {
       <header>
         <SimpleNavMenu positionNav="top-0 right-4 absolute" />
         <section className="relative flex w-fit justify-center gap-2">
-          <h1 className="rounded-md bg-slate-700/80 px-6 py-1 font-comic text-3xl text-slate-100 shadow-inner shadow-slate-50/50 backdrop-blur-md">
+          <h1 className="rounded-md bg-slate-700/80 px-6 py-1 font-comic text-3xl text-slate-100 shadow-inner shadow-slate-50/50 backdrop-blur-md dark:text-white">
             Sudoku
           </h1>
           <OpenInfo
@@ -71,7 +71,9 @@ export default function Sudoku() {
             idOpen="OpenDialogInfoPomodoroClock"
             posScreen="top-1.5 -right-12"
           >
-            <h3 className="text-lg text-red-600">{text[0]}</h3>
+            <h3 className="text-lg text-red-600 dark:text-red-300">
+              {text[0]}
+            </h3>
             <ul className="w-full *:pl-2">
               <li>{text[1]}</li>
               <li>{text[2]}</li>
@@ -81,13 +83,15 @@ export default function Sudoku() {
             <p className="max-w-[600px] self-start whitespace-pre-wrap text-pretty">
               {text[5]}
             </p>
-            <p className="max-w-[600px] text-pretty text-lime-600">{text[6]}</p>
+            <p className="max-w-[600px] text-pretty text-lime-600 dark:text-lime-300">
+              {text[6]}
+            </p>
           </OpenInfo>
         </section>
       </header>
       <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
         <AsideSudoku setNewSudoku={setNewSudoku} />
-        <main className="flex h-[450px] w-[410px] items-center justify-center rounded-xl bg-white/60 shadow-lg shadow-black backdrop-blur-md sm:w-[450px]">
+        <main className="flex h-[450px] w-[410px] items-center justify-center rounded-xl bg-white/60 shadow-lg shadow-black backdrop-blur-md sm:w-[450px] dark:bg-white/20">
           <GridSudoku />
         </main>
       </div>

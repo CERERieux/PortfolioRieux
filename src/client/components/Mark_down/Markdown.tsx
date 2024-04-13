@@ -7,16 +7,16 @@ import Button from "../SystemDesign/Button";
 import Dialog from "../SystemDesign/Dialog";
 import OpenInfo from "../SystemDesign/OpenInfo";
 const STYLES = {
-  BASE: "w-full overflow-y-auto p-4 bg-white shadow-inner shadow-gray-300",
+  BASE: "w-full overflow-y-auto p-4 bg-white shadow-inner shadow-gray-300 dark:shadow-black",
   A: "[&_a]:border-b-[1px] [&_a]:border-blue-400 [&_a]:text-blue-400",
   BLOCKQUOTE:
-    "[&_blockquote]:mx-4 [&_blockquote]:my-2 [&_blockquote]:border [&_blockquote]:border-blue-100 [&_blockquote]:bg-sky-100 [&_blockquote]:bg-[url('/Quote.svg')] [&_blockquote]:bg-no-repeat [&_blockquote]:py-2 [&_blockquote]:pl-10 [&_blockquote]:text-blue-700 [&_blockquote]:shadow-lg [&_blockquote]:[background-position:1%_5%] md:[&_blockquote]:mx-[10%]",
-  CODE: "[&_code]:bg-gray-300 [&_code]:text-xs",
+    "[&_blockquote]:mx-4 [&_blockquote]:my-2 [&_blockquote]:border [&_blockquote]:border-blue-100 [&_blockquote]:bg-sky-100 [&_blockquote]:bg-[url('/Quote.svg')] [&_blockquote]:bg-no-repeat [&_blockquote]:py-2 [&_blockquote]:pl-10 [&_blockquote]:text-blue-700 [&_blockquote]:shadow-lg [&_blockquote]:[background-position:1%_5%] md:[&_blockquote]:mx-[10%] dark:[&_blockquote]:bg-blue-200 dark:[&_blockquote]:text-blue-800 dark:[&_blockquote]:shadow-white/25",
+  CODE: "[&_code]:bg-gray-300 [&_code]:text-xs dark:[&_code]:bg-slate-500 dark:[&_code]:text-white",
   HEADERS:
     "[&_h1]:mb-4 [&_h1]:text-5xl [&_h2]:mb-4 [&_h2]:text-4xl [&_h3]:mb-3 [&_h3]:text-3xl [&_h4]:mb-3 [&_h4]:text-2xl [&_h5]:mb-2 [&_h5]:text-xl [&_h6]:mb-2 [&_h6]:text-lg",
   IMG: "[&_img]:mx-auto [&_img]:my-4 [&_img]:shadow-sm [&_img]:shadow-black [&_img~em]:block [&_img~em]:w-full [&_img~em]:text-center",
   OL: "[&_ol]:list-inside [&_ol]:list-decimal [&_ol]:pl-8 [&_ol_ol]:list-[upper-roman] [&_ol_ol_ol]:list-[upper-alpha]",
-  PRE: "[&_pre]:bg-gray-300 [&_pre]:px-4 [&_pre]:py-1 [&_pre]:shadow-inner [&_pre]:shadow-gray-600",
+  PRE: "[&_pre]:bg-gray-300 [&_pre]:px-4 [&_pre]:py-1 [&_pre]:shadow-inner [&_pre]:shadow-gray-600 dark:[&_pre]:bg-slate-500",
   STRONG: "[&_p>strong]:text-red-400 [&_blockquote_p_strong]:text-blue-600",
   UL: "[&_ul]:list-inside [&_ul]:list-disc [&_ul]:pl-8 [&_ul_ul]:list-[circle] [&_ul_ul_ul]:list-[square]",
 };
@@ -47,7 +47,7 @@ export default function Markdown() {
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-around gap-4 bg-gradient-to-b from-lime-100 to-60%">
+    <div className="relative flex h-full w-full flex-col items-center justify-around gap-4 bg-gradient-to-b from-lime-100 to-60% dark:from-lime-700 dark:to-black/30 dark:to-100%">
       <header
         className={`flex h-3/5 w-full flex-col items-center justify-center gap-4 px-6 py-2 md:h-2/5 md:flex-row ${hide}`}
       >
@@ -75,16 +75,18 @@ export default function Markdown() {
             </div>
           </article>
         </Dialog>
-        <section className="w-full bg-white px-4 py-2 shadow-md md:w-1/3">
+        <section className="w-full bg-white px-4 py-2 shadow-md md:w-1/3 dark:bg-slate-500">
           <section className="relative flex w-fit justify-center gap-2">
-            <h1 className="font-sketch text-2xl">{text[3]}</h1>
+            <h1 className="font-sketch text-2xl dark:text-white">{text[3]}</h1>
             <OpenInfo
               idClose="CloseDialogInfoMarkdownParser"
               idDialog="DialogForInfoMarkdownParser"
               idOpen="OpenDialogInfoMarkdownParser"
               posScreen="top-0 -right-12"
             >
-              <h3 className="text-lg text-red-600">{text[4]}</h3>
+              <h3 className="text-lg text-red-600 dark:text-red-300">
+                {text[4]}
+              </h3>
               <p className="max-w-[600px] self-start text-pretty">
                 {text[5]}
                 <em>{text[6]}</em>
@@ -93,20 +95,27 @@ export default function Markdown() {
                 {text[9]}
               </p>
               <p className="max-w-[600px] self-start text-pretty">
-                <span className="text-red-500">{text[10]}</span> <br />
+                <span className="text-red-500 dark:text-red-300">
+                  {text[10]}
+                </span>{" "}
+                <br />
                 {text[11]}
-                <span className="text-lime-500">{text[12]}</span>
+                <span className="text-lime-500 dark:text-lime-300">
+                  {text[12]}
+                </span>
                 {text[13]}
                 <br />
                 {text[14]}
-                <span className="text-amber-500">{text[15]}</span>
+                <span className="text-amber-500 dark:text-amber-300">
+                  {text[15]}
+                </span>
                 {text[16]}
                 <br />
                 {text[17]}
               </p>
             </OpenInfo>
           </section>
-          <p className="text-pretty">{text[18]}</p>
+          <p className="text-pretty dark:text-white">{text[18]}</p>
           <div className="flex w-full items-center justify-center">
             <button
               className="my-1 rounded-full border border-amber-600 bg-amber-200 px-4 py-1 hover:bg-red-400 hover:text-slate-50"
@@ -122,13 +131,15 @@ export default function Markdown() {
           rows={8}
           value={markdown}
           onChange={handleEditorChange}
-          className="my-2 w-full resize-none border-none md:w-2/3"
+          className="my-2 w-full resize-none border-none md:w-2/3 dark:bg-slate-500 dark:text-white"
         ></textarea>
       </header>
       {size === "min" && <SimpleNavMenu positionNav="-top-2 left-[4.5rem]" />}
-      <div className={`${previewHeight} ${STYLES.BASE}`}>
+      <div
+        className={`${previewHeight} ${STYLES.BASE} dark:bg-slate-800 dark:text-slate-200`}
+      >
         <button
-          className="group/expand absolute right-8 rounded-full bg-lime-500 p-2 transition-all hover:scale-110 hover:shadow-lg hover:shadow-lime-200"
+          className="group/expand absolute right-8 rounded-full bg-lime-500 p-2 transition-all hover:scale-110 hover:shadow-lg hover:shadow-lime-200 dark:hover:shadow-md dark:hover:shadow-lime-300"
           onClick={changeCurrentSize}
         >
           {size === "min" ? (
