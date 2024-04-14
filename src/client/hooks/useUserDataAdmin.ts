@@ -121,5 +121,6 @@ export function useUserDataAdmin(id: string) {
       updateUserIssue.mutate({ token, _id, project, status, text, title });
     },
     updateSuccessIssue: updateUserIssue.isSuccess,
+    updateUserIssue,
   };
 }
