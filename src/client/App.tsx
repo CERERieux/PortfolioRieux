@@ -8,9 +8,9 @@ const AdminMainMenu = lazy(
   () => import("./components/AdminPanel/AdminMainMenu"),
 );
 const AdminPanel = lazy(() => import("./components/AdminPanel/AdminPanel"));
-const AnonBoard = lazy(() => import("./components/AnonBoard/AnonBoard"));
-const AnonReply = lazy(() => import("./components/AnonBoard/AnonReply"));
-const AnonThread = lazy(() => import("./components/AnonBoard/AnonThread"));
+// const AnonBoard = lazy(() => import("./components/AnonBoard/AnonBoard"));
+// const AnonReply = lazy(() => import("./components/AnonBoard/AnonReply"));
+// const AnonThread = lazy(() => import("./components/AnonBoard/AnonThread"));
 const Book = lazy(() => import("./components/Library/Book"));
 const Calculator = lazy(() => import("./components/Calculator/Calculator"));
 const ConverterUnit = lazy(
@@ -42,7 +42,7 @@ const Quote = lazy(() => import("./components/Quotes/Quotes"));
 const ShortenerUrl = lazy(
   () => import("./components/ShortenerUrl/ShortenerUrl"),
 );
-const StockViewer = lazy(() => import("./components/Stocks/StockViewer"));
+// const StockViewer = lazy(() => import("./components/Stocks/StockViewer"));
 const Sudoku = lazy(() => import("./components/Games/Sudoku/Sudoku"));
 const TranslatorEng = lazy(
   () => import("./components/TranslatorEng/TranslatorEng"),
@@ -82,20 +82,12 @@ export default function App() {
           <Route path="translate-eng" element={<TranslatorEng />}></Route>
         </Route>
         <Route path="/games">
-          {/* <Route index element={<Home />}></Route> */}
           <Route path="sudoku" element={<Sudoku />}></Route>
-          {/* <Route path="ifIDosomethingExtra" element={<Home />}></Route> */}
-        </Route>
-        {/* <Route path="/communicationNameApp" element={<Home />}></Route> */}
-        <Route path="/anon-board">
-          <Route index element={<AnonBoard />}></Route>
-          <Route path=":board/thread" element={<AnonThread />}></Route>
-          <Route path=":board/:thread/reply" element={<AnonReply />}></Route>
         </Route>
         <Route path="/cut-content/portfolio">
           <Route index element={<Home />}></Route>
           <Route path="request-information" element={<DataRequest />}></Route>
-          <Route path="stock-api-cert" element={<StockViewer />}></Route>
+          {/* <Route path="stock-api-cert" element={<StockViewer />}></Route> */}
         </Route>
         {/* <Route path="/documentation" element={<Home />}></Route> */}
         <Route path={`/${import.meta.env.VITE_ROUTE_ADMIN}/admin`}>
