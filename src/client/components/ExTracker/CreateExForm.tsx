@@ -151,6 +151,7 @@ export default function CreateExForm({
           onChange={handleStatus}
           value={status}
           lineStyle={true}
+          extraStyles="dark:*:bg-slate-700 dark:*:text-white"
         >
           <option value="Pending">Pending</option>
           <option value="Current">Current</option>

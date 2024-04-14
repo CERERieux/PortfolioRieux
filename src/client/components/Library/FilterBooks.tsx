@@ -34,7 +34,7 @@ export default function FilterBooks({
   };
   // Return the component that display the filter
   return (
-    <section className="flex w-full flex-col items-center gap-2 rounded-md bg-white px-4 py-2 shadow-md shadow-black/20 dark:bg-slate-800/80 dark:text-slate-100 md:absolute md:right-2 md:top-1/3 md:w-[32%] lg:right-8 lg:w-[28%] xl:right-12 xl:w-[25%]">
+    <section className="flex w-full flex-col items-center gap-2 rounded-md bg-white px-4 py-2 shadow-md shadow-black/20 md:absolute md:right-2 md:top-1/3 md:w-[32%] lg:right-8 lg:w-[28%] xl:right-12 xl:w-[25%] dark:bg-slate-800/80 dark:text-slate-100">
       <h2 className="font-elegant text-4xl first-letter:text-lime-400">
         Filter
       </h2>
@@ -61,7 +61,7 @@ export default function FilterBooks({
             name="statusBookFilter"
             onChange={handleStatus}
             value={status}
-            extraStyles="*:text-black"
+            extraStyles="dark:*:bg-slate-700 dark:*:text-white"
           >
             <option value="All">All</option>
             <option value="Plan to Read">Plan to Read</option>
@@ -79,6 +79,7 @@ export default function FilterBooks({
             name="recommendBookFilter"
             onChange={handleRecommend}
             value={recommend}
+            extraStyles="dark:*:bg-slate-700 dark:*:text-white"
           >
             <option value="All">All</option>
             <option value="I can't say">I can&apos;t say</option>

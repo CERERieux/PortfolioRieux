@@ -44,7 +44,7 @@ export default function ConverterUnit() {
                 name="ConvertOptions"
                 value={userUnit}
                 onChange={handleUserUnit}
-                className="border-x-0 border-b-2 border-t-0 border-blue-600 py-0 text-center"
+                className="border-x-0 border-b-2 border-t-0 border-blue-600 py-0 text-center dark:*:bg-slate-700 dark:*:text-white"
               >
                 <option value="l">L → Gal</option>
                 <option value="gal">Gal → L</option>
