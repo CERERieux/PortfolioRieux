@@ -141,6 +141,7 @@ export default function LibraryForm({
             name="StatusBook"
             value={status}
             onChange={handleStatus}
+            extraStyles="dark:*:bg-slate-700 dark:*:text-white"
           >
             <option value="Plan to Read">Plan to Read</option>
             <option value="Current Reading">Current Reading</option>

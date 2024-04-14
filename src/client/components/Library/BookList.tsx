@@ -129,7 +129,7 @@ export default function BookList({
 
   // A component that returns the list of books
   return (
-    <article className="flex w-full items-center justify-center rounded-md bg-white shadow-inner shadow-black/40 backdrop-blur-sm dark:bg-gray-300/20 dark:text-slate-50 md:h-full md:w-2/3 md:overflow-y-auto">
+    <article className="flex w-full items-center justify-center rounded-md bg-white shadow-inner shadow-black/40 backdrop-blur-sm md:h-full md:w-2/3 md:overflow-y-auto dark:bg-gray-300/20 dark:text-slate-50">
       {!("error" in dataFiltered) ? (
         <ul className="flex h-full w-full flex-col gap-2 px-6 py-4">
           {dataFiltered.map(book => {

@@ -221,7 +221,7 @@ export default function BookAside({
   // Component that show both forms on the left/top side of the screen
   return (
     <aside className="flex flex-col items-center justify-center gap-4 md:sticky md:top-0 md:h-full md:w-1/2">
-      <section className="flex w-full flex-col gap-4 rounded-xl bg-slate-50/85 px-4 py-2 shadow-md shadow-black/30 dark:bg-slate-600/70 dark:text-slate-100 dark:backdrop-blur-sm sm:w-4/5 md:h-3/4 md:w-full md:items-center md:justify-center lg:w-4/5">
+      <section className="flex w-full flex-col gap-4 rounded-xl bg-slate-50/85 px-4 py-2 shadow-md shadow-black/30 sm:w-4/5 md:h-3/4 md:w-full md:items-center md:justify-center lg:w-4/5 dark:bg-slate-600/70 dark:text-slate-100 dark:backdrop-blur-sm">
         <TitleForm firstColor="first-letter:text-lime-500">
           Update your book!
         </TitleForm>
@@ -248,6 +248,7 @@ export default function BookAside({
               lineStyle
               value={status}
               onChange={handleStatus}
+              extraStyles="dark:*:text-white dark:*:bg-slate-700"
             >
               <option value="Plan to Read">Plan to Read</option>
               <option value="Current Reading">Current Reading</option>
@@ -270,6 +271,7 @@ export default function BookAside({
               onChange={handleRecommend}
               lineStyle
               name="RecommendUpdateBook"
+              extraStyles="dark:*:text-white dark:*:bg-slate-700"
             >
               <option value="I can't say">I can&apos;t say</option>
               <option value="Yes">Yes</option>
@@ -303,7 +305,7 @@ export default function BookAside({
           </Button>
         </Form>
       </section>
-      <section className="flex w-2/3 flex-col items-center justify-center rounded-xl bg-slate-50/80 px-4 py-2 shadow-md shadow-black/30 dark:bg-slate-100/80 sm:w-1/2 md:h-1/5 md:w-3/4 lg:w-3/5">
+      <section className="flex w-2/3 flex-col items-center justify-center rounded-xl bg-slate-50/80 px-4 py-2 shadow-md shadow-black/30 sm:w-1/2 md:h-1/5 md:w-3/4 lg:w-3/5 dark:bg-slate-100/80">
         <TitleForm firstColor="first-letter:text-sky-500">
           Add a note to your book
         </TitleForm>
