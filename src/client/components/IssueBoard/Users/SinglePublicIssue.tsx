@@ -55,7 +55,7 @@ export default function SinglePublicIssue({
       <h3 className="text-xl first-letter:text-lime-300">
         {text[20]}: <span className="text-base underline">{issue.title}</span>
       </h3>
-      <p className="ml-4 text-sm">{issue.text}</p>
+      <p className="ml-4 whitespace-pre-wrap text-sm">{issue.text}</p>
       <p className="left-16 text-end text-xs first-letter:text-lime-300">
         {text[9]} {issue.created_by}, {atWord} {created}{" "}
         {issue.created_on !== issue.updated_on && `${text[18]} ${updated}`}

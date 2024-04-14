@@ -44,7 +44,7 @@ export default function SingleIssue({
       <h3 className="-ml-4 text-xl first-letter:text-blue-500 dark:first-letter:text-blue-300">
         Issue: <span className="text-base underline">{issue.title}</span>
       </h3>
-      <p className="text-sm">{issue.text}</p>
+      <p className="whitespace-pre-wrap text-sm">{issue.text}</p>
       <p className="-ml-4 text-lg first-letter:text-blue-500 dark:first-letter:text-blue-300">
         Status:{" "}
         <span
