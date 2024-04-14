@@ -393,7 +393,7 @@ export async function deleteAllBooks(
   if (username === undefined)
     return res.status(400).json({ error: ERROR_GUSER.ADMIN_FORGOT_USER });
   const deletedBooks = await AdvancedModel.deleteAllBooks(username);
-  if ("error" in deletedBooks) {
+  if ("error" in deletedBooks && deletedBooks.action === undefined) {
     const status = advancedError(deletedBooks);
     return res.status(status).json(deletedBooks);
   }

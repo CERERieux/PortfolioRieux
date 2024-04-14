@@ -1035,19 +1035,7 @@ export async function createNewBook({ title, status, username }: CreateBook) {
 
 /** Function that deletes all data from books collection */
 export async function deleteAllBooks(username: string) {
-  // Delete all books, if there is an error at deleting, display it
-  const deletedBooks = await Book.deleteMany().catch(err => {
-    console.error(err);
-    return { error: ERROR_BOOKS.COULD_NOT_DELETE, category: "book" };
-  });
-  if ("error" in deletedBooks) {
-    return deletedBooks;
-  }
-  // If it was successful, we check if there was any book removed
-  const { deletedCount } = deletedBooks;
-  // If it was, then the action was successful, and we need to remove books from user
-  if (deletedCount > 0) {
-    // Find user by Id, if not found, we send an error
+  // Find user by Id, if not found, we send an error
     const user = await GUser.findById(username).catch(err => {
       console.error(err);
       return { error: ERROR_GUSER.COULD_NOT_FIND, category: "guser" };
@@ -1061,8 +1049,24 @@ export async function deleteAllBooks(username: string) {
     if ("error" in user) {
       return user;
     }
-    // Erase the array of books
-    user.books = [];
+    // Check if user have books to delete 
+    if(user.books.length===0){
+      // If not, we send an error because the was nothing to delete
+      return { error: ERROR_BOOKS.DELETE_EMPTY_LIBRARY, category: "book" };
+    }
+    // Delete books 1 by 1
+    for(let i = user.books.length-1; user.books.length>=0;i--){
+      const book = await Book.deleteOne({id:user.books[0]._id}).catch(err => {
+        console.error(err);
+        return { error: ERROR_BOOKS.COULD_NOT_DELETE, category: "book" };
+      });
+      if ("error" in book) {
+        return book;
+      }
+    }
+    // Then empty user library by placing an empty array
+    user.books=[]
+    // Then Save user
     const updatedUser = await user.save().catch(err => {
       console.error(err);
       return { error: ERROR_BOOKS.COULD_NOT_DELETE, category: "book" };
@@ -1071,9 +1075,7 @@ export async function deleteAllBooks(username: string) {
       return updatedUser;
     }
     return { action: `All books were successfully deleted` };
-  }
-  // If not, we send an error because the was nothing to delete
-  return { error: ERROR_BOOKS.DELETE_EMPTY_LIBRARY, category: "book" };
+  
 }
 
 /** Function to get a single book based on the ID given by user */
