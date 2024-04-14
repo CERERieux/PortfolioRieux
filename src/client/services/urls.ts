@@ -11,7 +11,7 @@ import type {
 
 export function getUserUrl({ token }: Token) {
   return axios<UserUrls[] | EmptyData>({
-    url: "/cYSvQmg9kR/basic/shorturl",
+    url: `/${import.meta.env.VITE_ROUTE_API}/basic/shorturl`,
     method: "get",
     headers: { Authorization: `Bearer ${token}` },
   }).then(({ data }) => {
@@ -21,7 +21,7 @@ export function getUserUrl({ token }: Token) {
 
 export function createUrl({ token, url }: CreateShortUrl) {
   return axios<ShortUrlResult>({
-    url: "/cYSvQmg9kR/basic/shorturl",
+    url: `/${import.meta.env.VITE_ROUTE_API}/basic/shorturl`,
     method: "post",
     data: {
       url,
@@ -40,7 +40,7 @@ export function createUrl({ token, url }: CreateShortUrl) {
 export function deleteUrl({ token, id, userId }: DeleteOperation) {
   const adminData = userId !== undefined ? `?user_id=${userId}` : "";
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/basic/shorturl/${id}${adminData}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/basic/shorturl/${id}${adminData}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
   })

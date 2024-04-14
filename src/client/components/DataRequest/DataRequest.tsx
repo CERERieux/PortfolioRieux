@@ -5,8 +5,8 @@ import FooterAttribution from "../SystemDesign/FooterAttribution";
 import CustomBackground from "../SystemDesign/CustomBackground";
 
 // Links to fetch the info we need
-const URL_REQUEST = "/cYSvQmg9kR/basic/whoami";
-const URL_TIMESTAMP = "/cYSvQmg9kR/basic/timestamp";
+const URL_REQUEST = `/${import.meta.env.VITE_ROUTE_API}/basic/whoami`;
+const URL_TIMESTAMP = `/${import.meta.env.VITE_ROUTE_API}/basic/timestamp`;
 
 export default function DataRequest() {
   // A state that saves all the info to display

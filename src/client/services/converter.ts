@@ -3,7 +3,9 @@ import type { ConverterResult } from "../types";
 
 export function convertUnit(dataConvert: string) {
   return axios<ConverterResult>({
-    url: `/cYSvQmg9kR/advanced/converter?input=${dataConvert}`,
+    url: `/${
+      import.meta.env.VITE_ROUTE_API
+    }/advanced/converter?input=${dataConvert}`,
     method: "get",
   })
     .then(({ data }) => data)

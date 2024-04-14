@@ -35,16 +35,19 @@ export function useTranslator() {
 
   const handleTranslation = useCallback(
     async ({ text, locale }: TranslateData) => {
-      const resultTranslation = await fetch("/cYSvQmg9kR/advanced/translate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const resultTranslation = await fetch(
+        `/${import.meta.env.VITE_ROUTE_API}/advanced/translate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            locale,
+            text,
+          }),
         },
-        body: JSON.stringify({
-          locale,
-          text,
-        }),
-      }).then(async data => {
+      ).then(async data => {
         if (data.ok) {
           const resultData: TranslateResult = await data.json();
           return resultData;

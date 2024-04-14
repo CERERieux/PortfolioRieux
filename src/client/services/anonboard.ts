@@ -16,21 +16,21 @@ import type { IThread, IThreadFiltered } from "../../server/types/advancedMisc";
 
 export function getBoards() {
   return axios<BoardData[] | EmptyData>({
-    url: "/cYSvQmg9kR/advanced-misc/boards",
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced-misc/boards`,
     method: "get",
   }).then(({ data }) => data);
 }
 
 export function getThreads(board: string) {
   return axios<IThreadFiltered[]>({
-    url: `/cYSvQmg9kR/advanced-misc/threads/${board}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced-misc/threads/${board}`,
     method: "get",
   }).then(({ data }) => data);
 }
 
 export function createThread({ board, text, password }: CreateThreadService) {
   return axios<ResponseCreate>({
-    url: `/cYSvQmg9kR/advanced-misc/threads/${board}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced-misc/threads/${board}`,
     method: "post",
     data: {
       board,
@@ -42,7 +42,7 @@ export function createThread({ board, text, password }: CreateThreadService) {
 
 export function reportThread({ board, idThread }: ThreadOperation) {
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/advanced-misc/threads/${board}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced-misc/threads/${board}`,
     method: "put",
     data: {
       thread_id: idThread,
@@ -52,7 +52,9 @@ export function reportThread({ board, idThread }: ThreadOperation) {
 
 export function deleteThread({ board, idThread, password }: DeleteThread) {
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/advanced-misc/threads/${board}?thread_id=${idThread}&password=${password}`,
+    url: `/${
+      import.meta.env.VITE_ROUTE_API
+    }/advanced-misc/threads/${board}?thread_id=${idThread}&password=${password}`,
     method: "delete",
   })
     .then(({ data }) => data)
@@ -65,7 +67,9 @@ export function deleteThread({ board, idThread, password }: DeleteThread) {
 
 export function getReplies({ board, idThread }: ThreadOperation) {
   return axios<IThread>({
-    url: `/cYSvQmg9kR/advanced-misc/replies/${board}?thread_id=${idThread}`,
+    url: `/${
+      import.meta.env.VITE_ROUTE_API
+    }/advanced-misc/replies/${board}?thread_id=${idThread}`,
     method: "get",
   }).then(({ data }) => data);
 }
@@ -77,7 +81,7 @@ export function createReply({
   text,
 }: CreateReplyService) {
   return axios({
-    url: `/cYSvQmg9kR/advanced-misc/replies/${board}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced-misc/replies/${board}`,
     method: "post",
     data: {
       delete_password: password,
@@ -89,7 +93,7 @@ export function createReply({
 
 export function reportReply({ board, idReply }: ReplyOperation) {
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/advanced-misc/replies/${board}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced-misc/replies/${board}`,
     method: "put",
     data: {
       reply_id: idReply,
@@ -99,7 +103,9 @@ export function reportReply({ board, idReply }: ReplyOperation) {
 
 export function deleteReply({ board, idReply, password }: DeleteReply) {
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/advanced-misc/replies/${board}?password=${password}&reply_id=${idReply}`,
+    url: `/${
+      import.meta.env.VITE_ROUTE_API
+    }/advanced-misc/replies/${board}?password=${password}&reply_id=${idReply}`,
     method: "delete",
   })
     .then(({ data }) => data)
@@ -112,7 +118,7 @@ export function deleteReply({ board, idReply, password }: DeleteReply) {
 
 export function deleteBoard({ id, token }: SingleOperation) {
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/advanced-misc/board/${id}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced-misc/board/${id}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
   }).then(({ data }) => data);

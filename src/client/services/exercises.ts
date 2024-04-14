@@ -13,7 +13,7 @@ import { type IExTracker } from "../../server/types/basic";
 
 export function getExercises({ token, from, to }: ExerciseData) {
   return axios<resGetExercise>({
-    url: "/cYSvQmg9kR/basic/users/exercises",
+    url: `/${import.meta.env.VITE_ROUTE_API}/basic/users/exercises`,
     method: "get",
     headers: { Authorization: `Bearer ${token}` },
     params: { from, to },
@@ -29,7 +29,7 @@ export function createNewExercise({
   token,
 }: NewExercise) {
   return axios<IExTracker>({
-    url: "/cYSvQmg9kR/basic/users/exercises",
+    url: `/${import.meta.env.VITE_ROUTE_API}/basic/users/exercises`,
     method: "post",
     headers: { Authorization: `Bearer ${token}` },
     data: { description, status, date },
@@ -46,7 +46,7 @@ export function updateExercise({
   description,
 }: updateExerciseService) {
   return axios<ResultUpdate>({
-    url: `/cYSvQmg9kR/basic/users/exercises/${id}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/basic/users/exercises/${id}`,
     method: "put",
     headers: { Authorization: `Bearer ${token}` },
     data: { status, description },
@@ -58,7 +58,7 @@ export function updateExercise({
 
 export function deleteExercise({ id, token }: SingleOperation) {
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/basic/users/exercises/${id}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/basic/users/exercises/${id}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
   }).catch(err => {

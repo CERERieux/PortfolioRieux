@@ -11,7 +11,9 @@ export function useStockViewer() {
   const viewStock = async ({ stock, like }: ViewStockData) => {
     if (typeof stock === "string") {
       const resultView = await axios<SingleConsultStock>({
-        url: `/cYSvQmg9kR/advanced-misc/stock-prices?stock=${stock}&like=${like}`,
+        url: `/${
+          import.meta.env.VITE_ROUTE_API
+        }/advanced-misc/stock-prices?stock=${stock}&like=${like}`,
         method: "get",
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -23,7 +25,11 @@ export function useStockViewer() {
       return resultView;
     } else {
       const resultView = await axios<IStocksData>({
-        url: `/cYSvQmg9kR/advanced-misc/stock-prices?stock=${stock[0]}&stock=${stock[1]}&like=${like}`,
+        url: `/${
+          import.meta.env.VITE_ROUTE_API
+        }/advanced-misc/stock-prices?stock=${stock[0]}&stock=${
+          stock[1]
+        }&like=${like}`,
         method: "get",
         headers: { Authorization: `Bearer ${token}` },
       })

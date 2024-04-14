@@ -33,7 +33,7 @@ export default function FormUrlAll({
     e.preventDefault();
     // Sent the request to the endpoint with the user link
     const fetchResult = await axios<ShortUrlResult>({
-      url: "/cYSvQmg9kR/basic/shorturl",
+      url: `/${import.meta.env.VITE_ROUTE_API}/basic/shorturl`,
       method: "post",
       data: {
         url: userUrl,

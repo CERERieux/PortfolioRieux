@@ -12,14 +12,16 @@ interface SolveResult {
 
 export function getInitialSudoku(puzzleNumber: number) {
   return axios<string>({
-    url: `/cYSvQmg9kR/advanced/sudoku/puzzle?index=${puzzleNumber}`,
+    url: `/${
+      import.meta.env.VITE_ROUTE_API
+    }/advanced/sudoku/puzzle?index=${puzzleNumber}`,
     method: "get",
   }).then(({ data }) => data);
 }
 
 export function checkSudoku({ coordinate, puzzle, value }: SudokuBody) {
   return axios<CheckResult>({
-    url: `/cYSvQmg9kR/advanced/sudoku/check`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced/sudoku/check`,
     method: "post",
     data: {
       coordinate,
@@ -36,7 +38,7 @@ export function checkSudoku({ coordinate, puzzle, value }: SudokuBody) {
 
 export function solveSudoku(puzzle: string) {
   return axios<SolveResult>({
-    url: `/cYSvQmg9kR/advanced/sudoku/solve`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced/sudoku/solve`,
     method: "post",
     data: {
       puzzle,

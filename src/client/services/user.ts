@@ -13,7 +13,9 @@ import type {
 
 export function getAllUsers(token: string) {
   return axios<AllUsers[]>({
-    url: `/cYSvQmg9kR/global/${import.meta.env.VITE_ROUTE_ADMIN}/admin`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/global/${
+      import.meta.env.VITE_ROUTE_ADMIN
+    }/admin`,
     method: "get",
     headers: { Authorization: `Bearer ${token}` },
   }).then(({ data }) => data);
@@ -21,14 +23,14 @@ export function getAllUsers(token: string) {
 
 export function getUserInfo(user: string) {
   return axios<UserInfo>({
-    url: `/cYSvQmg9kR/global/user/${user}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/global/user/${user}`,
     method: "get",
   }).then(({ data }) => data);
 }
 
 export async function createUser({ username, password }: User) {
   const resultCreateUser = await axios<ResponseAction>({
-    url: "/cYSvQmg9kR/global/user",
+    url: `/${import.meta.env.VITE_ROUTE_API}/global/user`,
     method: "post",
     data: {
       _id: username,
@@ -47,7 +49,7 @@ export async function createUser({ username, password }: User) {
 
 export function updateInfoUser({ token, bio, img }: UpdateUserService) {
   return axios<ResponseAction>({
-    url: "/cYSvQmg9kR/global/user",
+    url: `/${import.meta.env.VITE_ROUTE_API}/global/user`,
     method: "put",
     headers: { Authorization: `Bearer ${token}` },
     data: {
@@ -64,7 +66,7 @@ export function updateInfoUser({ token, bio, img }: UpdateUserService) {
 
 export async function loginUser({ username, password }: User) {
   const resultLoginUser = await axios<responseLogin>({
-    url: "/cYSvQmg9kR/global/verify-user",
+    url: `/${import.meta.env.VITE_ROUTE_API}/global/verify-user`,
     method: "post",
     data: {
       _id: username,
@@ -86,7 +88,7 @@ export async function loginUser({ username, password }: User) {
 
 export async function verifyToken(token: string) {
   const resultVerifyToken = await axios<{ newToken: string }>({
-    url: "/cYSvQmg9kR/global/verify-token",
+    url: `/${import.meta.env.VITE_ROUTE_API}/global/verify-token`,
     method: "post",
     data: { token },
   })
@@ -102,7 +104,7 @@ export async function verifyToken(token: string) {
 
 export async function verifyAdmin({ username, password }: User) {
   const resultVerifyAdmin = await axios<responseLogin>({
-    url: "/cYSvQmg9kR/global/verify-admin",
+    url: `/${import.meta.env.VITE_ROUTE_API}/global/verify-admin`,
     method: "post",
     data: {
       _id: username,
@@ -122,14 +124,16 @@ export async function verifyAdmin({ username, password }: User) {
 
 export function getUserBooks(user: string) {
   return axios<BookService[] | EmptyData>({
-    url: `/cYSvQmg9kR/advanced/books/external/${user}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced/books/external/${user}`,
     method: "get",
   }).then(({ data }) => data);
 }
 
 export function getUserInfoAdmin({ id, token }: SingleOperation) {
   return axios<AllUsers>({
-    url: `/cYSvQmg9kR/global/${import.meta.env.VITE_ROUTE_ADMIN}/admin/${id}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/global/${
+      import.meta.env.VITE_ROUTE_ADMIN
+    }/admin/${id}`,
     method: "get",
     headers: { Authorization: `Bearer ${token}` },
   }).then(({ data }) => data);

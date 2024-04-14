@@ -21,7 +21,9 @@ export function getIssues(QueryOptions: GetIssuesService) {
   if (options.endsWith("&")) options = options.slice(0, options.length - 1);
   options = options.toLowerCase();
   return axios<IIssueTracker[] | EmptyData>({
-    url: `/cYSvQmg9kR/advanced/issue-tracker/?${options}`,
+    url: `/${
+      import.meta.env.VITE_ROUTE_API
+    }/advanced/issue-tracker/?${options}`,
     method: "get",
     headers: { Authorization: `Bearer ${userToken}` },
   }).then(({ data }) => {
@@ -37,7 +39,7 @@ export function createIssue({
 }: CreateIssueService) {
   const userToken = token ?? "";
   return axios<IIssueTracker>({
-    url: "/cYSvQmg9kR/advanced/issue-tracker",
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced/issue-tracker`,
     method: "post",
     headers: { Authorization: `Bearer ${userToken}` },
     data: { project, text, title },
@@ -61,7 +63,7 @@ export function updateIssue({
   title,
 }: UpdateIssueService) {
   return axios<ResponseAction>({
-    url: "/cYSvQmg9kR/advanced/issue-tracker",
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced/issue-tracker`,
     method: "put",
     headers: { Authorization: `Bearer ${token}` },
     data: { _id, open, project, status, text, title },
@@ -77,7 +79,7 @@ export function updateIssue({
 
 export function deleteIssue({ id, token }: SingleOperation) {
   return axios<ResponseAction>({
-    url: `/cYSvQmg9kR/advanced/issue-tracker/${id}`,
+    url: `/${import.meta.env.VITE_ROUTE_API}/advanced/issue-tracker/${id}`,
     method: "delete",
     headers: { Authorization: `Bearer ${token}` },
   })
