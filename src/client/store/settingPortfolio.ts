@@ -18,25 +18,28 @@ function setInitialLang() {
 function setInitialTheme() {
   const theme = localStorage.getItem("Theme"); // Get theme from storage
   if (theme === null) {
+    console.log(theme);
     // If theme is empty, then get the preference from user PC
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       // If user prefer dark, then add it to the storage and to the html tag to work
-      document.documentElement.classList.toggle("dark");
+      document.documentElement.classList.add("dark");
       window.localStorage.setItem("Theme", "dark");
       return "dark";
     } else {
       // If user prefer light, then remove dark from html and set it to the storage
-      document.documentElement.classList.toggle("dark");
+      document.documentElement.classList.remove("dark");
       window.localStorage.setItem("Theme", "light");
       return "light";
     }
   } else {
+    console.log(theme);
+
     // If theme exist, then add or remove the class dark from html based on theme
     if (theme === "dark") {
-      document.documentElement.classList.toggle("dark");
+      document.documentElement.classList.add("dark");
       return "dark";
     } else {
-      document.documentElement.classList.toggle("dark");
+      document.documentElement.classList.remove("dark");
       return "light";
     }
   }
