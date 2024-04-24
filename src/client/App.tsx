@@ -8,9 +8,6 @@ const AdminMainMenu = lazy(
   () => import("./components/AdminPanel/AdminMainMenu"),
 );
 const AdminPanel = lazy(() => import("./components/AdminPanel/AdminPanel"));
-// const AnonBoard = lazy(() => import("./components/AnonBoard/AnonBoard"));
-// const AnonReply = lazy(() => import("./components/AnonBoard/AnonReply"));
-// const AnonThread = lazy(() => import("./components/AnonBoard/AnonThread"));
 const Book = lazy(() => import("./components/Library/Book"));
 const Calculator = lazy(() => import("./components/Calculator/Calculator"));
 const ConverterUnit = lazy(
