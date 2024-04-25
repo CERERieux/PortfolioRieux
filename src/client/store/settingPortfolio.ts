@@ -18,7 +18,6 @@ function setInitialLang() {
 function setInitialTheme() {
   const theme = localStorage.getItem("Theme"); // Get theme from storage
   if (theme === null) {
-    console.log(theme);
     // If theme is empty, then get the preference from user PC
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       // If user prefer dark, then add it to the storage and to the html tag to work
@@ -32,8 +31,6 @@ function setInitialTheme() {
       return "light";
     }
   } else {
-    console.log(theme);
-
     // If theme exist, then add or remove the class dark from html based on theme
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
