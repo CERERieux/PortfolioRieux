@@ -30,7 +30,7 @@ export default function PortfolioHeader({
           <span className="text-lime-200">{text[1]}</span>
         </p>
         <div className="flex w-2/3 flex-wrap items-center justify-center gap-6">
-          <Pill to="https://www.linkedin.com/in/erik-r-b36447184/">
+          <Pill to="https://www.linkedin.com/in/erikrodriguez-ec/">
             <LinkedInIcon size="20" fill="currentColor" /> LinkedIn
           </Pill>
           <Pill to="https://github.com/CERERieux">

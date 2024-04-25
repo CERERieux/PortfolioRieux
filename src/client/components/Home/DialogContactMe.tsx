@@ -23,7 +23,7 @@ export default function DialogContactMe({ idOpen }: DialogContactMeProps) {
         <p className="whitespace-pre-wrap text-pretty">{text[9]}</p>
         <div className="flex w-full flex-wrap items-center justify-center gap-6">
           <Pill
-            to="https://www.linkedin.com/in/erik-r-b36447184/"
+            to="https://www.linkedin.com/in/erikrodriguez-ec/"
             extraStyles="hover:bg-slate-900 hover:text-white"
           >
             <LinkedInIcon size="20" fill="currentColor" /> LinkedIn
