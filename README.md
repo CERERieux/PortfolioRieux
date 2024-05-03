@@ -6,7 +6,7 @@ Though, I’ll be working to pass those tests here soon.
 (I’ll use this opportunity to learn Jest. I already know Mocha-Chai so it shouldn’t be difficult to convert my old test to Jest.)
 
 The structure I tried to use was MVC, so the files for each exercise that is Full Stack maybe is a bit hard to follow, for that reason I’ll list where you can find the code for each one:
-
+```
 Code Dandelion:
     Main Menu & External Profile:
         View: src/client/components/MyProfile & /ExternalProfile
@@ -113,6 +113,6 @@ Code Dandelion:
     The folder “Routes” is where I keep my backend endpoints.
     The folder “Schemas” is where I keep the schema of each DB table.
     The folder “types” is where I save the types I need to use typescript with my code, also types.d.ts in client.
-
+```
 I hope with this list you can look at the part you are interested in!
 Anyway, you can contact me through my LinkedIn profile. Thanks for reading.
