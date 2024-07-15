@@ -26,7 +26,7 @@ export default function MainMenu({
 }: MainMenuProps) {
   const titles = useLanguage({ project: "MainMenuTitles" });
   return (
-    <section className="flex h-full w-full flex-col items-center justify-center gap-4 overflow-y-auto pb-6 max-[389px]:pt-[100px] sm:pt-4">
+    <section className="flex h-full w-full flex-col items-center justify-center gap-4 pb-6 max-[389px]:pt-[100px] sm:pt-4">
       <h2 className="text-2xl text-black first-letter:text-3xl dark:text-slate-200">
         {title}
       </h2>
