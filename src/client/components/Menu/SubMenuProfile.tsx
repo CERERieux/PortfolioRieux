@@ -10,15 +10,22 @@ import { useLanguage } from "../../hooks/useLanguage";
 
 interface SubMenuProfileProps {
   setMenu: React.Dispatch<React.SetStateAction<string>>;
+  title: string;
 }
 
-export default function SubMenuProfile({ setMenu }: SubMenuProfileProps) {
+export default function SubMenuProfile({
+  setMenu,
+  title,
+}: SubMenuProfileProps) {
   const text = useLanguage({ project: "ProfileMenuTitles" });
   const handleMenu = () => {
     setMenu("MainMenu");
   };
   return (
     <>
+      <h2 className="text-2xl text-black first-letter:text-3xl sm:pt-20 dark:text-slate-200">
+        {title}
+      </h2>
       <RedirectButton
         colorCover="hover:bg-purple-100 hover:border-purple-400"
         toRedirect="/my-profile"

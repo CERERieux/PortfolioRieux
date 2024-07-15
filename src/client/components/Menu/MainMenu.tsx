@@ -13,6 +13,7 @@ import HomeIcon from "../Icons/HomeIcon";
 import { useLanguage } from "../../hooks/useLanguage";
 
 interface MainMenuProps {
+  title: string;
   username: string;
   handleLogoff: () => void;
   setMenu: React.Dispatch<React.SetStateAction<string>>;
@@ -21,10 +22,14 @@ export default function MainMenu({
   username,
   handleLogoff,
   setMenu,
+  title,
 }: MainMenuProps) {
   const titles = useLanguage({ project: "MainMenuTitles" });
   return (
-    <>
+    <section className="flex h-full w-full flex-col items-center justify-center gap-4 overflow-y-auto pb-6 max-[389px]:pt-[220px] sm:pt-4">
+      <h2 className="text-2xl text-black first-letter:text-3xl dark:text-slate-200">
+        {title}
+      </h2>
       <RedirectButton
         colorCover="hover:bg-sky-200 hover:border-sky-600"
         toRedirect="/home"
@@ -34,7 +39,7 @@ export default function MainMenu({
       {username !== "" && (
         <Button
           color="hover:border-slate-700 hover:shadow-md hover:shadow-black/20 hover:bg-slate-50"
-          extraStyles="flex items-center justify-between gap-4 text-center text-lg hover:text-black py-2"
+          extraStyles="flex items-center justify-between gap-4 text-start text-lg hover:text-black py-2"
           textHover={false}
           onClick={() => {
             setMenu("Profile");
@@ -108,6 +113,6 @@ export default function MainMenu({
           <LogoutIcon size="32" /> {titles[7]}
         </Button>
       )}
-    </>
+    </section>
   );
 }

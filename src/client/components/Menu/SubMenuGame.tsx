@@ -6,15 +6,19 @@ import { useLanguage } from "../../hooks/useLanguage";
 
 interface SubMenuGameProps {
   setMenu: React.Dispatch<React.SetStateAction<string>>;
+  title: string;
 }
 
-export default function SubMenuGame({ setMenu }: SubMenuGameProps) {
+export default function SubMenuGame({ setMenu, title }: SubMenuGameProps) {
   const titles = useLanguage({ project: "GameMenuTitles" });
   const handleMenu = () => {
     setMenu("MainMenu");
   };
   return (
     <>
+      <h2 className="text-2xl text-black first-letter:text-3xl sm:pt-20 dark:text-slate-200">
+        {title}
+      </h2>
       <RedirectButton
         colorCover="hover:bg-lime-100 hover:border-lime-400"
         toRedirect="/games/sudoku"

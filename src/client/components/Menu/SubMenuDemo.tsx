@@ -10,22 +10,20 @@ import Transform from "../Icons/Transform";
 import World from "../Icons/World";
 import RedirectButton from "../SystemDesign/RedirectButton";
 import { useLanguage } from "../../hooks/useLanguage";
-import { useSettingStore } from "../../store/settingPortfolio";
 
 interface SubMenuDemoProps {
   setMenu: React.Dispatch<React.SetStateAction<string>>;
+  title: string;
 }
 
-export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
+export default function SubMenuDemo({ setMenu, title }: SubMenuDemoProps) {
   const titles = useLanguage({ project: "DemoMenuTitles" });
-  const { i18n } = useSettingStore();
-  const title = i18n === "English" ? "Main Menu" : "Menu Principal";
   const handleMenu = () => {
     setMenu("MainMenu");
   };
   return (
-    <section className="flex h-full w-full flex-col items-center justify-center gap-4 overflow-y-auto bg-blue-600 max-[389px]:pt-[230px] max-[340px]:pt-[220px] sm:pt-4">
-      <h2 className="text-2xl text-black first-letter:text-3xl dark:text-slate-200">
+    <section className="flex h-full w-full flex-col items-center justify-center gap-4 overflow-y-auto pb-6 max-[389px]:pt-[280px] sm:pt-4">
+      <h2 className="text-2xl text-black first-letter:text-3xl sm:pt-20 dark:text-slate-200">
         {title}
       </h2>
       <RedirectButton
