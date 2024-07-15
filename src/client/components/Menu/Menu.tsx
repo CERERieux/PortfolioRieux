@@ -33,7 +33,7 @@ export default function Menu({ opacity, handleOpacity }: MenuProps) {
     <section
       className={`absolute right-0 top-0 h-full w-full bg-gradient-to-b from-slate-100/80 to-slate-950/80 text-white backdrop-blur-sm md:w-3/5 lg:w-1/2 dark:from-slate-500/80 dark:to-black/90 dark:to-85% ${opacity} flex flex-col items-center justify-center shadow-xl shadow-black/40 transition-all duration-500 ease-in-out`}
     >
-      <article className="flex h-fit w-full flex-col items-center justify-center gap-4 overflow-y-auto">
+      <article className="flex h-full w-full flex-col items-center justify-center gap-4 overflow-y-auto">
         {menu !== "Demos" && (
           <h2 className="text-2xl text-black first-letter:text-3xl dark:text-slate-200">
             {title}

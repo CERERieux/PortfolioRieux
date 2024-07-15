@@ -24,7 +24,7 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
     setMenu("MainMenu");
   };
   return (
-    <section className="flex h-fit w-full flex-col items-center justify-center gap-6 overflow-y-auto pb-4 pt-52 max-[389px]:pt-[220px] max-[340px]:pt-[300px]">
+    <section className="flex h-full w-full flex-col items-center justify-center gap-4 overflow-y-auto bg-blue-600 max-[389px]:pt-[230px] max-[340px]:pt-[220px] sm:pt-4">
       <h2 className="text-2xl text-black first-letter:text-3xl dark:text-slate-200">
         {title}
       </h2>
