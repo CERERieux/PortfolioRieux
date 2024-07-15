@@ -24,7 +24,7 @@ export default function SubMenuGame({ setMenu }: SubMenuGameProps) {
 
       <Button
         color="hover:bg-slate-100 hover:border-slate-400 hover:shadow-md hover:shadow-black/20 "
-        extraStyles="flex items-center gap-4 text-center text-lg hover:text-black"
+        extraStyles="flex items-center gap-4 text-start text-lg hover:text-black"
         textHover={false}
         onClick={handleMenu}
       >

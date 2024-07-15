@@ -28,9 +28,9 @@ export default function Carrousel({
   };
 
   return (
-    <article className="flex items-center justify-center text-black">
+    <article className="relative flex w-full items-center justify-center text-black sm:w-fit">
       <button
-        className="flex h-12 w-6 items-center justify-center rounded-l-lg text-white transition-all hover:bg-slate-200/80 hover:text-slate-800"
+        className="absolute left-1 top-1/3 z-40 flex h-12 w-6 items-center justify-center rounded-l-lg bg-slate-200/80 text-slate-800 transition-all sm:relative sm:bg-transparent sm:text-white sm:hover:bg-slate-200/80 sm:hover:text-slate-800"
         onClick={() => {
           handleImgIndex(-1);
         }}
@@ -46,7 +46,7 @@ export default function Carrousel({
         {children}
       </WindowPreview>
       <button
-        className="flex h-12 w-6 items-center justify-center rounded-r-lg text-white transition-all hover:bg-slate-200/80 hover:text-slate-800"
+        className="absolute right-1 top-1/3 z-30 flex h-12 w-7 items-center justify-center rounded-r-lg bg-slate-200/80 text-slate-800 transition-all sm:relative sm:bg-transparent sm:text-white sm:hover:bg-slate-200/80 sm:hover:text-slate-800"
         onClick={() => {
           handleImgIndex(1);
         }}

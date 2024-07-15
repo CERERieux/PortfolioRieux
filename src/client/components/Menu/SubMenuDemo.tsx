@@ -10,6 +10,7 @@ import Transform from "../Icons/Transform";
 import World from "../Icons/World";
 import RedirectButton from "../SystemDesign/RedirectButton";
 import { useLanguage } from "../../hooks/useLanguage";
+import { useSettingStore } from "../../store/settingPortfolio";
 
 interface SubMenuDemoProps {
   setMenu: React.Dispatch<React.SetStateAction<string>>;
@@ -17,11 +18,16 @@ interface SubMenuDemoProps {
 
 export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
   const titles = useLanguage({ project: "DemoMenuTitles" });
+  const { i18n } = useSettingStore();
+  const title = i18n === "English" ? "Main Menu" : "Menu Principal";
   const handleMenu = () => {
     setMenu("MainMenu");
   };
   return (
-    <>
+    <section className="flex h-fit w-full flex-col items-center justify-center gap-6 overflow-y-auto pb-4 pt-52 max-[389px]:pt-[220px] max-[340px]:pt-[300px]">
+      <h2 className="text-2xl text-black first-letter:text-3xl dark:text-slate-200">
+        {title}
+      </h2>
       <RedirectButton
         colorCover="hover:bg-purple-100 hover:border-purple-400"
         toRedirect="/demo"
@@ -94,6 +100,6 @@ export default function SubMenuDemo({ setMenu }: SubMenuDemoProps) {
       >
         <ArrowRight styles="rotate-180" size="32" /> {titles[8]}
       </Button>
-    </>
+    </section>
   );
 }

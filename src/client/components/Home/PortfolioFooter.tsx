@@ -5,8 +5,8 @@ import DialogContactMe from "./DialogContactMe";
 export default function PortfolioFooter() {
   const text = useLanguage({ project: "HomeMisc" });
   return (
-    <footer className="flex w-full items-center justify-around rounded-t-xl bg-stone-900 px-6 py-2 text-xs">
-      <p>
+    <footer className="flex w-full flex-wrap items-center justify-around gap-4 rounded-t-xl bg-stone-900 px-6 py-2 text-xs">
+      <p className="text-center">
         {text[2]}
         <Anchor href="https://github.com/CERERieux">{text[3]}</Anchor>
       </p>

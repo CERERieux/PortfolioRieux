@@ -56,7 +56,7 @@ export default function SubMenuProfile({ setMenu }: SubMenuProfileProps) {
 
       <Button
         color="hover:bg-slate-100 hover:border-slate-400 hover:shadow-md hover:shadow-black/20 "
-        extraStyles="flex items-center gap-4 text-center text-lg hover:text-black py-2"
+        extraStyles="flex items-center gap-4 text-start text-lg hover:text-black py-2"
         textHover={false}
         onClick={handleMenu}
       >

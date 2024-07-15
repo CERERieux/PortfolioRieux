@@ -21,7 +21,7 @@ export default function RedirectButton({
     >
       <Button
         color={`${colorCover} hover:shadow-md hover:shadow-black/20`}
-        extraStyles={`flex items-center gap-4 text-center text-lg hover:text-black ${
+        extraStyles={`flex items-center gap-4 text-start text-lg hover:text-black ${
           needPad && "py-2"
         }`}
         textHover={false}

@@ -10,7 +10,7 @@ export default function DarkLightButton() {
       : "bg-gray-700 text-white hover:shadow-gray-500/40 active:bg-purple-600";
   return (
     <button
-      className={`hover absolute right-8 top-4 rounded-full ${bgColor} px-3 py-1 transition-all hover:scale-110 hover:shadow-lg active:scale-90 active:shadow-none`}
+      className={`hover absolute right-6 top-4 rounded-full sm:right-8 sm:top-4 ${bgColor} px-3 py-1 transition-all hover:scale-110 hover:shadow-lg active:scale-90 active:shadow-none`}
       onClick={setLightDark}
     >
       {lightDark === "dark" ? <Sun /> : <Moon />}

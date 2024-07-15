@@ -54,7 +54,7 @@ export default function MainMenu({
       </RedirectButton>
       <Button
         color="hover:bg-purple-100 hover:border-purple-400 hover:shadow-md hover:shadow-black/20 "
-        extraStyles="flex items-center justify-between gap-4 text-center text-lg hover:text-black py-2"
+        extraStyles="flex items-center justify-between gap-4 text-start text-lg hover:text-black py-2"
         textHover={false}
         onClick={() => {
           setMenu("Games");
@@ -66,8 +66,8 @@ export default function MainMenu({
         <ArrowRight size="28" />
       </Button>
       <Button
-        color="hover:bg-lime-100 hover:border-lime-400 hover:shadow-md hover:shadow-black/20 "
-        extraStyles="flex items-center justify-between gap-4 text-center text-lg hover:text-black py-2"
+        color="hover:bg-lime-100 hover:border-lime-400 hover:shadow-md hover:shadow-black/20 relative"
+        extraStyles="flex items-center justify-between gap-4 text-start text-lg hover:text-black py-2 pr-10"
         textHover={false}
         onClick={() => {
           setMenu("Demos");
@@ -76,7 +76,7 @@ export default function MainMenu({
         <span className="flex items-center justify-center gap-4">
           <PencilCode size="32" /> {titles[4]}
         </span>
-        <ArrowRight size="28" />
+        <ArrowRight size="28" styles="absolute top-[20%] right-2" />
       </Button>
       <RedirectButton
         colorCover="hover:bg-orange-100 hover:border-orange-400"
@@ -91,7 +91,7 @@ export default function MainMenu({
         >
           <Button
             color="hover:bg-sky-100 hover:border-sky-400 hover:shadow-md hover:shadow-black/20 "
-            extraStyles="flex items-center gap-4 text-center text-lg hover:text-black py-2"
+            extraStyles="flex items-center gap-4 text-start text-lg hover:text-black py-2"
             textHover={false}
             xSize="w-full"
           >
@@ -101,7 +101,7 @@ export default function MainMenu({
       ) : (
         <Button
           color="hover:bg-red-300 hover:border-red-500 hover:shadow-md hover:shadow-black/20 "
-          extraStyles="flex items-center gap-4 text-center text-lg hover:text-black py-2"
+          extraStyles="flex items-center gap-4 text-start text-lg hover:text-black py-2"
           textHover={false}
           onClick={handleLogoff}
         >

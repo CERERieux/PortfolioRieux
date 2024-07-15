@@ -61,7 +61,7 @@ export default function Home() {
         }
       });
     },
-    { threshold: 0.5 },
+    { threshold: 0.4 },
   );
   // Observer for the element Technology
   const observerTech = new IntersectionObserver(
@@ -78,7 +78,7 @@ export default function Home() {
         }
       });
     },
-    { threshold: 0.4 },
+    { threshold: 0.2 },
   );
 
   // Use effect to change title
@@ -115,7 +115,7 @@ export default function Home() {
   return (
     <div className="relative h-full w-full">
       <div className="absolute top-0 h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
-        <SimpleNavMenu positionNav="top-0 right-4 z-10 absolute" />
+        <SimpleNavMenu positionNav="top-10 right-4 sm:top-0 sm:right-4 z-10 absolute" />
         <div className="relative flex h-full w-full flex-col items-center gap-20 overflow-y-auto text-slate-200">
           <LocalNavPortfolio />
           <PortfolioHeader opacityHeader={opacityHeader} />
