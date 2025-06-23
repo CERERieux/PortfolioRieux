@@ -30,7 +30,6 @@ export default function AboutMe() {
         <br />
         {text[13]}
         <span className="text-lime-300">{text[14]}</span>
-        {text[15]}
       </p>
     </article>
   );
