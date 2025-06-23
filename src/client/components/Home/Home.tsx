@@ -6,6 +6,7 @@ import AboutMe from "./AboutMe";
 import LocalNavPortfolio from "./LocalNavPortfolio";
 import PortfolioFooter from "./PortfolioFooter";
 import Technology from "./Technology";
+import Experience from "./Experience";
 
 export default function Home() {
   const [opacityHeader, setOpacityHeader] = useState(
@@ -80,6 +81,23 @@ export default function Home() {
     },
     { threshold: 0.2 },
   );
+  // Observer for the element Experience
+  const observerExperience = new IntersectionObserver(
+    entries => {
+      // For each element
+      entries.forEach(entry => {
+        // If the element isn't visible, set the class "object-to-observe"
+        if (!entry.isIntersecting)
+          entry.target.classList.add("object-to-observe");
+        else {
+          // If the element is visible, set the class "slide-left" and remove "object-to-observe"
+          entry.target.classList.remove("object-to-observe");
+          entry.target.classList.toggle("slide-left", entry.isIntersecting);
+        }
+      });
+    },
+    { threshold: 0.4 },
+  );
 
   // Use effect to change title
   useEffect(() => {
@@ -97,6 +115,7 @@ export default function Home() {
     const listToObserve = document.querySelectorAll(".listObserve");
     const aboutMeToObserve = document.querySelectorAll(".aboutMeObserve");
     const techToObserve = document.querySelectorAll(".techObserve");
+    const experienceToObserve = document.querySelectorAll(".experienceObserve");
     // And to each observer, give those elements
     titleToObserve.forEach(element => {
       observerTitle.observe(element);
@@ -110,6 +129,9 @@ export default function Home() {
     techToObserve.forEach(element => {
       observerTech.observe(element);
     });
+    experienceToObserve.forEach(element => {
+      observerExperience.observe(element);
+    });
   }, []);
 
   return (
@@ -120,6 +142,7 @@ export default function Home() {
           <LocalNavPortfolio />
           <PortfolioHeader opacityHeader={opacityHeader} />
           <main className="mt-20 flex w-full flex-col items-start justify-center gap-4 px-8">
+            <Experience />
             <ProjectList />
             <AboutMe />
             <Technology />
